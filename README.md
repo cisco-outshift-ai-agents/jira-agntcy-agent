@@ -39,7 +39,7 @@ Before running the application, ensure you have the following environment variab
 - AZURE_OPENAI_API_VERSION: The API version for Azure OpenAI (required if using azure as LLM_PROVIDER).
 - OPENAI_API_KEY: Your OpenAI API key (required if using openai as LLM_PROVIDER).
 - OPENAI_API_VERSION: The model version for OpenAI (default is usually set to gpt-4o or similar).
-### TODO Required currently. These may be removed later, once policy is used to populate jira instance and token
+##### TODO Required currently. These may be removed later, once policy is used to populate jira instance and token
 - JIRA_INSTANCE: Your Jira base URL.
 - JIRA_BASIC_AUTH_TOKEN: Your Jira Basic Auth token with adequate permissions to the Jira instance.
 
