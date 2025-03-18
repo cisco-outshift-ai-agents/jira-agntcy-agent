@@ -40,7 +40,7 @@ Before running the application, ensure you have the following environment variab
 - OPENAI_API_KEY: Your OpenAI API key (required if using openai as LLM_PROVIDER).
 - OPENAI_API_VERSION: The model version for OpenAI (default is usually set to gpt-4o or similar).
 ##### TODO Required currently. These may be removed later, once policy is used to populate jira instance and token
-- JIRA_INSTANCE: Your Jira base URL.
+- JIRA_INSTANCE: Your Jira domain.
 - JIRA_BASIC_AUTH_TOKEN: Your Jira Basic Auth token with adequate permissions to the Jira instance.
 
 Make sure your .env file includes these keys with the appropriate values. For example:
