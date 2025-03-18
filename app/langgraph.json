@@ -1,0 +1,7 @@
+{
+    "dependencies": ["."],
+    "graphs": {
+        "jira_workflow_graph": "./langgraph_studio_run_jira_workflow.py:build_graph"
+    },
+    "env": "../.env"
+}

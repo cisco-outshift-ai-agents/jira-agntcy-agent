@@ -1,0 +1,14 @@
+uvicorn==0.34.0
+pydantic==2.10.6
+pydantic-settings==2.8.1
+pydantic_core==2.27.2
+fastapi==0.115.11
+fastapi-cli==0.0.7
+langgraph-supervisor==0.0.9
+langchain-openai==0.3.6
+langgraph==0.3.5
+langgraph-sdk==0.1.53
+langchain==0.3.19
+langgraph-prebuilt==0.1.2
+langgraph-checkpoint==2.0.16
+langgraph-cli[inmem]==0.1.74

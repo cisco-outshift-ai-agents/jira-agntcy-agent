@@ -1,121 +1,141 @@
-# Agntcy Repo Project Template
+# Jira AI Agent
 
-[![Release](https://img.shields.io/github/v/release/agntcy/repo-template?display_name=tag)](CHANGELOG.md)
-[![Lint](https://github.com/agntcy/repo-template/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/marketplace/actions/super-linter)
-[![Contributor-Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-fbab2c.svg)](CODE_OF_CONDUCT.md)
+## About the Project
 
-## Before You Start
+This repository contains a Jira AI Agent Protocol FastAPI application. It also includes examples of JSON-based logging, CORS configuration, and route tagging.
 
-As much as possible, we have tried to provide enough tooling to get you up and
-running quickly and with a minimum of effort. This includes sane defaults for
-documentation; templates for bug reports, feature requests, and pull requests;
-and [GitHub Actions](https://github.com/features/actions) that will
-automatically manage stale issues and pull requests. This latter defaults to
-labeling issues and pull requests as stale after 60 days of inactivity, and
-closing them after 7 additional days of inactivity. These
-[defaults](.github/workflows/stale.yml) and more can be configured. For
-configuration options, please consult the documentation for the [stale
-action](https://github.com/actions/stale).
+## Prerequisites
 
-In trying to keep this template as generic and reusable as possible, there are
-some things that were omitted out of necessity and others that need a little
-tweaking. Before you begin developing in earnest, there are a few changes that
-need to be made:
+- Python 3.12+
+- A virtual environment is recommended for isolating dependencies.
 
-- [ ] ✅ Select an [OSI-approved license](https://opensource.org/licenses) for
-  your project. This can easily be achieved through the 'Add File' button on the
-  GitHub UI, naming the file `LICENSE`, and selecting your desired license from
-  the provided list.
-- [ ] Update the `<License name>` placeholder in this file to reflect the name
-  of the license you selected above.
-- [ ] Replace `<INSERT_CONTACT_METHOD>` in
-  [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) with a suitable communication
-  channel.
-- [ ] Change references to `org_name` to the name of the org your repository belongs
-  to (eg. `agntcy`):
-  - [ ] In [`README.md`](README.md)
-  - [ ] In [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- [ ] Change references to `repo_name` to the name of your new repository:
-  - [ ] In [`README.md`](README.md)
-  - [ ] In [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- [ ] Update the Release and Lint `README` badges to point to your project URL.
-- [ ] Update the links to `CONTRIBUTING.md` to point to your project URL:
-  - [ ] In
-    [`.github/ISSUE_TEMPLATE/bug_report.yml`](.github/ISSUE_TEMPLATE/bug_report.yml)
-  - [ ] In
-    [`.github/ISSUE_TEMPLATE/feature_request.yml`](.github/ISSUE_TEMPLATE/feature_request.yml)
-  - [ ] In
-    [`.github/pull_request_template.md`](.github/pull_request_template.md)
-- [ ] Update the `Affected Version` tags in
-  [`.github/ISSUE_TEMPLATE/bug_report.yml`](.github/ISSUE_TEMPLATE/bug_report.yml)
-  if applicable.
-- [ ] Replace the `<project name>` placeholder with the name of your project:
-  - [ ] In [`CONTRIBUTING.md`](CONTRIBUTING.md)
-  - [ ] In [`SECURITY.md`](SECURITY.md)
-- [ ] Add names and contact information for the project maintainers to
-  [`MAINTAINERS.md`](MAINTAINERS.md).
-- [ ] Update the `<project-name>` placeholder in
-  [`.github/CODEOWNERS`](.github/CODEOWNERS) as well as the
-  `<maintainer-team-name>` and `<admin-team-name>` entries.
-- [ ] Delete the release placeholder content in [`CHANGELOG.md`](CHANGELOG.md).
-  We encourage you to [keep a changelog](https://keepachangelog.com/en/1.0.0/).
-- [ ] Configure [`.github/dependabot.yml`](.github/dependabot.yml) for your project's
-  language and tooling dependencies.
-- [ ] In [`.github/settings.yml`](.github/settings.yml), update the following fields:
-  - [ ] `name`: Replace with the repository name for your project
-  - [ ] `description`: A short, 1-2 sentence description of your project
-  - [ ] `teams`: Uncomment and update the GitHub team names and permissions as appropriate
-  - [ ] `branches`: Uncomment and enable branch protection settings for your
-    project _(please **do not** disable branch protection entirely!)_
-- [ ] Replace the generic content in this file with the relevant details about
-  your project.
-- [ ] 🚨 Delete this section of the `README`!
+## Installation
 
-## About The Project
+1. Clone the repository:
 
-Provide some information about what the project is/does.
-
-## Getting Started
-
-To get a local copy up and running follow these simple steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to
-install them.
-
-- npm
-
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Clone the repository
-
-   ```sh
-   git clone https://github.com/org_name/repo_name.git
+   ```bash
+   git clone TODO
+   cd jira-agent
    ```
 
-2. Install npm packages
+2. Install the dependencies in your virtual environment:
 
-   ```sh
-   npm install
+   ```bash
+   python -m venv env
+   source env/bin/activate
+   pip install -r requirements.txt
    ```
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional
-screenshots, code examples and demos work well in this space. You may also link
-to more resources.
+### Required Environment Variables
+Before running the application, ensure you have the following environment variables set in your .env file or in your environment:
 
-_For more examples, please refer to the [Documentation](https://example.com) or
-the [Wiki](https://github.com/org_name/repo_name/wiki)_
+- LLM_PROVIDER: The language model provider (e.g., azure or openai).
+- OPENAI_TEMPERATURE: The temperature setting for the language model (e.g., 0.7).
+- AZURE_OPENAI_DEPLOYMENT_NAME: The deployment name for Azure OpenAI (required if using azure as LLM_PROVIDER).
+- AZURE_OPENAI_ENDPOINT: The endpoint URL for Azure OpenAI (required if using azure as LLM_PROVIDER).
+- AZURE_OPENAI_API_KEY: Your Azure OpenAI API key (required if using azure as LLM_PROVIDER).
+- AZURE_OPENAI_API_VERSION: The API version for Azure OpenAI (required if using azure as LLM_PROVIDER).
+- OPENAI_API_KEY: Your OpenAI API key (required if using openai as LLM_PROVIDER).
+- OPENAI_API_VERSION: The model version for OpenAI (default is usually set to gpt-4o or similar).
+### TODO Required currently. These may be removed later, once policy is used to populate jira instance and token
+- JIRA_INSTANCE: Your Jira base URL.
+- JIRA_BASIC_AUTH_TOKEN: Your Jira Basic Auth token with adequate permissions to the Jira instance.
+
+Make sure your .env file includes these keys with the appropriate values. For example:
+
+```dotenv
+LLM_PROVIDER=azure
+OPENAI_TEMPERATURE=0.7
+OPENAI_API_VERSION=gpt-4o
+AZURE_OPENAI_ENDPOINT=https://your-azure-endpoint.com/
+AZURE_OPENAI_API_KEY=your-azure-api-key
+AZURE_OPENAI_API_VERSION=2023-03-15-preview
+# For OpenAI (if used)
+OPENAI_API_KEY=your-openai-api-key
+
+JIRA_INSTANCE=your-jira-instance.net
+JIRA_BASIC_AUTH_TOKEN=your-jira-basic-auth-token
+```
+
+### Server
+
+You can run the application by executing:
+
+```bash
+python app/main.py
+```
+
+### Expected Console Output
+
+On a successful run, you should see logs in your terminal similar to the snippet below. The exact timestamps, process IDs, and file paths will vary:
+
+```bash
+python app/main.py
+{"timestamp": "2025-03-14 18:04:29,821", "level": "INFO", "message": "Logging is initialized. This should appear in the log file.", "module": "logging_config", "function": "configure_logging", "line": 158, "logger": "app", "pid": 53852}
+{"timestamp": "2025-03-14 18:04:29,821", "level": "INFO", "message": "Starting FastAPI application...", "module": "main", "function": "main", "line": 197, "logger": "app", "pid": 53852}
+{"timestamp": "2025-03-14 18:04:29,822", "level": "INFO", "message": ".env file loaded from /Users/sushroff/Documents/AI/jira-agent/.env", "module": "main", "function": "load_environment_variables", "line": 47, "logger": "root", "pid": 53852}
+INFO:     Started server process [53852]
+INFO:     Waiting for application startup.
+{"timestamp": "2025-03-14 18:04:29,851", "level": "INFO", "message": "Starting Jira Agent...", "module": "main", "function": "lifespan", "line": 71, "logger": "root", "pid": 53852}
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8125 (Press CTRL+C to quit)
+```
+
+This output confirms that:
+
+1. Logging is properly initialized.
+2. The server is listening on `0.0.0.0:8125`.
+3. Your environment variables (like `.env file loaded`) are read.
+
+### Client
+
+Change to `client` folder
+
+```bash
+python rest.py
+```
+
+On a successful remote graph run you should see logs in your terminal similar to the snippet below:
+
+```bash
+{"timestamp": "2025-03-14 17:58:29,328", "level": "INFO", "message": "{'event': 'final_result', 'result': {'messages': [HumanMessage(content='is Alfred Plus Test a business project', additional_kwargs={}, response_metadata={}, id='6ddcc789-0196-4e24-86fc-f2119be43cdf'), HumanMessage(content='The project \"Alfred Plus Test\" is a software project, not a business project.', additional_kwargs={}, response_metadata={}, id='140ef897-cdb6-459d-914c-b5d2d2fd8281')]}}", "module": "rest", "function": "main", "line": 203, "logger": "graph_client", "pid": 51728}
+```
+
+## Logging
+
+- **Format**: The application is configured to use JSON logging by default. Each log line provides a timestamp, log level, module name, and the message.
+- **Location**: Logs typically go to stdout when running locally. If you configure a file handler or direct logs to a centralized logging solution, they can be written to a file (e.g., `logs/app.log`) or shipped to another service.
+- **Customization**: You can change the log level (`info`, `debug`, etc.) or format by modifying environment variables or the logger configuration in your code. If you run in Docker or Kubernetes, ensure the logs are captured properly and aggregated where needed.
+
+## API Endpoints
+
+By default, the API documentation is available at:
+
+```bash
+http://0.0.0.0:8125/docs
+```
+
+(Adjust the host and port if you override them via environment variables.)
+
+## Running as a LangGraph Studio
+
+You need to install Rust: <https://www.rust-lang.org/tools/install>
+
+Run the server
+
+```bash
+langgraph dev
+```
+
+Upon successful execution, you should see:
+
+![Langgraph Studio](./docs/imgs/remote-graph-1.png "Studio")
 
 ## Roadmap
 
-See the [open issues](https://github.com/org_name/repo_name/issues) for a list
+See the [open issues](TODO) for a list
 of proposed features (and known issues).
 
 ## Contributing
@@ -127,15 +147,15 @@ appreciated**. For detailed contributing guidelines, please see
 
 ## License
 
-Distributed under the `<License name>` License. See [LICENSE](LICENSE) for more
+Distributed under the Apache-2.0 License. See [LICENSE](LICENSE) for more
 information.
 
 ## Contact
 
-Your Name - [@github_handle](https://github.com/github_handle) - email
+Sushama Shroff - @ssmails - sushroff@cisco.com
+Samuel Yang - @samuyang - samuyang@cisco.com
 
-Project Link:
-[https://github.com/org_name/repo_name](https://github.com/org_name/repo_name)
+Project Link: TODO
 
 ## Acknowledgements
 
