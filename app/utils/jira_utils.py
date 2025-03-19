@@ -9,7 +9,8 @@ import requests
 import json
 from requests.exceptions import (ConnectionError, HTTPError, RequestException,
                                  Timeout)
-
+from jira_client.client import JiraClient
+import base64
 
 # Below code to be refactored into the JiraRESTClient class
 
@@ -19,6 +20,11 @@ def jira_request_get(url_path: str) -> str:
         # TODO use from env variable until that is implemented
         jira_instance = os.getenv("JIRA_INSTANCE")
         jira_basic_auth_token = os.getenv("JIRA_BASIC_AUTH_TOKEN")
+
+        if jira_basic_auth_token is None:
+            jira_basic_auth_token = base64.b64encode(f'{os.getenv("JIRA_USERNAME")}:{os.getenv("JIRA_API_TOKEN")}'.encode()).decode()
+        if jira_instance.startswith("http"):
+            jira_instance = jira_instance.replace("http://", "").replace("https://", "")
 
         headers = {
             "Accept": "application/json",
@@ -79,6 +85,11 @@ def jira_request_post(url_path: str, payload) -> str:
         # TODO use from env variable until that is implemented
         jira_instance = os.getenv("JIRA_INSTANCE")
         jira_basic_auth_token = os.getenv("JIRA_BASIC_AUTH_TOKEN")
+
+        if jira_basic_auth_token is None:
+            jira_basic_auth_token = base64.b64encode(f'{os.getenv("JIRA_USERNAME")}:{os.getenv("JIRA_API_TOKEN")}'.encode()).decode()
+        if jira_instance.startswith("http"):
+            jira_instance = jira_instance.replace("http://", "").replace("https://", "")
 
         headers = {
             "Accept": "application/json",
@@ -142,6 +153,11 @@ def jira_request_put(url_path: str, payload) -> str:
         # TODO use from env variable until that is implemented
         jira_instance = os.getenv("JIRA_INSTANCE")
         jira_basic_auth_token = os.getenv("JIRA_BASIC_AUTH_TOKEN")
+
+        if jira_basic_auth_token is None:
+            jira_basic_auth_token = base64.b64encode(f'{os.getenv("JIRA_USERNAME")}:{os.getenv("JIRA_API_TOKEN")}'.encode()).decode()
+        if jira_instance.startswith("http"):
+            jira_instance = jira_instance.replace("http://", "").replace("https://", "")
 
         headers = {
             "Accept": "application/json",

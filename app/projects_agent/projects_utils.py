@@ -39,13 +39,14 @@ def _get_jira_project_by_name(input: GetJiraProjectByNameInput) -> JiraProjectOu
             response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
         else:
             project_urls = _parse_project_url_from_get_jira_project_by_name(jira_resp_json)
+            project_key = _parse_project_key_from_get_jira_project_by_name(jira_resp_json)
             if len(project_urls) == 0:
                 response_str = f"{INTERNAL_ERROR_MESSAGE}:No projects found for {input.name}, {jira_resp}"
             elif len(project_urls) > 1:
                 response_str = (f"{INTERNAL_ERROR_MESSAGE}:Multiple projects found for {input.name}, {jira_resp}. "
                                 f"Please try using the unique project key instead of project name")
             else:
-                response_str = project_urls[0]
+                response_str = f'Project URL: {project_urls[0]}, Project Key: {project_key}'
 
         return JiraProjectOutput(response=response_str)
 
@@ -198,6 +199,15 @@ def _parse_project_url_from_get_jira_project_by_name(jira_resp_json):
                     project_urls.append(project['self'])
 
     return project_urls
+
+def _parse_project_key_from_get_jira_project_by_name(jira_resp_json):
+    if 'total' in jira_resp_json and jira_resp_json['total'] != 0:
+        if 'values' in jira_resp_json:
+            for project in jira_resp_json['values']:
+                if 'key' in project:
+                    return project['key']
+
+    return ""
 
 
 def is_valid_email(email):
