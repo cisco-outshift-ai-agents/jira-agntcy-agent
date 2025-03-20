@@ -8,7 +8,7 @@ from pydantic import model_validator
 from pydantic_settings import BaseSettings
 
 # Error messages
-INTERNAL_ERROR_MESSAGE = "An unexpected error occurred. Please try again later."
+INTERNAL_ERROR_MESSAGE = "An unexpected error occurred"
 
 
 class Settings(BaseSettings):
