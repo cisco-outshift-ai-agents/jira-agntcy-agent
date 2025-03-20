@@ -30,21 +30,33 @@ class CreateJiraProjectInput(BaseModel):
         Attributes:
         name (str): The name of the project.
         key (str): The key of the project.
-        assignee_type:Optional[str] = "UNASSIGNED" : assignee type.
+        leadAccountId: (str) : lead account ID.
         projectTypeKey: Optional[str] = "software" : project type.
+        description: Optional[str] = "This project was created by the Jira Agent." : project description.
     """
     name: str
     key: str
     leadAccountId: str
-    assignee_type: Optional[str] = "PROJECT_LEAD"
     projectTypeKey: Optional[str] = "software"
     description: Optional[str] = "This project was created by the Jira Agent."
 
 
-class GetJiraProjectInput(BaseModel):
+class UpdateJiraProjectDescriptionInput(BaseModel):
     """
-    The input for get on a Jira project.
+    The input for updating a Jira project description.
         Attributes:
-        projectIdOrKey (str): The projectIdOrKey of the project.
+        key (str): The key of the project.
+        description: (str) : description.
     """
-    projectIdOrKey: str
+    key: str
+    description: str
+
+class UpdateJiraProjectLeadInput(BaseModel):
+    """
+    The input for updating a Jira project lead.
+        Attributes:
+        key (str): The key of the project.
+        leadAccountId: str : lead account ID. (Eg. 5b10a2844c20165700ede21g)
+    """
+    key: str
+    leadAccountId: str

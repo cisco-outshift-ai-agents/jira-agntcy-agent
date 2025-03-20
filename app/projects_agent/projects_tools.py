@@ -3,9 +3,16 @@ import logging
 import os
 
 from projects_agent.projects_models import JiraProjectOutput
-from projects_agent.projects_models import CreateJiraProjectInput, GetJiraProjectByNameInput
 
-from utils.jira_utils import jira_request_get, jira_request_post
+from projects_agent.projects_models import (CreateJiraProjectInput,
+                                            GetJiraProjectByNameInput,
+                                            UpdateJiraProjectDescriptionInput,
+                                            UpdateJiraProjectLeadInput)
+
+from projects_agent.projects_utils import (_get_jira_project_by_name,
+                                           _create_jira_project,
+                                           _update_jira_project_description,
+                                           _update_jira_project_lead)
 
 
 def get_jira_project_by_name(input: GetJiraProjectByNameInput) -> JiraProjectOutput:
@@ -23,15 +30,8 @@ def get_jira_project_by_name(input: GetJiraProjectByNameInput) -> JiraProjectOut
              which must have a `model_dump()` method for JSON conversion.
     """
     logging.info(f"tool input:{input}")
-    if not input or input is None:
-        return JiraProjectOutput(response="error performing the operation")
-
-    url_path = f"/rest/api/3/project/search?query=" + input.name
-    jira_resp = jira_request_get(url_path)
-    response_str = f"Got Jira project by name: {input.name}, project details: {jira_resp}"
-    resp = JiraProjectOutput(response=response_str)
+    resp = _get_jira_project_by_name(input)
     logging.info(f"tool output:{resp}")
-
     return resp
 
 
@@ -50,27 +50,46 @@ def create_jira_project(input: CreateJiraProjectInput) -> JiraProjectOutput:
              which must have a `model_dump()` method for JSON conversion.
     """
     logging.info(f"tool input:{input}")
-    if not input or input is None:
-        return JiraProjectOutput(response="error performing the operation")
-
-    if os.getenv("USE_MOCK_RESP") == "true":
-        response_str = f"Created Jira project id:123 with owner: John Doe"
-    else:
-        url_path = "/rest/api/3/project"
-
-        payload = json.dumps({
-            "assigneeType": input.assignee_type,
-            "description": input.description,
-            "key": input.key,
-            "leadAccountId": input.leadAccountId,
-            "name": input.name,
-            "projectTypeKey": input.projectTypeKey
-        })
-
-        jira_resp = jira_request_post(url_path, payload)
-        response_str = f"Created Jira project: {jira_resp}"
-
-    resp = JiraProjectOutput(response=response_str)
+    resp = _create_jira_project(input)
     logging.info(f"tool output:{resp}")
+    return resp
 
+
+def update_jira_project_description(input: UpdateJiraProjectDescriptionInput) -> JiraProjectOutput:
+    """update a jira project description and return the output.
+         Args:
+         input (UpdateJiraProjectDescriptionInput):
+             The user-provided input that guides the jira project description updation.
+             This request is serialized from a `UpdateJiraProjectDescriptionInput` object,
+             which must have a `model_dump()` method for JSON conversion.
+
+     Returns:
+         JiraProjectOutput:
+             A JSON representation of the JiraProjectOutput.
+             This response is serialized from a `JiraProjectOutput` object,
+             which must have a `model_dump()` method for JSON conversion.
+    """
+    logging.info(f"tool input:{input}")
+    resp = _update_jira_project_description(input)
+    logging.info(f"tool output:{resp}")
+    return resp
+
+
+def update_jira_project_lead(input: UpdateJiraProjectLeadInput) -> JiraProjectOutput:
+    """update a jira project lead and return the output.
+         Args:
+         input (UpdateJiraProjectLeadInput):
+             The user-provided input that guides the jira project lead updation.
+             This request is serialized from a `UpdateJiraProjectLeadInput` object,
+             which must have a `model_dump()` method for JSON conversion.
+
+     Returns:
+         JiraProjectOutput:
+             A JSON representation of the JiraProjectOutput.
+             This response is serialized from a `JiraProjectOutput` object,
+             which must have a `model_dump()` method for JSON conversion.
+    """
+    logging.info(f"tool input:{input}")
+    resp = _update_jira_project_lead(input)
+    logging.info(f"tool output:{resp}")
     return resp
