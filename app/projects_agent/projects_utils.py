@@ -46,7 +46,7 @@ def _get_jira_project_by_name(input: GetJiraProjectByNameInput) -> JiraProjectOu
                 response_str = (f"{INTERNAL_ERROR_MESSAGE}:Multiple projects found for {input.name}, {jira_resp}. "
                                 f"Please try using the unique project key instead of project name")
             else:
-                response_str = f'Project URL: {project_urls[0]}, Project Key: {project_key}'
+                response_str = f'{project_urls[0]}, {jira_resp}'
 
         return JiraProjectOutput(response=response_str)
 
