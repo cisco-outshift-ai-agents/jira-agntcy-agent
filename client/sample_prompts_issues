@@ -1,4 +1,3 @@
-user_prompt = "give me the project key of the project Alfred Plus Test"
 user_prompt = "what issues type are available in the project Alfred Plus Test"
 user_prompt = "create a jira sushroff-custom-issue issue in project Alfred Plus Test, summary will be TBD"
 user_prompt = "assign APT-3 to samuyang@cisco.com"
