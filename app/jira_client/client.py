@@ -13,6 +13,10 @@ class JiraClient:
     if not config.url:
       raise ValueError("JIRA URL is required")
 
+    ## TODO: remove this later
+    if not config.url.startswith("http"):
+      config.url = "https://" + config.url
+
     if config.auth_type.lower() == AUTH_TYPE_BASIC:
       if not config.username or not config.api_token:
         raise ValueError("Username and API token are required for basic authentication")
@@ -60,6 +64,10 @@ class JiraRESTClient:
       cls._auth_instance = HTTPBasicAuth(user_email, access_token)
     if cls._jira_server_url is None:
       cls._jira_server_url = os.getenv("JIRA_INSTANCE") or os.getenv('JIRA_URL')
+
+      ## TODO: remove this later
+      if not cls._jira_server_url.startswith("http"):
+        cls._jira_server_url = "https://" + cls._jira_server_url
 
     return cls._jira_server_url, cls._auth_instance, cls._jira_headers
 
