@@ -19,6 +19,7 @@ class CreateJiraIssueInput(BaseModel):
       summary (str): The summary of the issue.
       description (str): The description of the issue.
       issue_type (Optional[str]): The type of the issue (e.g., "Bug", "Task").
+      assignee_email (Optional[str]): The email of the assignee.
       reporter_email (Optional[str]): The email of the reporter.
   """
   project_key: str
@@ -26,6 +27,7 @@ class CreateJiraIssueInput(BaseModel):
   description: str
   issue_type: Optional[str] = "Task"
   reporter_email: Optional[str] = ""
+  assignee_email: Optional[str] = ""
 
 class GetJiraIssueInput(BaseModel):
   """

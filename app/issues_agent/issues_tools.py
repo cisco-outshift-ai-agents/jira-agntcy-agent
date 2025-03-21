@@ -58,6 +58,10 @@ def create_jira_issue(input: CreateJiraIssueInput) -> JiraIssueOutput:
       'issuetype': {'name': input.issue_type},
       #'reporter': {'id': reporter_id} # TODO: reported cannot be set for some reason, need to check
     }
+
+    if input.assignee_email:
+      issue_dict['assignee'] = {'id': _get_account_id_from_email(input.assignee_email)}
+
     jira_api = JiraClient.get_jira_instance()
     new_issue = jira_api.create_issue(fields=issue_dict)
     urlify_jira_issue_id = _urlify_jira_issue_id(new_issue.key)
