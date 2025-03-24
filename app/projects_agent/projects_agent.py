@@ -24,7 +24,8 @@ class ProjectsAgent:
                    "3. Epics and stories are not projects. They are issues under a project."
                    "4. **ProjectTypeKey** or **Project Type** indicates the type of project such as software, business, etc.\n" 
                    "5. Always check if the project exists using the provided tools before creating it. New projects must be created only if they do not exist.\n"
-                   "6. Always check if the project exists using the provided tools before updating it. Only existing projects must be updated\n")
+                   "6. Always check if the project exists using the provided tools before updating it. Only existing projects must be updated\n"
+                   "7. Always search for the project key before creating Jira issue.")
 
     def agent(self):
 
