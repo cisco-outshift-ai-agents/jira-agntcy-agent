@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     LANGSMITH_API_KEY: Optional[str] = None
 
     # Mandatory LLM settings
-    LLM_PROVIDER: str = "azure"  # or "openai"
+    LLM_PROVIDER: Optional[str] = "azure"  # or "openai"
     OPENAI_TEMPERATURE: float = 0.7
 
     # Azure settings
@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     AZURE_OPENAI_API_VERSION: Optional[str] = None
 
     # OpenAI settings
+    OPENAI_ENDPOINT: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_API_VERSION: Optional[str] = "gpt-4o"
 
@@ -66,9 +67,16 @@ class Settings(BaseSettings):
                     f"Missing required Azure OpenAI environment variables: {', '.join(missing)}"
                 )
         elif provider == "openai":
+            missing = []
+            if not self.OPENAI_ENDPOINT:
+                missing.append("OPENAI_ENDPOINT")
             if not self.OPENAI_API_KEY:
+                missing.append("OPENAI_API_KEY")
+            if not self.OPENAI_API_VERSION:
+                missing.append("OPENAI_API_VERSION")
+            if missing:
                 raise ValueError(
-                    "Missing required OpenAI environment variable: OPENAI_API_KEY"
+                    f"Missing required OpenAI environment variables: {', '.join(missing)}"
                 )
         else:
             raise ValueError(f"Unsupported LLM provider: {provider}")

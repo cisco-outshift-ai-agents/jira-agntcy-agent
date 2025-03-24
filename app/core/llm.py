@@ -16,10 +16,12 @@ def get_llm():
             api_version=settings.AZURE_OPENAI_API_VERSION,
             temperature=temperature,
         )
+
     if provider == "openai":
         return ChatOpenAI(
             model_name=settings.OPENAI_API_VERSION,
             api_key=settings.OPENAI_API_KEY,
+            base_url=settings.OPENAI_ENDPOINT,
             temperature=temperature,
         )
     raise ValueError(f"Unsupported LLM provider: {provider}")

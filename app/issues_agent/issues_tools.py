@@ -167,8 +167,8 @@ def get_jira_issue_details(issue_key: str) -> JiraIssueOutput:
       "created": issue.fields.created,
       "updated": issue.fields.updated,
     }
-    logging.info(f"Ticket details: {ticket_details}")
-    return JiraIssueOutput(response=ticket_details)
+    resp_str = f"Jira Issue Details: {ticket_details}"
+    return JiraIssueOutput(response=resp_str)
 
   except Exception as e:
     logging.error(f"Error retrieving Jira issue details: {e}")
