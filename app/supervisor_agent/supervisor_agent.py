@@ -1,6 +1,7 @@
 from langgraph_supervisor import create_supervisor
 
 from core.llm import get_llm
+from issues_agent.search_tools import search_jira_issues_using_jql
 from projects_agent.projects_agent import ProjectsAgent
 from issues_agent.issues_agent import IssuesAgent
 
@@ -12,16 +13,17 @@ class SupervisorAgent:
         self.tools = []
         self.agents = [ProjectsAgent().agent(), IssuesAgent().agent()]
         self.prompt = (
-            "You are a team supervisor managing the provided jira agents."
-            "Only use the agents provided"
-            "If an agent is not found, return error message to the caller."
+            "You are a team supervisor managing the provided Jira agents."
+            "Only use the agents provided."
+            "If an agent is not found, return an error message to the caller."
             "If an agent is found, return the agent response to the caller."
-            "If the prompt is to assign a jira issue to a user, use the issues agent directly."
+            "If the prompt is to assign a Jira issue to a user, use the issues agent directly."
             "Here is the hierarchy of Jira issue types and projects:\n"
-            "1. **Projects**: A project is a collection of issues. Projects can be of different types such as software,"
-            "business, etc. When creating an Jira issue, if a project name is in the prompt, get the project info to obtain the project key.\n"
-            "2. **Issue Types**: Issues are the building blocks of a project."
-
+            "1. **Projects**: A project is a collection of issues. Projects can be of different types such as software, business, etc.\n"
+            "---\n"
+            "2. **Issues**: Issues are the tasks or problems to be addressed within a project. They can be of different types such as Bug, Task, Story, Epic, and Sub-task.\n"
+            "Special instructions for Jira issue-related operations:\n"
+            "   - When creating a Jira issue, if a project name is in the prompt, get the project info to obtain the project key. For operations like getting issue details or transitions, the project key is not needed.\n"
         )
 
     def agent(self, input_prompt=None):
