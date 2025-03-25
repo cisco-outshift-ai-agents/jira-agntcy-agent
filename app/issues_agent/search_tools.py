@@ -79,7 +79,7 @@ def _search_jira_issues_using_jql(jql_query: str, user_email: str) -> List:
     logging.error(f"Error in ticket retrieval tool: {e}")
     return "An error occurred while retrieving tickets."
 
-def search_jira_issues_using_jql(jql_query: str, user_email: str) -> str:
+def search_jira_issues_using_jql(jql_query: str, user_email: str) -> JiraIssueOutput:
   """
   Search for Jira tickets based on a JQL query and user_email.
 
@@ -90,4 +90,4 @@ def search_jira_issues_using_jql(jql_query: str, user_email: str) -> str:
   Returns:
     list: List of Jira issue IDs in a markdown format.
   """
-  return _search_jira_issues_using_jql(jql_query, user_email)
+  return JiraIssueOutput(response=_search_jira_issues_using_jql(jql_query, user_email))
