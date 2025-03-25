@@ -59,10 +59,7 @@ class JiraGraph:
             for m in result["messages"]:
                 m.pretty_print()
 
-            return result["messages"][-1].content
+            return result["messages"][-1].content, result
 
-            # return JiraGraphResponse(
-            #     jira_output=result["messages"][-1].content
-            # )
         except Exception as e:
             raise Exception("Jira operation failed: " + str(e))
