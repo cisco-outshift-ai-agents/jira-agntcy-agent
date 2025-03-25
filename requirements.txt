@@ -12,3 +12,4 @@ langchain==0.3.19
 langgraph-prebuilt==0.1.2
 langgraph-checkpoint==2.0.16
 langgraph-cli[inmem]==0.1.74
+jira
