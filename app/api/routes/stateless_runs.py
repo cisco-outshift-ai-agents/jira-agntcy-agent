@@ -56,7 +56,7 @@ def run_stateless_runs_post(body: RunCreateStateless) -> Union[Any, ErrorRespons
         # Retrieve the 'query' field from the input dictionary.
         query = input_field.get("query")
         logging.info("query: %s", query)
-        result = graph.serve(query)
+        result, result_detail = graph.serve(query)
         logging.info("result: %s", result)
     except HTTPException as http_exc:
         logger.error(
