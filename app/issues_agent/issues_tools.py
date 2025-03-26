@@ -1,88 +1,90 @@
+import json
 import logging
 import os
-from jira_client.client import JiraClient, JiraRESTClient
 import requests
-from requests.auth import HTTPBasicAuth
-import json
-from issues_agent.issues_models import CreateJiraIssueInput, JiraIssueOutput
+
 from core.config import INTERNAL_ERROR_MESSAGE
+from issues_agent.dryrun.mock_responses import (
+  MOCK_ADD_NEW_LABEL_TO_ISSUE_RESPONSE,
+  MOCK_ASSIGN_JIRA_RESPONSE,
+  MOCK_CREATE_JIRA_ISSUE_RESPONSE,
+  MOCK_GET_ACCOUNT_ID_FROM_EMAIL_RESPONSE,
+  MOCK_GET_JIRA_ISSUE_DETAILS_RESPONSE,
+  MOCK_GET_SUPPORTED_JIRA_ISSUE_TYPES_RESPONSE,
+  MOCK_UPDATE_ISSUE_REPORTER_RESPONSE,
+)
+from issues_agent.issues_models import CreateJiraIssueInput, JiraIssueOutput
+from jira_client.client import JiraClient, JiraRESTClient
+from utils.dryrun_utils import dryrun_response
 
-def get_jira_issue_metadata(project_key: str) -> JiraIssueOutput:
+@dryrun_response(MOCK_CREATE_JIRA_ISSUE_RESPONSE)
+def _create_jira_issue(input_data: CreateJiraIssueInput) -> str:
   """
-  Create a new generic Jira issue.
+  Create a new Jira issue.
 
   Args:
-      project_key (str): The project key for the Jira issue metadata.
+      input_data (CreateJiraIssueInput): The input model containing the details for creating the issue.
 
   Returns:
       str: The URL of the created Jira issue.
   """
-  logging.info(f"Getting metadata for project: {project_key}")
+  logging.info(f"Creating a new Jira issue in project: {input_data.project_key}")
 
   try:
-    jira_api = JiraClient.get_jira_instance()
-    issue_metadata = jira_api.createmeta(projectKeys=project_key, expand='projects.issuetypes.fields')
-    supported_issue_types = {}
-    for project in issue_metadata['projects']:
-      for issue in project['issuetypes']:
-        required_fields = {k: v for k, v in issue['fields'].items() if v['required']}
-        supported_issue_types[issue['name']] = required_fields
-    output = "".join([f"{issue_type}: {fields}" for issue_type, fields in supported_issue_types.items()])
-    return JiraIssueOutput(response=output)
-  except Exception as e:
-    logging.error(f"Error getting Jira issue metadata: {e}")
-    return JiraIssueOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
+    supported_issue_types = _get_supported_issue_types(input_data.project_key)
+    if input_data.issue_type not in supported_issue_types:
+      raise ValueError(f"Unsupported issue type: {input_data.issue_type}. Supported issue types are: {supported_issue_types}")
 
-def create_jira_issue(input: CreateJiraIssueInput) -> JiraIssueOutput:
-  """
-  Create a new generic Jira issue.
-
-  Args:
-      input (CreateJiraIssueInput): The input model containing the details for creating the issue.
-
-  Returns:
-      str: The URL of the created Jira issue.
-  """
-  logging.info(f"Creating a new Jira issue in project: {input.project_key}")
-
-  try:
-    supported_issue_types = _get_supported_issue_types(input.project_key)
-    if input.issue_type not in supported_issue_types:
-      return JiraIssueOutput(response=f"Unsupported issue type: {input.issue_type}. Supported issue types are: {supported_issue_types}")
-
-    reporter_id = _get_account_id_from_email(input.reporter_email)
     issue_dict = {
-      'project': {'key': input.project_key},
-      'summary': input.summary,
-      'description': input.description,
-      'issuetype': {'name': input.issue_type},
-      #'reporter': {'id': reporter_id} # TODO: reported cannot be set for some reason, need to check
+      'project': {'key': input_data.project_key},
+      'summary': input_data.summary,
+      'description': input_data.description,
+      'issuetype': {'name': input_data.issue_type},
     }
 
-    if input.assignee_email:
-      issue_dict['assignee'] = {'id': _get_account_id_from_email(input.assignee_email)}
+    if input_data.assignee_email:
+      issue_dict['assignee'] = {'id': _get_account_id_from_email(input_data.assignee_email)}
 
     jira_api = JiraClient.get_jira_instance()
     new_issue = jira_api.create_issue(fields=issue_dict)
-    urlify_jira_issue_id = _urlify_jira_issue_id(new_issue.key)
-    logging.info(f"Created new Jira issue: {urlify_jira_issue_id}")
-    return JiraIssueOutput(response=urlify_jira_issue_id)
-  except Exception as e:
-    logging.error(f"Error creating Jira issue: {e}")
-    return JiraIssueOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
+    return _urlify_jira_issue_id(new_issue.key)
 
-def assign_jira(issue_key: str, assignee_email: str) -> JiraIssueOutput:
+  except Exception as e:
+    raise ValueError(e)
+
+
+def create_jira_issue(input_data: CreateJiraIssueInput) -> JiraIssueOutput:
   """
-  Assigns a JIRA ticket to a specified user.
+  Create a new Jira issue.
 
   Args:
-      issue_key (str): The key of the JIRA issue to assign.
+      input_data (CreateJiraIssueInput): The input model containing the details for creating the issue.
+
+  Returns:
+      JiraIssueOutput: The output model containing the URL of the created Jira issue.
+  """
+  logging.info(f"Creating a new Jira issue in project: {input_data.project_key}")
+
+  try:
+    issue_url = _create_jira_issue(input_data)
+    return JiraIssueOutput(response=issue_url)
+  except Exception as e:
+    return JiraIssueOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
+
+
+@dryrun_response(MOCK_ASSIGN_JIRA_RESPONSE)
+def _assign_jira(issue_key: str, assignee_email: str) -> str:
+  """
+  Assign a Jira ticket to a specified user.
+
+  Args:
+      issue_key (str): The key of the Jira issue to assign.
       assignee_email (str): The email of the user to assign the issue to.
 
   Returns:
-      JiraIssueOutput: The result of the assignment.
+      str: A message indicating the result of the assignment.
   """
-  logging.info(f"Assigning JIRA ticket {issue_key} to {assignee_email}")
+  logging.info(f"Assigning Jira ticket {issue_key} to {assignee_email}")
 
   jira_server_url, auth, headers = JiraRESTClient.get_auth_instance()
   try:
@@ -93,21 +95,42 @@ def assign_jira(issue_key: str, assignee_email: str) -> JiraIssueOutput:
     response = requests.put(assignee_url, headers=headers, data=payload, auth=auth)
     if response.status_code == 204:
       urlify_jira_issue_id = _urlify_jira_issue_id(issue_key)
-      logging.info(f'JIRA ticket {issue_key} assigned to {assignee_email} successfully.')
-      return JiraIssueOutput(response=f"JIRA ticket assigned successfully {urlify_jira_issue_id}.")
+      logging.info(f'Jira ticket {issue_key} assigned to {assignee_email} successfully.')
+      return f"Jira ticket assigned successfully {urlify_jira_issue_id}."
     else:
-      logging.error(f'Failed to assign JIRA ticket {issue_key} to {assignee_email}. Status code: {response.status_code}, Response: {response.text}')
-      return JiraIssueOutput(response="Failed to assign JIRA ticket.")
+      logging.error(f'Failed to assign Jira ticket {issue_key} to {assignee_email}. Status code: {response.status_code}, Response: {response.text}')
+      return "Failed to assign Jira ticket."
   except Exception as e:
-    logging.error(f'Failed to assign JIRA ticket {issue_key} to {assignee_email}. Error: {e}')
+    logging.error(f'Failed to assign Jira ticket {issue_key} to {assignee_email}. Error: {e}')
+    return INTERNAL_ERROR_MESSAGE + ":" + str(e)
+
+def assign_jira(issue_key: str, assignee_email: str) -> JiraIssueOutput:
+  """
+  Assign a Jira ticket to a specified user.
+
+  Args:
+      issue_key (str): The key of the Jira issue to assign.
+      assignee_email (str): The email of the user to assign the issue to.
+
+  Returns:
+      JiraIssueOutput: The output model containing the result of the assignment.
+  """
+  logging.info(f"Assigning Jira ticket {issue_key} to {assignee_email}")
+
+  try:
+    result = _assign_jira(issue_key, assignee_email)
+    return JiraIssueOutput(response=result)
+  except Exception as e:
+    logging.error(f'Failed to assign Jira ticket {issue_key} to {assignee_email}. Error: {e}')
     return JiraIssueOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
-def update_issue_reporter(issue_key: str, reporter_email: str) -> JiraIssueOutput:
+@dryrun_response(MOCK_UPDATE_ISSUE_REPORTER_RESPONSE)
+def _update_jira_reporter(issue_key: str, reporter_email: str) -> str:
   """
   Update the reporter of a Jira issue.
 
   Args:
-      issue_key (str): Jira Issue ID.
+      issue_key (str): The key of the Jira issue.
       reporter_email (str): The email of the new reporter.
 
   Returns:
@@ -122,9 +145,26 @@ def update_issue_reporter(issue_key: str, reporter_email: str) -> JiraIssueOutpu
     issue.update(reporter={'id': reporter_id})
     logging.info("Reporter updated successfully.")
     urlify_jira_issue_id = _urlify_jira_issue_id(issue_key)
-    return JiraIssueOutput(response=f"Reporter updated successfully on Jira {urlify_jira_issue_id}.")
+    return f"Reporter updated successfully on Jira {urlify_jira_issue_id}."
   except Exception as e:
     logging.error(f"Error updating reporter: {e}")
+    raise ValueError(INTERNAL_ERROR_MESSAGE + ":" + str(e))
+
+def update_issue_reporter(issue_key: str, reporter_email: str) -> JiraIssueOutput:
+  """
+  Update the reporter of a Jira issue.
+
+  Args:
+      issue_key (str): The key of the Jira issue.
+      reporter_email (str): The email of the new reporter.
+
+  Returns:
+      JiraIssueOutput: The output model containing the result of the update.
+  """
+  try:
+    result = _update_jira_reporter(issue_key, reporter_email)
+    return JiraIssueOutput(response=result)
+  except Exception as e:
     return JiraIssueOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
 def add_new_label_to_issue(issue_key: str, label: str) -> JiraIssueOutput:
@@ -132,23 +172,28 @@ def add_new_label_to_issue(issue_key: str, label: str) -> JiraIssueOutput:
   Add a new label to a Jira issue.
 
   Args:
-      issue_key (str): Jira Issue ID.
+      issue_key (str): The key of the Jira issue.
       label (str): The label to add.
 
   Returns:
-      str: A message indicating the result of the operation.
+      JiraIssueOutput: The output model containing the result of the operation.
   """
-  return _add_new_label_to_issue(issue_key, label)
+  try:
+    issue_url =  _add_new_label_to_issue(issue_key, label)
+    return JiraIssueOutput(response=issue_url)
+  except Exception as e:
+    return JiraIssueOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
-def get_jira_issue_details(issue_key: str) -> JiraIssueOutput:
+@dryrun_response(MOCK_GET_JIRA_ISSUE_DETAILS_RESPONSE)
+def _get_jira_issue_details(issue_key: str) -> dict:
   """
-  Retrieve the details of a Jira ticket based on its key.
+  Retrieve the details of a Jira issue.
 
   Args:
-      issue_key (str): Jira Issue ID.
+      issue_key (str): The key of the Jira issue.
 
   Returns:
-      dict: A dictionary containing the details of the ticket.
+      dict: A dictionary containing the details of the issue.
   """
   logging.info(f"Retrieving details for ticket: {issue_key}")
 
@@ -167,23 +212,40 @@ def get_jira_issue_details(issue_key: str) -> JiraIssueOutput:
       "created": issue.fields.created,
       "updated": issue.fields.updated,
     }
-    resp_str = f"Jira Issue Details: {ticket_details}"
-    return JiraIssueOutput(response=resp_str)
+    return ticket_details
 
   except Exception as e:
     logging.error(f"Error retrieving Jira issue details: {e}")
+    raise ValueError(INTERNAL_ERROR_MESSAGE + ":" + str(e))
+
+def get_jira_issue_details(issue_key: str) -> JiraIssueOutput:
+  """
+  Retrieve the details of a Jira issue.
+
+  Args:
+      issue_key (str): The key of the Jira issue.
+
+  Returns:
+      JiraIssueOutput: The output model containing the details of the issue.
+  """
+  try:
+    ticket_details = _get_jira_issue_details(issue_key)
+    resp_str = f"Jira Issue Details: {ticket_details}"
+    return JiraIssueOutput(response=resp_str)
+  except Exception as e:
     return JiraIssueOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
-def _add_new_label_to_issue(issue_key: str, label: str) -> JiraIssueOutput:
+@dryrun_response(MOCK_ADD_NEW_LABEL_TO_ISSUE_RESPONSE)
+def _add_new_label_to_issue(issue_key: str, label: str) -> str:
   """
   Add a new label to a Jira issue.
 
   Args:
-      issue_key (str): Jira Issue ID.
+      issue_key (str): The key of the Jira issue.
       label (str): The label to add.
 
   Returns:
-      JiraIssueOutput: The result of the operation.
+      str: A message indicating the result of the operation.
   """
   logging.info(f"Adding label '{label}' to ticket: {issue_key}")
   try:
@@ -193,10 +255,9 @@ def _add_new_label_to_issue(issue_key: str, label: str) -> JiraIssueOutput:
     issue.update(fields={"labels": issue.fields.labels})
     logging.info("Label added successfully.")
     urlify_jira_issue_id = _urlify_jira_issue_id(issue_key)
-    return JiraIssueOutput(response=f"Label added successfully on Jira {urlify_jira_issue_id}.")
+    return f"Label added successfully on Jira {urlify_jira_issue_id}."
   except Exception as e:
-    logging.error(f"Error adding label: {e}")
-    return JiraIssueOutput(response="Failed to add label.")
+    raise ValueError(f"Error adding label: {e}")
 
 def _urlify_jira_issue_id(issue_id: str) -> str:
   """
@@ -230,9 +291,10 @@ def _create_jira_urlified_list(issues) -> list:
     issues_md.append(f"[{issue.key}: {issue_summary}]({issue_link})")
   return issues_md
 
+@dryrun_response(MOCK_GET_ACCOUNT_ID_FROM_EMAIL_RESPONSE)
 def _get_account_id_from_email(email: str) -> str:
   """
-  Retrieves the account ID associated with a given email address in JIRA.
+  Retrieve the account ID associated with a given email address in Jira.
 
   Args:
       email (str): The email address of the user whose account ID is to be retrieved.
@@ -241,7 +303,7 @@ def _get_account_id_from_email(email: str) -> str:
       str: The account ID of the user, as a string. Returns None if the user is not found or if an error occurs.
 
   Raises:
-      Exception: If the JIRA API request fails or encounters an error. The exception will contain details about the failure, including the HTTP status code and response text (if available).
+      Exception: If the Jira API request fails or encounters an error.
   """
   try:
     jira_server_url, auth, headers = JiraRESTClient.get_auth_instance()
@@ -266,17 +328,17 @@ def _get_account_id_from_email(email: str) -> str:
         return account_id
       else:
         logging.warning(f'No users found with email {email}.')
-        return None
+        return ""
     else:
       logging.error(f'Failed to retrieve user details for email {email}. Status code: {user_search_response.status_code}, Response: {user_search_response.text}')
-      return None
+      return ""
   except Exception as e:
     logging.error(f'Failed to get account ID for email {email}. Error: {e}')
-    return None
+    return ""
 
 def get_account_id_from_email(email: str) -> str:
   """
-  Retrieves the account ID associated with a given email address in JIRA.
+  Retrieve the account ID associated with a given email address in Jira.
 
   Args:
       email (str): The email address of the user whose account ID is to be retrieved.
@@ -285,11 +347,11 @@ def get_account_id_from_email(email: str) -> str:
       str: The account ID of the user, as a string. Returns None if the user is not found or if an error occurs.
 
   Raises:
-      Exception: If the JIRA API request fails or encounters an error. The exception will contain details about the failure, including the HTTP status code and response text (if available).
+      Exception: If the Jira API request fails or encounters an error.
   """
   return _get_account_id_from_email(email)
 
-
+@dryrun_response(MOCK_GET_SUPPORTED_JIRA_ISSUE_TYPES_RESPONSE)
 def _get_supported_issue_types(project_key: str) -> list[str]:
   """
   Retrieve supported issue types for Jira issues in a specific project.

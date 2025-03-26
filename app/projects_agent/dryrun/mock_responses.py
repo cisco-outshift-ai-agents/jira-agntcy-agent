@@ -1,0 +1,1 @@
+MOCK_GET_PROJECT_KEY_BY_NAME_RESPONSE = "http://mock.jira.instance.test/browse/FOO, {\"key\": \"FOO\", \"name\": \"foo\"}"

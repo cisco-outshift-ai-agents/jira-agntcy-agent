@@ -1,8 +1,7 @@
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
-from core.config import settings
+from core.config import Settings
 
-
-def get_llm():
+def get_llm(settings: Settings):
     """
     Get the LLM provider based on the configuration.
     """

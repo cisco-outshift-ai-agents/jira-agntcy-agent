@@ -6,7 +6,7 @@ from http import HTTPStatus
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 
-from core.config import INTERNAL_ERROR_MESSAGE, settings
+from core.config import INTERNAL_ERROR_MESSAGE, get_settings_from_env
 from models.models import Any, ErrorResponse, RunCreateStateless, Union
 
 from graph.graph import JiraGraph
@@ -73,7 +73,7 @@ def run_stateless_runs_post(body: RunCreateStateless) -> Union[Any, ErrorRespons
     payload = {
         "agent_id": agent_id,
         "output": result,
-        "model": settings.OPENAI_API_VERSION,
+        "model": get_settings_from_env().OPENAI_API_VERSION,
         "metadata": {},
     }
 

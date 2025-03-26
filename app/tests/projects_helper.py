@@ -35,20 +35,6 @@ def validate_env_vars():
 
     return True, ""
 
-
-def get_projects_tools_executed(result):
-    tools_executed = []
-    tools_executed_dict = {}
-    for message in result['messages']:
-        if hasattr(message, 'tool_call_id'):
-            if hasattr(message, 'name'):
-                # print(f"\nTool: {message.name}, Content: {message.content}")
-                tools_executed.append(message.name)
-                tools_executed_dict[message.name] = message.content
-
-    return tools_executed, tools_executed_dict
-
-
 def get_project_by_key(project_key: str):
     jira_instance = os.getenv("JIRA_INSTANCE")
     jira_basic_auth_token = os.getenv("JIRA_BASIC_AUTH_TOKEN")
@@ -112,3 +98,6 @@ def project_update_description(project_key: str, description: str):
 #         headers=headers,
 #         url=url
 #     )
+
+def contains_all_elements(list1, list2):
+    return all(elem in list1 for elem in list2)

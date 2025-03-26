@@ -36,11 +36,11 @@ class JiraClient:
       raise ValueError("Unsupported authentication type. Use 'basic', 'token', or 'oauth'.")
 
   @classmethod
-  def get_jira_instance(cls):
+  def get_jira_instance(cls, client_config=None):
     if cls._client is None:
       with cls._lock:
         if cls._client is None:
-          config = JiraClientConfig.from_env()
+          config = client_config or JiraClientConfig.from_env()
           cls._client = JiraClient(config).client
     return cls._client
 

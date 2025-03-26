@@ -6,6 +6,7 @@ from users_agent.users_models import JiraUserOutput
 from users_agent.users_models import GetJiraAccountIdByUserEmailInput
 
 from utils.jira_utils import jira_request_get, jira_request_post
+from utils.dryrun_utils import dryrun_response
 
 from core.config import INTERNAL_ERROR_MESSAGE
 
@@ -15,7 +16,7 @@ from core.config import INTERNAL_ERROR_MESSAGE
 # "The user email supplied at project creation is not the project lead Account ID\n"
 # option 2-adding get_jira_accountID_by_user_email to the supervisor tools also works, without adding users agent to supervisor agents
 # option 3- used currently - helper fn _get_jira_accountID_by_user_email invoked from project agent tools as required.
-
+@dryrun_response("test")
 def get_jira_accountID_by_user_email(input: GetJiraAccountIdByUserEmailInput) -> JiraUserOutput:
     """get jira user account ID by user email.
          Args:

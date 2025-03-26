@@ -23,7 +23,7 @@ def jira_request_get(url_path: str) -> str:
 
         if jira_basic_auth_token is None:
             jira_basic_auth_token = base64.b64encode(f'{os.getenv("JIRA_USERNAME")}:{os.getenv("JIRA_API_TOKEN")}'.encode()).decode()
-        if jira_instance.startswith("http"):
+        if jira_instance and jira_instance.startswith("http"):
             jira_instance = jira_instance.replace("http://", "").replace("https://", "")
 
         headers = {

@@ -89,6 +89,23 @@ This output confirms that:
 2. The server is listening on `0.0.0.0:8125`.
 3. Your environment variables (like `.env file loaded`) are read.
 
+## Docker
+
+Alternatively, you can run the application with Docker by building the Docker image and running the container.
+
+- **Build the Docker Image**: Create a Docker image from the Dockerfile in the current directory.
+
+  ```bash
+  docker build -t your_docker_image_name .
+  ```o
+
+- **Run the Docker Container**: Start a container from the built image, using the `.env` file for environment variables and mapping port 8125.
+
+  ```bash
+  docker run --env-file .env -p 8125:8125 your_docker_image_name
+  ```
+
+
 ### Client
 
 Change to `client` folder
