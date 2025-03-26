@@ -21,11 +21,6 @@ DRYRUN = os.getenv("DRYRUN")
 
 @unittest.skipIf(not TEST_OPENAI_ENDPOINT or not TEST_OPENAI_API_KEY or not DRYRUN, "OPENAI_ENDPOINT or OPENAI_API_KEY or DRY not set")
 class TestPromptsIssues(unittest.TestCase):
-  def setUp(self):
-    os.putenv("DRYRUN", 'true')
-    os.putenv("JIRA_URL", "https://mock.jira.instance.test")
-    os.putenv("JIRA_INSTANCE", "https://mock.jira.instance.test")
-
   def getMockSettings(self):
     return Settings(
       JIRA_INSTANCE="https://mock.jira.instance.test",
@@ -71,7 +66,7 @@ class TestPromptsIssues(unittest.TestCase):
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_issue_details']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
-  #
+
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_perform_jira_transition(self):
     query = "transition jira issue TEST-123 to 'In Progress'"
@@ -106,6 +101,54 @@ class TestPromptsIssues(unittest.TestCase):
     tools_executed, tools_executed_dict = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql']
+    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+
+  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  def test_create_jira_issue(self):
+    query = "create a jira issue in project TEST with summary 'Test Issue' and description 'This is a test issue.'"
+    graph = JiraGraph(self.getMockSettings())
+    output, result = graph.serve(query)
+    self.assertIsNotNone(output)
+
+    tools_executed, tools_executed_dict = get_tools_executed(result)
+    logging.info(f"tools_executed: {tools_executed}")
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue']
+    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+
+  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  def test_assign_jira(self):
+    query = "assign the jira issue TEST-123 to samuyang@cisco.com"
+    graph = JiraGraph(self.getMockSettings())
+    output, result = graph.serve(query)
+    self.assertIsNotNone(output)
+
+    tools_executed, tools_executed_dict = get_tools_executed(result)
+    logging.info(f"tools_executed: {tools_executed}")
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'assign_jira']
+    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+
+  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  def test_update_issue_reporter(self):
+    query = "update the reporter of jira issue TEST-123 to samuyang@cisco.com"
+    graph = JiraGraph(self.getMockSettings())
+    output, result = graph.serve(query)
+    self.assertIsNotNone(output)
+
+    tools_executed, tools_executed_dict = get_tools_executed(result)
+    logging.info(f"tools_executed: {tools_executed}")
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'update_issue_reporter']
+    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+
+  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  def test_get_jira_transitions(self):
+    query = "get transitions for jira issue TEST-123"
+    graph = JiraGraph(self.getMockSettings())
+    output, result = graph.serve(query)
+    self.assertIsNotNone(output)
+
+    tools_executed, tools_executed_dict = get_tools_executed(result)
+    logging.info(f"tools_executed: {tools_executed}")
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_transitions']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
 if __name__ == '__main__':
