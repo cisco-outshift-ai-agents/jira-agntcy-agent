@@ -25,7 +25,7 @@ class SupervisorAgent:
             "2. **Issues**: Issues are the tasks or problems to be addressed within a project. They can be of different types such as Bug, Task, Story, Epic, and Sub-task.\n"
             "Issue agent will handle Jira transitions, issue creation, issue assignment, issue details, issue updates, and issue searches.\n"
             "Special instructions for Jira issue-related operations:\n"
-            "   - When creating a Jira issue or searching for supported issue types, if a project name is in the prompt, get the project info to obtain the project key. For operations like getting issue details or transitions, the project key is not needed.\n"
+            "   - When creating a Jira issue, if a project name is in the prompt, get the project info to obtain the project key. For operations like getting issue details or transitions, the project key is not needed.\n"
         )
 
     def agent(self, input_prompt=None):
