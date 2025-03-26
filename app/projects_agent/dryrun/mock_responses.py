@@ -1,2 +1,1 @@
-MOCK_FETCH_LLM_ACCESS_INFO_RESPONSE = "The URL for LLM access and the user credentials have been sent to foo@example via Webex"
-MOCK_GET_PROJECT_KEY_BY_NAME_RESPONSE = "The project key for the project named 'foo' is 'FOO'"
+MOCK_GET_PROJECT_KEY_BY_NAME_RESPONSE = "http://mock.jira.instance.test/browse/FOO, {\"key\": \"FOO\", \"name\": \"foo\"}"

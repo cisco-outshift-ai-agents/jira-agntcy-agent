@@ -36,7 +36,6 @@ def _retrieve_multiple_jira_issues(user_email: str, project: str, num_jira_issue
       maxResults=num_jira_issues_to_retrieve,
     )
     issues_md_list = _create_jira_urlified_list(issues)
-    logging.info(f"Issues found: {issues_md_list}")
     return issues_md_list
   except Exception as e:
     raise ValueError(f"Error retrieving service desk tickets: {e}")
