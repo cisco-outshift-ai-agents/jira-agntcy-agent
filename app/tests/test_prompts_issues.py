@@ -21,7 +21,7 @@ DRYRUN = os.getenv("DRYRUN")
 
 @unittest.skipIf(not TEST_OPENAI_ENDPOINT or not TEST_OPENAI_API_KEY or not DRYRUN, "OPENAI_ENDPOINT or OPENAI_API_KEY or DRY not set")
 class TestPromptsIssues(unittest.TestCase):
-  def getMockSettings(self):
+  def get_mock_settings(self):
     return Settings(
       JIRA_INSTANCE="https://mock.jira.instance.test",
       TEST_USER_EMAIL="test_user@example.com",
@@ -46,7 +46,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_add_new_label_to_issue(self):
     query = "add a new label 'urgent' to jira issue TEST-123"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -58,7 +58,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_get_jira_issue_details(self):
     query = "get details of jira issue TEST-123"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -70,7 +70,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_perform_jira_transition(self):
     query = "transition jira issue TEST-123 to 'In Progress'"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -82,7 +82,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_retrieve_multiple_jira_issues(self):
     query = "retrieve the latest 5 jira issues for user samuyang@cisco.com in project TEST"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -94,7 +94,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_search_jira_issues_using_jql(self):
     query = "search jira issues using JQL 'project = TEST AND status = Open'"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -106,7 +106,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_create_jira_issue(self):
     query = "create a jira issue in project TEST with summary 'Test Issue' and description 'This is a test issue.'"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -118,7 +118,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_assign_jira(self):
     query = "assign the jira issue TEST-123 to samuyang@cisco.com"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -130,7 +130,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_update_issue_reporter(self):
     query = "update the reporter of jira issue TEST-123 to samuyang@cisco.com"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -142,7 +142,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_get_jira_transitions(self):
     query = "get transitions for jira issue TEST-123"
-    graph = JiraGraph(self.getMockSettings())
+    graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
