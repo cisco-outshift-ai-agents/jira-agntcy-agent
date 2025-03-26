@@ -4,7 +4,8 @@ import logging
 from unittest import TestCase
 from graph.graph import JiraGraph
 
-from tests.projects_helper import validate_env_vars, get_tools_executed
+from tests.projects_helper import validate_env_vars
+from tests.utils import get_tools_executed
 from tests.projects_helper import get_project_by_key, project_update_description
 
 from core.logging_config import configure_logging

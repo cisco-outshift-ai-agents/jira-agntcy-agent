@@ -4,9 +4,8 @@ import logging
 from tenacity import retry, stop_after_attempt
 from graph.graph import JiraGraph
 from core.config import Settings
-from tests.projects_helper import validate_env_vars, get_tools_executed, contains_all_elements
-from issues_agent.issues_models import JiraIssueOutput
-
+from tests.projects_helper import validate_env_vars,  contains_all_elements
+from tests.utils import get_tools_executed, verify_llm_settings_for_test
 # Initialize logger
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
@@ -14,12 +13,7 @@ logging.getLogger('httpx').setLevel(logging.WARNING)
 logging.getLogger('httpcore').setLevel(logging.WARNING)
 
 TEST_PROMPT_ISSUES_RETRY_COUNT = 3
-# Check if required environment variables are set
-TEST_OPENAI_ENDPOINT = os.getenv("TEST_OPENAI_ENDPOINT")
-TEST_OPENAI_API_KEY = os.getenv("TEST_OPENAI_API_KEY")
-DRYRUN = os.getenv("DRYRUN")
-
-@unittest.skipIf(not TEST_OPENAI_ENDPOINT or not TEST_OPENAI_API_KEY or not DRYRUN, "OPENAI_ENDPOINT or OPENAI_API_KEY or DRY not set")
+@unittest.skipIf(verify_llm_settings_for_test(), "Required test environment variables not set")
 class TestPromptsIssues(unittest.TestCase):
   def get_mock_settings(self):
     return Settings(
@@ -33,10 +27,16 @@ class TestPromptsIssues(unittest.TestCase):
       LANGCHAIN_PROJECT="",
       LANGSMITH_API_KEY="",
       OPENAI_TEMPERATURE=0.7,
+      # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
+      # OpenAI Setting
       OPENAI_ENDPOINT=os.getenv("TEST_OPENAI_ENDPOINT"),
       OPENAI_API_KEY=os.getenv("TEST_OPENAI_API_KEY"),
-      OPENAI_API_VERSION='gpt-4o',
-      LLM_PROVIDER='openai',
+      # Azure Setting
+      AZURE_OPENAI_ENDPOINT=os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
+      AZURE_OPENAI_API_KEY=os.getenv("TEST_AZURE_OPENAI_API_KEY"),
+      AZURE_OPENAI_API_VERSION=os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
+      # Azure or OpenAI (default is Azure)
+      LLM_PROVIDER= os.getenv("TEST_LLM_PROVIDER"),
     )
 
   @classmethod
