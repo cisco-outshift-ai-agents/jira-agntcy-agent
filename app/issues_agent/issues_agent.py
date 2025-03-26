@@ -1,6 +1,6 @@
 from core.llm import get_llm
 from langgraph.prebuilt import create_react_agent
-
+from core.config import get_settings_from_env
 from issues_agent.issues_models import JiraIssueOutput
 from issues_agent.issues_tools import (
   create_jira_issue,
@@ -13,7 +13,8 @@ from issues_agent.transitions_tools import perform_jira_transition, get_jira_tra
 from issues_agent.search_tools import retrieve_multiple_jira_issues, search_jira_issues_using_jql
 
 class IssuesAgent:
-  def __init__(self):
+  def __init__(self, settings=None):
+    self.settings = settings or get_settings_from_env()
     self.name = "jira_issues_agent"
     self.tools = [
       create_jira_issue,
@@ -36,7 +37,7 @@ class IssuesAgent:
   def agent(self):
     agent = create_react_agent(
       name=self.name,
-      model=get_llm(),
+      model=get_llm(self.settings),
       tools=self.tools,
       prompt=self.prompt,
       response_format=JiraIssueOutput

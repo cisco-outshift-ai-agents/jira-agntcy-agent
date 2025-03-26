@@ -86,5 +86,6 @@ class Settings(BaseSettings):
         env_file = ".env"
         extra = "ignore"  # This will ignore any extra environment variables.
 
+def get_settings_from_env() -> Settings:
+    return Settings()
 
-settings = Settings()

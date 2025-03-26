@@ -12,7 +12,7 @@ import uvicorn
 
 from graph.graph import JiraGraph
 from api.routes import stateless_runs
-from core.config import settings
+from core.config import get_settings_from_env
 from core.logging_config import configure_logging
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI
@@ -153,6 +153,7 @@ def create_app() -> FastAPI:
     Returns:
         FastAPI: The configured FastAPI application instance.
     """
+    settings = get_settings_from_env()
     app = FastAPI(
         title=settings.PROJECT_NAME,
         openapi_url=f"{settings.API_V1_STR}/openapi.json",

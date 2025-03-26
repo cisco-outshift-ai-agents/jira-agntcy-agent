@@ -36,7 +36,7 @@ def validate_env_vars():
     return True, ""
 
 
-def get_projects_tools_executed(result):
+def get_tools_executed(result):
     tools_executed = []
     tools_executed_dict = {}
     for message in result['messages']:
@@ -112,3 +112,6 @@ def project_update_description(project_key: str, description: str):
 #         headers=headers,
 #         url=url
 #     )
+
+def contains_all_elements(list1, list2):
+    return all(elem in list1 for elem in list2)

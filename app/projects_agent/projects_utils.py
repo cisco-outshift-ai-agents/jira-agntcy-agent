@@ -8,15 +8,17 @@ from projects_agent.projects_models import (CreateJiraProjectInput,
                                             GetJiraProjectByNameInput,
                                             UpdateJiraProjectDescriptionInput,
                                             UpdateJiraProjectLeadInput)
+from projects_agent.dryrun.mock_responses import MOCK_GET_PROJECT_KEY_BY_NAME_RESPONSE
 
 from utils.jira_utils import jira_request_get, jira_request_post, jira_request_put
+from utils.dryrun_utils import dryrun_response
 
 from core.config import INTERNAL_ERROR_MESSAGE
 
 
 ############################## Tool helper functions ##############################
 
-
+@dryrun_response(JiraProjectOutput(response=MOCK_GET_PROJECT_KEY_BY_NAME_RESPONSE))
 def _get_jira_project_by_name(input: GetJiraProjectByNameInput) -> JiraProjectOutput:
     """get a jira project by name.
          Args:

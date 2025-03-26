@@ -4,7 +4,7 @@ import logging
 from unittest import TestCase
 from graph.graph import JiraGraph
 
-from tests.projects_helper import validate_env_vars, get_projects_tools_executed
+from tests.projects_helper import validate_env_vars, get_tools_executed
 from tests.projects_helper import get_project_by_key, project_update_description
 
 from core.logging_config import configure_logging
@@ -51,7 +51,7 @@ class TestPromptsProjects(unittest.TestCase):
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
-        tools_executed, tools_executed_dict = get_projects_tools_executed(result)
+        tools_executed, tools_executed_dict = get_tools_executed(result)
 
         # check if expected tools were executed
         tools_executed_expected = ['transfer_to_jira_projects_agent',
@@ -93,7 +93,7 @@ class TestPromptsProjects(unittest.TestCase):
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
-        tools_executed, tools_executed_dict = get_projects_tools_executed(result)
+        tools_executed, tools_executed_dict = get_tools_executed(result)
 
         # check if expected tools were executed
         # create_project_tool not executed, as project already exists
@@ -135,7 +135,7 @@ class TestPromptsProjects(unittest.TestCase):
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
-        tools_executed, tools_executed_dict = get_projects_tools_executed(result)
+        tools_executed, tools_executed_dict = get_tools_executed(result)
 
         # check if expected tools were executed
         tools_executed_expected = ['transfer_to_jira_projects_agent',
@@ -175,7 +175,7 @@ class TestPromptsProjects(unittest.TestCase):
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
-        tools_executed, tools_executed_dict = get_projects_tools_executed(result)
+        tools_executed, tools_executed_dict = get_tools_executed(result)
 
         # check if expected tools were executed
         tools_executed_expected = ['transfer_to_jira_projects_agent',

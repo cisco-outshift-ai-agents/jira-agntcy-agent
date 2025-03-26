@@ -12,4 +12,8 @@ langchain==0.3.19
 langgraph-prebuilt==0.1.2
 langgraph-checkpoint==2.0.16
 langgraph-cli[inmem]==0.1.74
-jira
+jira~=3.8.0
+requests~=2.32.3
+python-dotenv~=1.0.1
+starlette~=0.46.1
+langchain-core~=0.3.45

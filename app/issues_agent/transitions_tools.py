@@ -1,12 +1,20 @@
+from typing import List, Any
+
 import requests
 import json
 import logging
 
 from issues_agent.issues_models import JiraIssueOutput
 from jira_client.client import JiraRESTClient
+from utils.dryrun_utils import dryrun_response
+from issues_agent.dryrun.mock_responses import (
+  MOCK_PERFORM_JIRA_TRANSITION_RESPONSE,
+  MOCK_GET_REQUIRED_FIELDS_FOR_TRANSITION_RESPONSE,
+  MOCK_GET_JIRA_TRANSITIONS_RESPONSE,
+)
 
-
-def _get_required_fields_for_transition(issue_key: str, transition_name: str) -> list:
+@dryrun_response(MOCK_GET_REQUIRED_FIELDS_FOR_TRANSITION_RESPONSE)
+def _get_required_fields_for_transition(issue_key: str, transition_name: str) -> list[Any] | None:
   """
   Retrieves the required fields for a given transition in a JIRA issue.
 
@@ -44,6 +52,7 @@ def _get_required_fields_for_transition(issue_key: str, transition_name: str) ->
     logging.error(f'Failed to retrieve transitions for JIRA ticket {issue_key}. Error: {e}')
     return None
 
+@dryrun_response(MOCK_GET_JIRA_TRANSITIONS_RESPONSE)
 def _get_jira_transitions(issue_key: str) -> list:
   """
   Retrieves available transitions for a given JIRA issue.
@@ -95,31 +104,32 @@ def get_jira_transitions(issue_key: str) -> JiraIssueOutput:
 
   return JiraIssueOutput(response="Failed to retrieve transitions for JIRA ticket.")
 
-def perform_jira_transition(
+@dryrun_response(MOCK_PERFORM_JIRA_TRANSITION_RESPONSE)
+def _perform_jira_transition(
         issue_key: str,
         resolution_id: str,
         transition_name: str
-) -> JiraIssueOutput:
+) -> str:
   """
   Transitions a JIRA ticket to a specified state.
 
   Args:
-    issue_key (str): The key of the JIRA issue to transition.
-    transition_name (str): The name of the transition to perform.
-    resolution_id (str, optional): The ID of the resolution to set when transitioning to a resolved state. Defaults to None.
+      issue_key (str): The key of the JIRA issue to transition.
+      transition_name (str): The name of the transition to perform.
+      resolution_id (str, optional): The ID of the resolution to set when transitioning to a resolved state. Defaults to None.
 
   Returns:
-    str: A message indicating the result of the transition.
+      str: A message indicating the result of the transition.
 
   Raises:
-    Exception: If the JIRA API request fails or encounters an error. The exception will contain details about the failure, including the HTTP status code and response text (if available).
+      Exception: If the JIRA API request fails or encounters an error. The exception will contain details about the failure, including the HTTP status code and response text (if available).
   """
   logging.info(f'Attempting to transition JIRA ticket {issue_key} to state {transition_name} with resolution ID {resolution_id}.')
   jira_server_url, auth, headers = JiraRESTClient.get_auth_instance()
 
   try:
     transition_url = f'{jira_server_url}/rest/api/3/issue/{issue_key}/transitions'
-    available_transitions =  _get_jira_transitions(issue_key)
+    available_transitions = _get_jira_transitions(issue_key)
     if not available_transitions:
       raise Exception(f"No transitions found for JIRA ticket {issue_key}.")
 
@@ -138,7 +148,7 @@ def perform_jira_transition(
       }
     }
 
-    required_fields =  _get_required_fields_for_transition(issue_key, transition_name)
+    required_fields = _get_required_fields_for_transition(issue_key, transition_name)
     fields = {}
     logging.info(f'Required fields for transition {transition_name} on JIRA ticket {issue_key}: {json.dumps(required_fields, indent=2)}')
     if required_fields:
@@ -163,10 +173,32 @@ def perform_jira_transition(
 
     if transition_response.status_code == 204:
       logging.info(f'JIRA ticket {issue_key} transitioned to state {transition_name} successfully.')
-      return JiraIssueOutput(response="JIRA ticket transitioned to {transition_name} successfully.")
+      return f"JIRA ticket transitioned to {transition_name} successfully."
     else:
       logging.error(f'Failed to transition JIRA ticket {issue_key} to state {transition_name}. Status code: {transition_response.status_code}, Response: {transition_response.text}')
+      raise Exception(f"Failed to transition JIRA ticket {issue_key} to state {transition_name}. Status code: {transition_response.status_code}, Response: {transition_response.text}")
   except Exception as e:
     logging.error(f'Failed to transition JIRA ticket {issue_key} to state {transition_name}. Error: {e}')
     raise e
-  return JiraIssueOutput(response=f"Failed to transition JIRA ticket to {transition_name}.")
+
+def perform_jira_transition(
+        issue_key: str,
+        resolution_id: str,
+        transition_name: str
+) -> JiraIssueOutput:
+  """
+  Transitions a JIRA ticket to a specified state.
+
+  Args:
+      issue_key (str): The key of the JIRA issue to transition.
+      transition_name (str): The name of the transition to perform.
+      resolution_id (str, optional): The ID of the resolution to set when transitioning to a resolved state. Defaults to None.
+
+  Returns:
+      JiraIssueOutput: A message indicating the result of the transition.
+  """
+  try:
+    result = _perform_jira_transition(issue_key, resolution_id, transition_name)
+    return JiraIssueOutput(response=result)
+  except Exception as e:
+    return JiraIssueOutput(response=f"Failed to transition JIRA ticket to {transition_name}. Error: {str(e)}")

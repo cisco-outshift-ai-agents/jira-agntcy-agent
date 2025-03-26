@@ -1,5 +1,5 @@
 from core.llm import get_llm
-
+from core.config import get_settings_from_env
 from langgraph.prebuilt import create_react_agent
 
 from projects_agent.projects_models import JiraProjectOutput
@@ -12,7 +12,8 @@ from projects_agent.projects_tools import (get_jira_project_by_name,
 
 class ProjectsAgent:
 
-    def __init__(self):
+    def __init__(self, settings=None):
+        self.settings = settings or get_settings_from_env()
         self.name="jira_projects_agent"
         self.tools=[get_jira_project_by_name,
                     create_jira_project,
@@ -28,10 +29,9 @@ class ProjectsAgent:
                    "7. Always search for the project key before creating Jira issue.")
 
     def agent(self):
-
         agent = create_react_agent(
             name=self.name,
-            model=get_llm(),
+            model=get_llm(self.settings),
             tools=self.tools,
             prompt=self.prompt,
             response_format=JiraProjectOutput

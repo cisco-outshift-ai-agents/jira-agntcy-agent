@@ -1,5 +1,5 @@
 from langgraph_supervisor import create_supervisor
-
+from core.config import Settings, get_settings_from_env
 from core.llm import get_llm
 from issues_agent.search_tools import search_jira_issues_using_jql
 from projects_agent.projects_agent import ProjectsAgent
@@ -8,10 +8,11 @@ from issues_agent.issues_agent import IssuesAgent
 # SupervisorAgent acts as a router for the Jira agents.
 class SupervisorAgent:
 
-    def __init__(self):
+    def __init__(self, settings:Settings=None):
+        self.settings = settings or get_settings_from_env()
         self.name = "jira_supervisor"
         self.tools = []
-        self.agents = [ProjectsAgent().agent(), IssuesAgent().agent()]
+        self.agents = [ProjectsAgent(settings).agent(), IssuesAgent(settings).agent()]
         self.prompt = (
             "You are a team supervisor managing the provided Jira agents."
             "Only use the agents provided."
@@ -22,8 +23,9 @@ class SupervisorAgent:
             "1. **Projects**: A project is a collection of issues. Projects can be of different types such as software, business, etc.\n"
             "---\n"
             "2. **Issues**: Issues are the tasks or problems to be addressed within a project. They can be of different types such as Bug, Task, Story, Epic, and Sub-task.\n"
+            "Issue agent will handle Jira transitions, issue creation, issue assignment, issue details, issue updates, and issue searches.\n"
             "Special instructions for Jira issue-related operations:\n"
-            "   - When creating a Jira issue, if a project name is in the prompt, get the project info to obtain the project key. For operations like getting issue details or transitions, the project key is not needed.\n"
+            "   - When creating a Jira issue or searching for supported issue types, if a project name is in the prompt, get the project info to obtain the project key. For operations like getting issue details or transitions, the project key is not needed.\n"
         )
 
     def agent(self, input_prompt=None):
@@ -38,7 +40,7 @@ class SupervisorAgent:
             supervisor_name=self.name,
             tools=self.tools,
             agents=self.agents,
-            model=get_llm(),
+            model=get_llm(self.settings),
             prompt=prompt,
             add_handoff_back_messages=True,
             output_mode="full_history",

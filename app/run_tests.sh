@@ -12,3 +12,6 @@
 # NOTE: These tests *run updates* on the Jira Project. Please use a *test jira project* for this test.
 # source tests/.env
 python3 -m unittest tests.test_prompts_projects
+
+# Ensure TEST_OPENAI_ENDPOINT and TEST_OPENAI_API_KEY are set
+DRYRUN=true python3 -m unittest tests.test_prompts_issues
