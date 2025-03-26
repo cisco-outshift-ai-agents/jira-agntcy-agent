@@ -5,7 +5,7 @@ from tenacity import retry, stop_after_attempt
 from graph.graph import JiraGraph
 from core.config import Settings
 from tests.projects_helper import validate_env_vars,  contains_all_elements
-from tests.utils import get_tools_executed, verify_llm_settings_for_test
+from tests.helper import get_tools_executed, verify_llm_settings_for_test
 # Initialize logger
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
@@ -13,7 +13,7 @@ logging.getLogger('httpx').setLevel(logging.WARNING)
 logging.getLogger('httpcore').setLevel(logging.WARNING)
 
 TEST_PROMPT_ISSUES_RETRY_COUNT = 3
-@unittest.skipIf(verify_llm_settings_for_test(), "Required test environment variables not set")
+@unittest.skipIf(not verify_llm_settings_for_test(), "Required test environment variables not set")
 class TestPromptsIssues(unittest.TestCase):
   def get_mock_settings(self):
     return Settings(
@@ -36,7 +36,7 @@ class TestPromptsIssues(unittest.TestCase):
       AZURE_OPENAI_API_KEY=os.getenv("TEST_AZURE_OPENAI_API_KEY"),
       AZURE_OPENAI_API_VERSION=os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
       # Azure or OpenAI (default is Azure)
-      LLM_PROVIDER= os.getenv("TEST_LLM_PROVIDER"),
+      LLM_PROVIDER= os.getenv("TEST_LLM_PROVIDER") or "azure",
     )
 
   @classmethod

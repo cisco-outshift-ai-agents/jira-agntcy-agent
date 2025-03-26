@@ -20,6 +20,7 @@ def verify_llm_settings_for_test():
       bool: True if either OpenAI or Azure settings are set, False otherwise.
       str: Error message if neither settings are set.
   """
+  print("DRYRUN: ", os.getenv("DRYRUN"))
   if not os.getenv("DRYRUN"):
     return False
 
