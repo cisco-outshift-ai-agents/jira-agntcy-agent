@@ -1,16 +1,21 @@
 import os
 import unittest
 import logging
+
+from dotenv import load_dotenv
 from tenacity import retry, stop_after_attempt
 from graph.graph import JiraGraph
 from core.config import Settings
-from tests.projects_helper import validate_env_vars,  contains_all_elements
+from tests.helper import contains_all_elements
 from tests.helper import get_tools_executed, verify_llm_settings_for_test
 # Initialize logger
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('httpx').setLevel(logging.WARNING)
 logging.getLogger('httpcore').setLevel(logging.WARNING)
+
+# load environment variables from .env file
+load_dotenv()
 
 TEST_PROMPT_ISSUES_RETRY_COUNT = 3
 @unittest.skipIf(not verify_llm_settings_for_test(), "Required test environment variables not set")

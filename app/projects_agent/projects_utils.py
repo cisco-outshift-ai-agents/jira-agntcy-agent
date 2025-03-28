@@ -8,7 +8,10 @@ from projects_agent.projects_models import (CreateJiraProjectInput,
                                             GetJiraProjectByNameInput,
                                             UpdateJiraProjectDescriptionInput,
                                             UpdateJiraProjectLeadInput)
-from projects_agent.dryrun.mock_responses import MOCK_GET_PROJECT_KEY_BY_NAME_RESPONSE
+from projects_agent.dryrun.mock_responses import (MOCK_GET_PROJECT_KEY_BY_NAME_RESPONSE,
+                                                  MOCK_CREATE_PROJECT_RESPONSE,
+                                                  MOCK_UPDATE_PROJECT_DESCRIPTION_RESPONSE,
+                                                  MOCK_UPDATE_PROJECT_LEAD_RESPONSE)
 
 from utils.jira_utils import jira_request_get, jira_request_post, jira_request_put
 from utils.dryrun_utils import dryrun_response
@@ -55,7 +58,7 @@ def _get_jira_project_by_name(input: GetJiraProjectByNameInput) -> JiraProjectOu
     except Exception as e:
         return JiraProjectOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
-
+@dryrun_response(JiraProjectOutput(response=MOCK_CREATE_PROJECT_RESPONSE))
 def _create_jira_project(input: CreateJiraProjectInput) -> JiraProjectOutput:
     """create a jira project and return the output.
          Args:
@@ -79,34 +82,31 @@ def _create_jira_project(input: CreateJiraProjectInput) -> JiraProjectOutput:
             else:
                 return JiraProjectOutput(response=f"{INTERNAL_ERROR_MESSAGE}: {input.leadAccountId} not found in Jira")
 
-        if os.getenv("USE_MOCK_RESP") == "true":
-            response_str = f"Created Jira project id:123 with owner: John Doe"
+        url_path = "/rest/api/3/project"
+
+        payload = json.dumps({
+            "assigneeType": "PROJECT_LEAD",
+            "description": input.description,
+            "key": input.key,
+            "leadAccountId": leadAccountId,
+            "name": input.name,
+            "projectTypeKey": input.projectTypeKey
+        })
+
+        jira_resp = jira_request_post(url_path, payload)
+        jira_resp_json = json.loads(jira_resp)
+        if 'error' in jira_resp_json and 'exception' in jira_resp_json:
+            response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
         else:
-            url_path = "/rest/api/3/project"
-
-            payload = json.dumps({
-                "assigneeType": "PROJECT_LEAD",
-                "description": input.description,
-                "key": input.key,
-                "leadAccountId": leadAccountId,
-                "name": input.name,
-                "projectTypeKey": input.projectTypeKey
-            })
-
-            jira_resp = jira_request_post(url_path, payload)
-            jira_resp_json = json.loads(jira_resp)
-            if 'error' in jira_resp_json and 'exception' in jira_resp_json:
-                response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
-            else:
-                project_url = jira_resp_json['self']
-                response_str = project_url
+            project_url = jira_resp_json['self']
+            response_str = project_url
 
         return JiraProjectOutput(response=response_str)
 
     except Exception as e:
         return JiraProjectOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
-
+@dryrun_response(JiraProjectOutput(response=MOCK_UPDATE_PROJECT_DESCRIPTION_RESPONSE))
 def _update_jira_project_description(input: UpdateJiraProjectDescriptionInput) -> JiraProjectOutput:
     """update a jira project description and return the output.
          Args:
@@ -122,29 +122,26 @@ def _update_jira_project_description(input: UpdateJiraProjectDescriptionInput) -
              which must have a `model_dump()` method for JSON conversion.
     """
     try:
-        if os.getenv("USE_MOCK_RESP") == "true":
-            response_str = f"Updated Jira project id:123 with description: description"
+        url_path = "/rest/api/3/project/" + input.key
+
+        payload = json.dumps({
+            "description": input.description
+        })
+
+        jira_resp = jira_request_put(url_path, payload)
+        jira_resp_json = json.loads(jira_resp)
+        if 'error' in jira_resp_json and 'exception' in jira_resp_json:
+            response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
         else:
-            url_path = "/rest/api/3/project/" + input.key
-
-            payload = json.dumps({
-                "description": input.description
-            })
-
-            jira_resp = jira_request_put(url_path, payload)
-            jira_resp_json = json.loads(jira_resp)
-            if 'error' in jira_resp_json and 'exception' in jira_resp_json:
-                response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
-            else:
-                project_url = jira_resp_json['self']
-                response_str = project_url
+            project_url = jira_resp_json['self']
+            response_str = project_url
 
         return JiraProjectOutput(response=response_str)
 
     except Exception as e:
         return JiraProjectOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
-
+@dryrun_response(JiraProjectOutput(response=MOCK_UPDATE_PROJECT_LEAD_RESPONSE))
 def _update_jira_project_lead(input: UpdateJiraProjectLeadInput) -> JiraProjectOutput:
     """update a jira project lead and return the output.
          Args:
@@ -168,22 +165,19 @@ def _update_jira_project_lead(input: UpdateJiraProjectLeadInput) -> JiraProjectO
             else:
                 return JiraProjectOutput(response=f"{INTERNAL_ERROR_MESSAGE}: {input.leadAccountId} not found in Jira")
 
-        if os.getenv("USE_MOCK_RESP") == "true":
-            response_str = f"Updated Jira project id:123 with lead: xxxx"
+        url_path = "/rest/api/3/project/" + input.key
+
+        payload = json.dumps({
+            "leadAccountId": leadAccountId
+        })
+
+        jira_resp = jira_request_put(url_path, payload)
+        jira_resp_json = json.loads(jira_resp)
+        if 'error' in jira_resp_json and 'exception' in jira_resp_json:
+            response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
         else:
-            url_path = "/rest/api/3/project/" + input.key
-
-            payload = json.dumps({
-                "leadAccountId": leadAccountId
-            })
-
-            jira_resp = jira_request_put(url_path, payload)
-            jira_resp_json = json.loads(jira_resp)
-            if 'error' in jira_resp_json and 'exception' in jira_resp_json:
-                response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
-            else:
-                project_url = jira_resp_json['self']
-                response_str = project_url
+            project_url = jira_resp_json['self']
+            response_str = project_url
 
         return JiraProjectOutput(response=response_str)
 

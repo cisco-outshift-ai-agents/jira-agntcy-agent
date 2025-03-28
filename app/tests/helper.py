@@ -41,3 +41,6 @@ def verify_llm_settings_for_test():
     return True, ""
   else:
     return False, "Either OpenAI or Azure settings must be set."
+
+def contains_all_elements(list1, list2):
+  return all(elem in list1 for elem in list2)

@@ -1,45 +1,52 @@
 import os
 import unittest
 import logging
-from unittest import TestCase
+
+from dotenv import load_dotenv
 from graph.graph import JiraGraph
 
-from tests.projects_helper import validate_env_vars
 from tests.helper import get_tools_executed
-from tests.projects_helper import get_project_by_key, project_update_description
 
-from core.logging_config import configure_logging
+from core.config import Settings
 
-from projects_agent.projects_utils import _get_jira_accountID_by_user_email
+from tests.helper import verify_llm_settings_for_test
 
 # Initialize logger
-logger = configure_logging()
+logger = logging.getLogger()
+logging.basicConfig(level=logging.INFO)
+logging.getLogger('httpx').setLevel(logging.WARNING)
+logging.getLogger('httpcore').setLevel(logging.WARNING)
 
+# load environment variables from .env file
+load_dotenv()
 
+TEST_PROJECT_NAME="foo"
+TEST_PROJECT_KEY="FOO"
+TEST_PROJECT_LEAD_EMAIL="test_alfred_user@example.com"
+
+@unittest.skipIf(not verify_llm_settings_for_test(), "Required test environment variables not set")
 class TestPromptsProjects(unittest.TestCase):
 
-    def setUp(self):
-
-        # common setup for all tests
-
-        # 1. Env var validation
-        isEnvValid, msg = validate_env_vars()
-        self.assertTrue(isEnvValid, msg)
-
-        self.TEST_PROJECT_NAME = os.getenv("TEST_PROJECT_NAME")
-        self.TEST_PROJECT_KEY = os.getenv("TEST_PROJECT_KEY")
-        self.TEST_PROJECT_LEAD_EMAIL = os.getenv("TEST_PROJECT_LEAD_EMAIL")
-
-        # 2. project name and key validation
-        response = get_project_by_key(self.TEST_PROJECT_KEY)
-        if response.status_code == 404:
-            self.fail(
-                "TestSetupFailure: Please use a valid jira project key. Project with key does not exist: " + self.TEST_PROJECT_KEY)
-        project = response.json()
-        self.assertEqual(project['name'], self.TEST_PROJECT_NAME,
-                         "env var must contain a valid jira project key and associated project name.")
-
-        print("Test setup complete")
+    def get_mock_settings(self):
+        return Settings(
+            JIRA_INSTANCE="https://mock.jira.instance.test",
+            LANGCHAIN_TRACING_V2=False,
+            LANGCHAIN_ENDPOINT="",
+            LANGCHAIN_API_KEY="",
+            LANGCHAIN_PROJECT="",
+            LANGSMITH_API_KEY="",
+            OPENAI_TEMPERATURE=0.7,
+            # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
+            # OpenAI Setting
+            OPENAI_ENDPOINT=os.getenv("TEST_OPENAI_ENDPOINT"),
+            OPENAI_API_KEY=os.getenv("TEST_OPENAI_API_KEY"),
+            # Azure Setting
+            AZURE_OPENAI_ENDPOINT=os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
+            AZURE_OPENAI_API_KEY=os.getenv("TEST_AZURE_OPENAI_API_KEY"),
+            AZURE_OPENAI_API_VERSION=os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
+            # Azure or OpenAI (default is Azure)
+            LLM_PROVIDER=os.getenv("TEST_LLM_PROVIDER") or "azure",
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -47,8 +54,8 @@ class TestPromptsProjects(unittest.TestCase):
 
     def test_get_project_by_name(self):
 
-        query = f"get details for my project {self.TEST_PROJECT_NAME}"
-        graph = JiraGraph()
+        query = f"get details for my project {TEST_PROJECT_NAME}"
+        graph = JiraGraph(self.get_mock_settings())
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -67,72 +74,32 @@ class TestPromptsProjects(unittest.TestCase):
 
         # check if expected tools were executed with expected content
         self.assertRegex(tools_executed_dict['get_jira_project_by_name'], 'response=')
-
-        response = get_project_by_key(self.TEST_PROJECT_KEY)
-        if response.status_code == 404:
-            self.fail("Project with key does not exist: " + self.TEST_PROJECT_KEY)
-        project = response.json()
-
-        # check if the correct project url was returned in the tool response
-        expected_regex = ".*" + project['self'] + ".*"
-        self.assertRegex(tools_executed_dict['get_jira_project_by_name'], expected_regex,
-                         "did not get the correct project")
 
     def test_create_project_is_exists(self):
-        # Test - create a project that already exists - Implemented
 
-        # Test - create a project that does not exist - Skipped
-        # - intend to reuse same key for project creation testing-to avoid creating new projects each time.
-        # - so we need to archive / delete the project after the testcase is run.
-        # - but project archival/deletion will not allow creating project with same key for a timelimit(set by jira).
-        # - even restoring the project reuses the key, so we cannot create a project with the same key again.
-
-        query = (f"create a project for my venture {self.TEST_PROJECT_NAME} "
-                 f"with key {self.TEST_PROJECT_KEY} "
-                 f"and user {self.TEST_PROJECT_LEAD_EMAIL}")
-        graph = JiraGraph()
+        query = (f"create a JIRA project for my venture {TEST_PROJECT_NAME} "
+                 f"with key {TEST_PROJECT_KEY} "
+                 f"and user {TEST_PROJECT_LEAD_EMAIL}")
+        graph = JiraGraph(self.get_mock_settings())
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
         tools_executed, tools_executed_dict = get_tools_executed(result)
 
-        # check if expected tools were executed
-        # create_project_tool not executed, as project already exists
-        tools_executed_expected = ['transfer_to_jira_projects_agent',
-                                   'get_jira_project_by_name',
-                                   'transfer_back_to_jira_supervisor']
+        # create_project_tool must not be executed, as project already exists per mock response
+        tools_not_expected = ['create_jira_project']
 
-        err_msg = (f"Tools executed do not match expected tools. "
-                   f"Expected: {tools_executed_expected}, "
+        err_msg = (f"Tools executed error. "
+                   f"Tool Not Expected: {tools_not_expected}, "
                    f"Actual: {tools_executed}")
 
-        self.assertListEqual(tools_executed, tools_executed_expected, err_msg)
-
-        # check if expected tools were executed with expected content
-        self.assertRegex(tools_executed_dict['get_jira_project_by_name'], 'response=')
-
-        response = get_project_by_key(self.TEST_PROJECT_KEY)
-        if response.status_code == 404:
-            self.fail("Project with key does not exist: " + self.TEST_PROJECT_KEY)
-        project = response.json()
-
-        # check if the correct project url was returned in the tool response
-        expected_regex = ".*" + project['self'] + ".*"
-        self.assertRegex(tools_executed_dict['get_jira_project_by_name'], expected_regex,
-                         "did not get the correct project")
+        self.assertTrue(not any(tool in tools_executed for tool in tools_not_expected), err_msg)
 
     def test_update_project_description(self):
 
-        # setup for this test - initialize project description to empty
-        response = project_update_description(self.TEST_PROJECT_KEY, "")
-        if response.status_code != 200:
-            self.fail(
-                "TestSetupFailure: Project description could not be initialized for project with key: " + self.TEST_PROJECT_KEY)
-
-        # Run the test
         expected_description = "description updated by Alfred jira tests"
-        query = f"update description for project {self.TEST_PROJECT_NAME} to {expected_description}"
-        graph = JiraGraph()
+        query = f"update description for project {TEST_PROJECT_NAME} to {expected_description}"
+        graph = JiraGraph(self.get_mock_settings())
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -154,25 +121,10 @@ class TestPromptsProjects(unittest.TestCase):
         self.assertRegex(tools_executed_dict['get_jira_project_by_name'], 'response=')
         self.assertRegex(tools_executed_dict['update_jira_project_description'], 'response=')
 
-        # check if project description was updated as expected in jira
-        response = get_project_by_key(self.TEST_PROJECT_KEY)
-        if response.status_code == 404:
-            self.fail("Project with key does not exist: " + self.TEST_PROJECT_KEY)
-
-        project = response.json()
-        self.assertEqual(project['description'], expected_description, "Project description was not updated")
-
     def test_update_project_lead(self):
 
-        # setup for this test. check project lead valid
-        expected_account_id = _get_jira_accountID_by_user_email(self.TEST_PROJECT_LEAD_EMAIL)
-        if not expected_account_id:
-            self.fail(
-                "TestSetupFailure: Please use a valid user email. Jira User does not exist: " + self.TEST_PROJECT_LEAD_EMAIL)
-
-        # Run the test
-        query = f"update lead for {self.TEST_PROJECT_NAME} to {self.TEST_PROJECT_LEAD_EMAIL}"
-        graph = JiraGraph()
+        query = f"update lead for project {TEST_PROJECT_NAME} to {TEST_PROJECT_LEAD_EMAIL}"
+        graph = JiraGraph(self.get_mock_settings())
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -194,10 +146,5 @@ class TestPromptsProjects(unittest.TestCase):
         self.assertRegex(tools_executed_dict['get_jira_project_by_name'], 'response=')
         self.assertRegex(tools_executed_dict['update_jira_project_lead'], 'response=')
 
-        # check if project lead was updated as expected in jira
-        response = get_project_by_key(self.TEST_PROJECT_KEY)
-        if response.status_code == 404:
-            self.fail("Project with key does not exist: " + self.TEST_PROJECT_KEY)
-        project = response.json()
-
-        self.assertEqual(project['lead']['accountId'], expected_account_id, "Project lead was not updated")
+if __name__ == '__main__':
+  unittest.main()
