@@ -11,7 +11,7 @@ from typing import AsyncGenerator
 import uvicorn
 
 from graph.graph import JiraGraph
-from api.routes import stateless_runs
+from api.routes import stateless_runs, policy
 from core.config import get_settings_from_env
 from core.logging_config import configure_logging
 from dotenv import find_dotenv, load_dotenv
@@ -165,6 +165,7 @@ def create_app() -> FastAPI:
 
     add_handlers(app)
     app.include_router(stateless_runs.router, prefix=settings.API_V1_STR)
+    app.include_router(policy.router, prefix=settings.API_V1_STR)
 
     # Set all CORS enabled origins
     app.add_middleware(

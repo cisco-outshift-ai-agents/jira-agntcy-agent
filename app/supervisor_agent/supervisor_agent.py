@@ -1,3 +1,5 @@
+import logging
+
 from langgraph_supervisor import create_supervisor
 from core.config import Settings, get_settings_from_env
 from core.llm import get_llm
@@ -5,10 +7,11 @@ from issues_agent.search_tools import search_jira_issues_using_jql
 from projects_agent.projects_agent import ProjectsAgent
 from issues_agent.issues_agent import IssuesAgent
 
+
 # SupervisorAgent acts as a router for the Jira agents.
 class SupervisorAgent:
 
-    def __init__(self, settings:Settings=None):
+    def __init__(self, settings: Settings = None):
         self.settings = settings or get_settings_from_env()
         self.name = "jira_supervisor"
         self.tools = []
@@ -28,12 +31,12 @@ class SupervisorAgent:
             "   - When creating a Jira issue, if a project name is in the prompt, get the project info to obtain the project key. For operations like getting issue details or transitions, the project key is not needed.\n"
         )
 
-    def agent(self, input_prompt=None):
-
+    def agent(self, input_prompt: str = None):
+        prompt = self.prompt
         if input_prompt:
             prompt = self.prompt + " " + input_prompt
-        else:
-            prompt = self.prompt
+
+        print("SupervisorAgent: prompt:", prompt)
 
         # returns a state graph
         graph = create_supervisor(

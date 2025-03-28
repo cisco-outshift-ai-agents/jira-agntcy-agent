@@ -17,3 +17,6 @@ requests~=2.32.3
 python-dotenv~=1.0.1
 starlette~=0.46.1
 langchain-core~=0.3.45
+python-multipart==0.0.20
+pytest-mock==3.14.0
+pytest

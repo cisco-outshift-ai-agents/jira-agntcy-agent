@@ -1,0 +1,8 @@
+{
+    "jira_instance": "example.atlassian.net",
+    "jira_auth": {
+        "username": "JIRA User Email",
+        "api_token": "JIRA Api Token"
+    },
+    "policy":"optional customer jira configuration information to be sent to the agent"
+}

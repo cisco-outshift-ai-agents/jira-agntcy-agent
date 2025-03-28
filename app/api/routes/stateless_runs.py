@@ -11,11 +11,10 @@ from models.models import Any, ErrorResponse, RunCreateStateless, Union
 
 from graph.graph import JiraGraph
 
+from api.routes.policy import get_policyfile_policy
 
 router = APIRouter(tags=["Stateless Runs"])
 logger = logging.getLogger(__name__)  # This will be "app.api.routes.<name>"
-graph = JiraGraph()
-
 
 @router.post(
     "/runs",
@@ -56,8 +55,11 @@ def run_stateless_runs_post(body: RunCreateStateless) -> Union[Any, ErrorRespons
         # Retrieve the 'query' field from the input dictionary.
         query = input_field.get("query")
         logging.info("query: %s", query)
+
+        graph = JiraGraph(policy=get_policyfile_policy())
         result, result_detail = graph.serve(query)
         logging.info("result: %s", result)
+
     except HTTPException as http_exc:
         logger.error(
             "HTTP error during run processing: %s", http_exc.detail, exc_info=True

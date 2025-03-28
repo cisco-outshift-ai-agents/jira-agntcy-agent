@@ -1,4 +1,5 @@
 import logging
+import os
 import uuid
 from pydantic import BaseModel
 from langgraph.checkpoint.memory import InMemorySaver
@@ -17,11 +18,12 @@ class JiraGraphResponse(BaseModel):
 
 
 class JiraGraph:
-    def __init__(self, settings:Settings=None):
+    def __init__(self, settings: Settings = None, policy: str = None):
         """
         Initialize the JiraGraph as a LangGraph.
         """
         self.settings = settings or get_settings_from_env()
+        self.policy = policy
         self.graph = self.build_graph()
 
     def build_graph(self):
@@ -31,7 +33,7 @@ class JiraGraph:
         Returns:
             CompiledGraph: A compiled LangGraph instance.
         """
-        graph = SupervisorAgent(settings=self.settings).agent()
+        graph = SupervisorAgent(settings=self.settings).agent(input_prompt=self.policy)
 
         checkpointer = InMemorySaver()
         return graph.compile(checkpointer=checkpointer)
