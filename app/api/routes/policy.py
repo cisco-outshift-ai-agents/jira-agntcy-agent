@@ -17,6 +17,7 @@ from pydantic import ValidationError, BaseModel, Field
 from jira_client.config import AUTH_TYPE_BASIC
 
 
+# todo below models to be moved to shared models repo or models.py
 class JiraAuth(BaseModel):
     """Expected input format for jira auth."""
     auth_type: Optional[str] = AUTH_TYPE_BASIC  # Authentication type
@@ -38,11 +39,16 @@ class JiraAgentPolicyOutput(BaseModel):
     policy: str
 
 
-POLICY_DIR = "."  # Directory to store the policy file
-POLICY_FILE_NAME = "policy.json"
-
 router = APIRouter(tags=["Policy"])
 logger = logging.getLogger(__name__)  # This will be "app.api.routes.<name>"
+
+if os.getenv("DRYRUN") == "true":
+    POLICY_DIR = "tmp_test_policy"
+    POLICY_FILE_NAME = "tmp_test_policy.json"
+    logging.info(f"Running policy API in test mode with {POLICY_DIR}/{POLICY_FILE_NAME}")
+else:
+    POLICY_DIR = "."  # Directory to store the policy file
+    POLICY_FILE_NAME = "policy.json"
 
 
 @router.post(

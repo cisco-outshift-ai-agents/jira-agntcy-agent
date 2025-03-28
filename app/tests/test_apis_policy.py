@@ -3,25 +3,28 @@ import os
 import pytest
 import httpx
 from fastapi.testclient import TestClient
-from app.api.routes.policy import router, POLICY_DIR, POLICY_FILE_NAME
+from api.routes.policy import router, POLICY_DIR, POLICY_FILE_NAME
 
 # python3 -m pytest tests/test_apis_policy.py
+
+TEST_POLICY_DIR = POLICY_DIR
+TEST_POLICY_FILE_NAME = POLICY_FILE_NAME
 
 client = TestClient(router)
 
 @pytest.fixture(autouse=True)
 def setup_and_teardown():
     # Setup: Create the policy directory if it doesn't exist
-    os.makedirs(POLICY_DIR, exist_ok=True)
+    os.makedirs(TEST_POLICY_DIR, exist_ok=True)
     yield
     # Teardown: Remove the policy file if it exists
-    policy_file = os.path.join(POLICY_DIR, POLICY_FILE_NAME)
+    policy_file = os.path.join(TEST_POLICY_DIR, TEST_POLICY_FILE_NAME)
     if os.path.exists(policy_file):
         os.remove(policy_file)
 
 
 def test_policy_create(mocker):
-    mocker.patch("app.api.routes.policy.validate_jira_auth", return_value=(True, ""))
+    mocker.patch("api.routes.policy.validate_jira_auth", return_value=(True, ""))
     policy_data = {
         "jira_instance": "example.atlassian.net",
         "jira_auth": {
@@ -40,7 +43,7 @@ def test_policy_create(mocker):
 
 
 def test_policy_get(mocker):
-    mocker.patch("app.api.routes.policy.validate_jira_auth", return_value=(True, ""))
+    mocker.patch("api.routes.policy.validate_jira_auth", return_value=(True, ""))
     policy_data = {
         "jira_instance": "example.atlassian.net",
         "jira_auth": {
@@ -49,7 +52,7 @@ def test_policy_get(mocker):
         },
         "policy": "optional customer jira configuration information to be sent to the agent"
     }
-    policy_file = os.path.join(POLICY_DIR, POLICY_FILE_NAME)
+    policy_file = os.path.join(TEST_POLICY_DIR, TEST_POLICY_FILE_NAME)
     with open(policy_file, "w") as f:
         f.write(json.dumps(policy_data))
 
@@ -70,7 +73,7 @@ def test_policy_delete():
         },
         "policy": "optional customer jira configuration information to be sent to the agent"
     }
-    policy_file = os.path.join(POLICY_DIR, POLICY_FILE_NAME)
+    policy_file = os.path.join(TEST_POLICY_DIR, TEST_POLICY_FILE_NAME)
     with open(policy_file, "w") as f:
         f.write(json.dumps(policy_data))
 

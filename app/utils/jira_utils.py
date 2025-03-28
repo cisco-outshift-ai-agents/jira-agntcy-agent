@@ -31,7 +31,7 @@ def jira_request_get(url_path: str) -> str:
             "Authorization": "Basic " + jira_basic_auth_token
         }
         url = f"https://{jira_instance}{url_path}"
-        logging.info(f"sending jira request to:{url}\n{headers}")
+        logging.info(f"sending jira request to:{url}")
         response = requests.request(
             "GET",
             url,
@@ -98,7 +98,7 @@ def jira_request_post(url_path: str, payload) -> str:
         }
         url = f"https://{jira_instance}{url_path}"
 
-        logging.info(f"sending jira request to:{url}, headers:{headers}, payload:{payload}")
+        logging.info(f"sending jira request to:{url}, payload:{payload}")
         response = requests.request(
             "POST",
             url,

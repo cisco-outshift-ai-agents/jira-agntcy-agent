@@ -5,6 +5,9 @@
 #pip install --upgrade pip setuptools
 #pip install -r requirements.txt
 
+# Api Tests with mocks
+DRYRUN=true python3 -m pytest tests/test_apis_policy.py
+
 # The purpose of this test is to do a quick validation for the tools executed for user prompts.
 # This test is run using a LLM and mock Jira responses.
 # USAGE: ./run_tests.sh
