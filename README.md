@@ -148,28 +148,13 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "agent_id": "remote_agent",
-  "input": {
-    "query":"create a jira issue in project Alfred Plus Test, to implement an Agent"
-  },
-  "metadata": {
-    "id":"c303282d-f2e6-46ca-a04a-35d3d873712d"
-  },
-  "config": {
-    "tags": [
-      "string"
-    ],
-    "recursion_limit": 0,
-    "configurable": {}
-  },
-  "webhook": "https://example.com/",
-  "stream_mode": [
-    "values"
-  ],
-  "on_completion": "delete",
-  "on_disconnect": "cancel",
-  "multitask_strategy": "reject",
-  "after_seconds": 0
+    "agent_id": "remote_agent",
+    "input": {
+        "query": "create a jira issue in project Alfred Plus Test, to implement an Agent"
+    },
+    "metadata": {
+        "id": "c303282d-f2e6-46ca-a04a-35d3d873712d"
+    }
 }'
 
 200 OK
