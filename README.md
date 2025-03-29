@@ -14,7 +14,7 @@ This repository contains a Jira AI Agent Protocol FastAPI application. It also i
 1. Clone the repository:
 
    ```bash
-   git clone TODO
+   git clone https://github.com/cisco-outshift-alfred/jira-agntcy-agent.git
    cd jira-agent
    ```
 
@@ -31,32 +31,46 @@ This repository contains a Jira AI Agent Protocol FastAPI application. It also i
 ### Required Environment Variables
 Before running the application, ensure you have the following environment variables set in your .env file or in your environment:
 
-- LLM_PROVIDER: The language model provider (e.g., azure or openai).
-- OPENAI_TEMPERATURE: The temperature setting for the language model (e.g., 0.7).
-- AZURE_OPENAI_DEPLOYMENT_NAME: The deployment name for Azure OpenAI (required if using azure as LLM_PROVIDER).
-- AZURE_OPENAI_ENDPOINT: The endpoint URL for Azure OpenAI (required if using azure as LLM_PROVIDER).
-- AZURE_OPENAI_API_KEY: Your Azure OpenAI API key (required if using azure as LLM_PROVIDER).
-- AZURE_OPENAI_API_VERSION: The API version for Azure OpenAI (required if using azure as LLM_PROVIDER).
-- OPENAI_API_KEY: Your OpenAI API key (required if using openai as LLM_PROVIDER).
-- OPENAI_API_VERSION: The model version for OpenAI (default is usually set to gpt-4o or similar).
-##### TODO Required currently. These may be removed later, once policy is used to populate jira instance and token
-- JIRA_INSTANCE: Your Jira domain.
-- JIRA_BASIC_AUTH_TOKEN: Your Jira Basic Auth token with adequate permissions to the Jira instance.
+#### **🔹 OpenAI API Configuration**
 
-Make sure your .env file includes these keys with the appropriate values. For example:
+If configuring your AI agent to use OpenAI as its LLM provider, set these variables:
 
 ```dotenv
-LLM_PROVIDER=azure
-OPENAI_TEMPERATURE=0.7
-OPENAI_API_VERSION=gpt-4o
-AZURE_OPENAI_ENDPOINT=https://your-azure-endpoint.com/
-AZURE_OPENAI_API_KEY=your-azure-api-key
-AZURE_OPENAI_API_VERSION=2023-03-15-preview
-# For OpenAI (if used)
-OPENAI_API_KEY=your-openai-api-key
+# OpenAI API Configuration
+OPENAI_API_KEY=your-openai-api-key-here
+OPENAI_API_VERSION=gpt-4o  # Specify the model name
+OPENAI_TEMPERATURE=0.7    # Adjust temperature for response randomness
+```
 
-JIRA_INSTANCE=your-jira-instance.net
-JIRA_BASIC_AUTH_TOKEN=your-jira-basic-auth-token
+---
+
+#### **🔹 Azure OpenAI API Configuration**
+
+If configuring your AI agent to use Azure OpenAI as its LLM provider, set these variables:
+
+```dotenv
+# Azure OpenAI API Configuration
+AZURE_OPENAI_API_KEY=your-azure-api-key-here
+AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
+AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name  # Deployment name in Azure
+AZURE_OPENAI_API_VERSION=your-azure-openai-api-version  # API version
+OPENAI_TEMPERATURE=0.7 # Adjust temperature for response randomness
+```
+
+---
+
+#### **🔹 Jira Configuration**
+
+TODO Cleanup.
+
+```dotenv
+JIRA_INSTANCE=Your Jira domain (Eg. example.atlassian.net).
+JIRA_USERNAME=Your Jira email wih appropriate permissions.
+JIRA_API_TOKEN=Your Jira API token.
+JIRA_BASIC_AUTH_TOKEN=Your Jira Basic Auth token obtained as base64 encoded string of JIRA_USERNAME:JIRA_API_TOKEN.
+```
+```bash
+echo -n user@example.com:api_token_string | base64
 ```
 
 ### Server
@@ -89,6 +103,7 @@ This output confirms that:
 2. The server is listening on `0.0.0.0:8125`.
 3. Your environment variables (like `.env file loaded`) are read.
 
+
 ## Docker
 
 Alternatively, you can run the application with Docker by building the Docker image and running the container.
@@ -97,7 +112,7 @@ Alternatively, you can run the application with Docker by building the Docker im
 
   ```bash
   docker build -t your_docker_image_name .
-  ```o
+  ```
 
 - **Run the Docker Container**: Start a container from the built image, using the `.env` file for environment variables and mapping port 8125.
 
@@ -106,19 +121,66 @@ Alternatively, you can run the application with Docker by building the Docker im
   ```
 
 
-### Client
+## AP REST Client
 
-Change to `client` folder
+*Change to `client` folder*
+
+*Update the user_prompt in `rest.py` to the desired prompt (sample prompts available in sample_prompts/*
+
+The REST client connects to the AP endpoint for the Server running at the default port 8125
 
 ```bash
 python rest.py
 ```
-
 On a successful remote graph run you should see logs in your terminal similar to the snippet below:
 
 ```bash
 {"timestamp": "2025-03-14 17:58:29,328", "level": "INFO", "message": "{'event': 'final_result', 'result': {'messages': [HumanMessage(content='is Alfred Plus Test a business project', additional_kwargs={}, response_metadata={}, id='6ddcc789-0196-4e24-86fc-f2119be43cdf'), HumanMessage(content='The project \"Alfred Plus Test\" is a software project, not a business project.', additional_kwargs={}, response_metadata={}, id='140ef897-cdb6-459d-914c-b5d2d2fd8281')]}}", "module": "rest", "function": "main", "line": 203, "logger": "graph_client", "pid": 51728}
 ```
+
+Sample API request and response for running a remote graph AP request can be sent via:
+
+*http://0.0.0.0:8125/docs#/Stateless%20Runs/Stateless%20Runs-run_stateless_runs_post*
+
+```bash
+curl -X 'POST' \
+  'http://0.0.0.0:8125/api/v1/runs' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "agent_id": "remote_agent",
+  "input": {
+    "query":"create a jira issue in project Alfred Plus Test, to implement an Agent"
+  },
+  "metadata": {
+    "id":"c303282d-f2e6-46ca-a04a-35d3d873712d"
+  },
+  "config": {
+    "tags": [
+      "string"
+    ],
+    "recursion_limit": 0,
+    "configurable": {}
+  },
+  "webhook": "https://example.com/",
+  "stream_mode": [
+    "values"
+  ],
+  "on_completion": "delete",
+  "on_disconnect": "cancel",
+  "multitask_strategy": "reject",
+  "after_seconds": 0
+}'
+
+200 OK
+{
+  "agent_id": "remote_agent",
+  "output": "The Jira issue to implement an Agent has been successfully created in the \"Alfred Plus Test\" project. You can view and manage the issue at [this link](https://cisco-eti-sandbox-858.atlassian.net/browse/APT-13).",
+  "model": "gpt-4o",
+  "metadata": {}
+}
+```
+
 
 ## Logging
 
@@ -134,21 +196,35 @@ By default, the API documentation is available at:
 http://0.0.0.0:8125/docs
 ```
 
-(Adjust the host and port if you override them via environment variables.)
+(Adjust the host and port if you override them via environment variable JIRA_AGENT_PORT.)
 
-## Running as a LangGraph Studio
+## Running as a LangGraph Studio 
 
 You need to install Rust: <https://www.rust-lang.org/tools/install>
 
 Run the server
 
+*To see the graph for the end client using LangGraph AP*
 ```bash
+cd client
+langgraph dev
+```
+Upon successful execution, you should see:
+
+![Langgraph Studio](./docs/imgs/remote-graph-1.png "Studio")
+
+
+*To see the graph for the entire jira workflow server*
+```bash
+cd app
 langgraph dev
 ```
 
 Upon successful execution, you should see:
 
-![Langgraph Studio](./docs/imgs/remote-graph-1.png "Studio")
+![Langgraph Studio](./docs/imgs/search-issues-readme.png "Studio")
+
+
 
 ## Roadmap
 
