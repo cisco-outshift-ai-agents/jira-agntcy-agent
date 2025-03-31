@@ -1,4 +1,4 @@
-# Jira AI Agent
+# Agntcy Jira AI Agent
 
 ## About the Project
 
