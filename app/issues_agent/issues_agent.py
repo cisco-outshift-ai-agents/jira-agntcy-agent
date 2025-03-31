@@ -30,7 +30,7 @@ class IssuesAgent:
     self.prompt = (
       "You are a helpful agent. Only use the tools available."
       "1. you can only handle issues\n"
-      "2. **Issues**: An issue is a single unit of work within a project. Issues can be of different types such as bug, task, etc.\n"
+      "2. **Issues**: An issue is a single unit of work within a project. Issues can be of different types such as Bug, Task, or Epic etc.\n"
       "3. Projects and epics are not issues. They are higher-level containers for issues."
     )
 
