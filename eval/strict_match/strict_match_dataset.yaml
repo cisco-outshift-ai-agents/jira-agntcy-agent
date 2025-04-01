@@ -1,0 +1,46 @@
+tests:
+  projects_agent_1:
+    input: |
+      Get details for project Agntcy-Jira-Eval-Test-Projects.
+    reference_trajectory:
+      solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    metadata:
+      comments: |
+        Get details for project.
+  projects_agent_2:
+    input: |
+      create a project for my venture Agntcy-Jira-Eval-Test-Projects with user agntcyevaltestuser@example.com.
+    reference_trajectory:
+      solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+      solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    metadata:
+      comments: |
+        [Negative] Create project - Not enough information provided.
+  projects_agent_3:
+    input: |
+      create a new project for my venture Agntcy-Jira-Eval-Test-Projects with key AJETN and user agntcyevaltestuser@example.com.
+    reference_trajectory:
+      solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+      solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    metadata:
+      comments: |
+        Create new project.
+  projects_agent_4:
+    input: |
+      update description for project Agntcy-Jira-Eval-Test-Projects to description - 'implement a test'.
+    reference_trajectory:
+      solution 1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+      solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    metadata:
+      comments: |
+        Update project description.
+  projects_agent_5:
+    input: |
+      update lead for project Agntcy-Jira-Eval-Test-Projects to user agntcyevaltestuser@example.com.
+    reference_trajectory:
+      solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+      solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    metadata:
+      comments: |
+        Update project lead.
+

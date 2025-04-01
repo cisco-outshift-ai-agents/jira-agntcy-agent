@@ -22,6 +22,8 @@ class SupervisorAgent:
             "Here is the hierarchy of Jira issue types and projects:\n"
             "1. **Projects**: A project is a collection of issues. Projects can be of different types such as software, business, etc.\n"
             "---\n"
+            "Special instructions for Jira project-related operations:\n"
+            "   - If user email is in the prompt instead of account id, pass it to the tool.\n"
             "2. **Issues**: Issues are the tasks or problems to be addressed within a project. They can be of different types such as Bug, Task, Story, Epic, and Sub-task.\n"
             "Issue agent will handle Jira transitions, issue creation, issue assignment, issue details, issue updates, and issue searches.\n"
             "Special instructions for Jira issue-related operations:\n"
