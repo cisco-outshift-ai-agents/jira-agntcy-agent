@@ -195,9 +195,7 @@ def main():
 
     logger.info({"event": "invoking_graph", "input": input})
 
-    #user_prompt = "create a project for my venture sushroff-venture-1 with key SV1 and leadAccountId 639b617e2aac389d02c2769a"
-    #user_prompt = "get details for my project Alfred Plus Test"
-    user_prompt = "is Alfred Plus Test a business project"
+    user_prompt = "UPDATE THIS PROMPT BASED ON PROMPTS IN client/sample_prompts"
     inputs = {"messages": [HumanMessage(content=user_prompt)]}
     result = graph.invoke(inputs)
     logger.info({"event": "final_result", "result": result})
