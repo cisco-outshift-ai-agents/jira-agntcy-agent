@@ -2,10 +2,16 @@ import json
 import logging
 from typing import List
 
-from core.config import INTERNAL_ERROR_MESSAGE
-from .dryrun.mock_responses import MOCK_RETRIEVE_MULTIPLE_JIRA_ISSUES_RESPONSE, MOCK_SEARCH_JIRA_ISSUES_USING_JQL_RESPONSE
+from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
+
+from .dryrun.mock_responses import (
+  MOCK_RETRIEVE_MULTIPLE_JIRA_ISSUES_RESPONSE,
+  MOCK_SEARCH_JIRA_ISSUES_USING_JQL_RESPONSE
+)
+
 from agents.issues_agent.models import LLMResponseOutput
 from agents.issues_agent.tools import _get_account_id_from_email, _create_jira_urlified_list
+
 from utils.jira_client.client import JiraClient
 from utils.dryrun_utils import dryrun_response
 

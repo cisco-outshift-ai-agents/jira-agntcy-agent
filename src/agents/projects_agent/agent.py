@@ -1,5 +1,5 @@
-from core.llm import get_llm
-from core.config import get_settings_from_env
+from agntcy_agents_common.llm import get_llm
+from agntcy_agents_common.config import get_settings_from_env
 from langgraph.prebuilt import create_react_agent
 
 from agents.projects_agent.models import LLMResponseOutput

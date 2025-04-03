@@ -6,7 +6,7 @@ from http import HTTPStatus
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 
-from core.config import INTERNAL_ERROR_MESSAGE, get_settings_from_env
+from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE, get_settings_from_env
 from models.models import Any, ErrorResponse, RunCreateStateless, Union
 
 from graph.graph import JiraGraph

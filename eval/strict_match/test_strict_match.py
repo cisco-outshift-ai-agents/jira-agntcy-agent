@@ -216,4 +216,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run strict match evaluation.")
     parser.add_argument('--test_ids', type=str, help="Comma-separated list of test IDs to run.")
     args = parser.parse_args()
-    asyncio.run(eval_strict(test_ids=args.test_ids))
+    asyncio.run(test_eval_strict(test_ids=args.test_ids))

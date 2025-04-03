@@ -3,7 +3,7 @@ import logging
 import os
 import requests
 
-from core.config import INTERNAL_ERROR_MESSAGE
+from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
 from .dryrun.mock_responses import (
   MOCK_ADD_NEW_LABEL_TO_ISSUE_RESPONSE,
   MOCK_ASSIGN_JIRA_RESPONSE,

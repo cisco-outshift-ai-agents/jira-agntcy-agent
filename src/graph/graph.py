@@ -2,7 +2,7 @@ import logging
 import uuid
 from pydantic import BaseModel
 from langgraph.checkpoint.memory import InMemorySaver
-from core.config import Settings, get_settings_from_env
+from agntcy_agents_common.config import Settings, get_settings_from_env
 from agents.supervisor_agent.supervisor_agent import SupervisorAgent
 
 

@@ -1,4 +1,4 @@
-from agncty_agents_common.setup_logging import logging
+from agntcy_agents_common.setup_logging import logging
 
 from agents.projects_agent.models import LLMResponseOutput
 

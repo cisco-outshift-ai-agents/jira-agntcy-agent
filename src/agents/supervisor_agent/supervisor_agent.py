@@ -1,9 +1,13 @@
 from langgraph_supervisor import create_supervisor
-from core.config import Settings, get_settings_from_env
-from core.llm import get_llm
+
+from agntcy_agents_common.config import Settings, get_settings_from_env
+from agntcy_agents_common.llm import get_llm
+
 from agents.projects_agent.agent import ProjectsAgent
 from agents.issues_agent.agent import IssuesAgent
+
 from .prompt import prompt
+
 # SupervisorAgent acts as a router for the Jira agents.
 class SupervisorAgent:
 

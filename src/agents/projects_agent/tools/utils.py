@@ -19,7 +19,7 @@ from .dryrun.mock_responses import (
 from utils.jira_utils import jira_request_get, jira_request_post, jira_request_put
 from utils.dryrun_utils import dryrun_response
 
-from core.config import INTERNAL_ERROR_MESSAGE
+from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
 
 
 ############################## Tool helper functions ##############################

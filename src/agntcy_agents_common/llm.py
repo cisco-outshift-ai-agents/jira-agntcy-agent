@@ -1,5 +1,5 @@
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
-from core.config import Settings
+from .config import Settings
 
 def get_llm(settings: Settings):
     """

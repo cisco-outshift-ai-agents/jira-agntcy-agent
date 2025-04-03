@@ -1,3 +1,5 @@
+from typing import Any, Callable, List
+
 from .issues import (
   create_jira_issue,
   assign_jira,
@@ -17,7 +19,7 @@ from .search import (
   search_jira_issues_using_jql
 )
 
-tools = [
+TOOLS: List[Callable[..., Any]] = [
   create_jira_issue,
   assign_jira,
   update_issue_reporter,

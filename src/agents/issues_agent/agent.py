@@ -1,15 +1,17 @@
-from core.llm import get_llm
 from langgraph.prebuilt import create_react_agent
-from core.config import get_settings_from_env
+
+from agntcy_agents_common.llm import get_llm
+from agntcy_agents_common.config import get_settings_from_env
+
 from .models import LLMResponseOutput
-from .tools import tools
+from .tools import TOOLS
 from .prompt import prompt
 
 class IssuesAgent:
   def __init__(self, settings=None):
     self.settings = settings or get_settings_from_env()
     self.name = "jira_issues_agent"
-    self.tools = tools
+    self.tools = TOOLS
     self.prompt = prompt.format(additional_context="")
 
   def agent(self):

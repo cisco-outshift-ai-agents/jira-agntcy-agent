@@ -11,15 +11,15 @@ from typing import AsyncGenerator
 import uvicorn
 
 from graph.graph import JiraGraph
-from api.routes import stateless_runs
-from core.config import get_settings_from_env
-from core.logging_config import configure_logging
+from agntcy_agents_common.config import get_settings_from_env
+from agntcy_agents_common.logging_config import configure_logging
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI
 # from fastapi.responses import FileResponse
 from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
 
+from protocol.ap.api.routes import stateless_runs
 
 def load_environment_variables(env_file: str | None = None) -> None:
     """
