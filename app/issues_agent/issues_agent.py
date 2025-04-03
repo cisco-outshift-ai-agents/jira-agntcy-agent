@@ -10,7 +10,7 @@ from issues_agent.issues_tools import (
   get_jira_issue_details,
 )
 from issues_agent.transitions_tools import perform_jira_transition, get_jira_transitions
-from issues_agent.search_tools import retrieve_multiple_jira_issues, search_jira_issues_using_jql
+from issues_agent.search_tools import search_jira_issues_using_jql
 
 class IssuesAgent:
   def __init__(self, settings=None):
@@ -24,14 +24,12 @@ class IssuesAgent:
       get_jira_issue_details,
       perform_jira_transition,
       get_jira_transitions,
-      retrieve_multiple_jira_issues,
       search_jira_issues_using_jql,
     ]
     self.prompt = (
       "You are a helpful agent. Only use the tools available."
       "1. you can only handle issues\n"
       "2. **Issues**: An issue is a single unit of work within a project. Issues can be of different types such as Bug, Task, or Epic etc.\n"
-      "3. Projects and epics are not issues. They are higher-level containers for issues."
     )
 
   def agent(self):
