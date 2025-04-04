@@ -35,7 +35,7 @@ def run_stateless_runs_post(body: RunCreateStateless) -> Union[Any, ErrorRespons
     try:
         # Extract assistant_id from the payload
         agent_id = body.agent_id
-        logging.debug(f"Agent id: %s", agent_id)
+        logging.debug(f"Agent id: {agent_id}")
 
         # Validate that the assistant_id is not empty.
         if not body.agent_id:
@@ -56,7 +56,7 @@ def run_stateless_runs_post(body: RunCreateStateless) -> Union[Any, ErrorRespons
         # Retrieve the 'query' field from the input dictionary.
         query = input_field.get("query")
         logging.info("query: %s", query)
-        result, result_detail = graph.serve(query)
+        result, _ = graph.serve(query)
         logging.info("result: %s", result)
     except HTTPException as http_exc:
         logger.error(

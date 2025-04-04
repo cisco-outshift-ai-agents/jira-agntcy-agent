@@ -1,14 +1,13 @@
 import json
 import logging
-import os
 
 from users_agent.users_models import JiraUserOutput
 from users_agent.users_models import GetJiraAccountIdByUserEmailInput
 
-from utils.jira_utils import jira_request_get, jira_request_post
+from utils.jira_utils import jira_request_get
 from utils.dryrun_utils import dryrun_response
 
-from core.config import INTERNAL_ERROR_MESSAGE
+from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
 
 
 # option 1-if using the users_agent to get_jira_accountID_by_user_email, add this to the supervisor prompt under projects section.
@@ -36,7 +35,7 @@ def get_jira_accountID_by_user_email(input: GetJiraAccountIdByUserEmailInput) ->
         if not input or input is None:
             return JiraUserOutput(response="error performing the operation")
 
-        url_path = f"/rest/api/3/groupuserpicker?query=" + input.user_email
+        url_path = f"/rest/api/3/groupuserpicker?query={input.user_email}"
         jira_resp = jira_request_get(url_path)
         user_data = json.loads(jira_resp)
 

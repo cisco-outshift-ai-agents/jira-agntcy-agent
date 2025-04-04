@@ -2,6 +2,8 @@ unamestr := $(shell uname)
 
 AGENT_NAME := jira
 
+ROOT_DIR := $(shell pwd)
+
 # .env is the build artifact of this step, so name the target so that make can do what make does.
 .env:
 	@echo "Checking if .env file exists..."
@@ -27,6 +29,10 @@ venv/bin/activate:
 	@echo "Activating virtual environment and installing requirements..."
 	. venv/bin/activate && pip install -r requirements.txt
 
+run: .env venv/bin/activate
+	@echo "Running the application with Uvicorn reload on port 8125..."
+	. venv/bin/activate && export PYTHONPATH=$PYTHONPATH:$(ROOT_DIR)/src && python src/main.py
+
 docker-build:
 	${docker} build --platform linux/amd64 -t ${AGENT_NAME}-agent:dev -f ./Dockerfile  .
 
@@ -45,13 +51,25 @@ docker-run: .env venv/bin/activate run-docker-local
 
 lint: venv/bin/activate
 	@echo "Running ruff..."
-	. venv/bin/activate && ruff check app/src tests
+	. venv/bin/activate && ruff check src tests
 
 pytest: venv/bin/activate
 	@echo "Running pytest..."
 	. venv/bin/activate && export PYTHONPATH=app/src && python3 -m pytest tests
 
 test: venv/bin/activate lint pytest
+
+run-test: .env venv/bin/activate
+	@echo "Setting up environment variables for tests..."
+	echo "Running quick validation tests..." && \
+	. venv/bin/activate && \
+	DRYRUN=true python3 -m unittest tests.agents.issues.test_prompts_issues && \
+	DRYRUN=true python3 -m unittest tests.agents.projects.test_prompts_projects
+
+run-test-dev: .env venv/bin/activate
+	@echo "Running dev validation tests..."
+	. venv/bin/activate && \
+	DEV_TEST=true python3 -m unittest tests.dev.test_prompts_projects_dev
 
 graph: .env venv/bin/activate
 	@echo "Running make graph..."

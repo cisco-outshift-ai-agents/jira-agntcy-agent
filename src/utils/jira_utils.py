@@ -1,15 +1,15 @@
 # common utils for jira operations
-import http
 import logging
 import os
-from asyncio import Timeout
-from urllib.error import HTTPError
 import traceback
 import requests
 import json
-from requests.exceptions import (ConnectionError, HTTPError, RequestException,
-                                 Timeout)
-from utils.jira_client.client import JiraClient
+from requests.exceptions import (
+  ConnectionError,
+  HTTPError,
+  RequestException,
+  Timeout
+)
 import base64
 
 # Below code to be refactored into the JiraRESTClient class

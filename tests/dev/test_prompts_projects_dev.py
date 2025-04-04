@@ -8,8 +8,8 @@ from graph.graph import JiraGraph
 from tests.helper import get_tools_executed
 from tests.dev.projects_helper import get_project_by_key, project_update_description
 
-from projects_agent.projects_utils import _get_jira_accountID_by_user_email
-from core.config import Settings
+from agents.projects_agent.tools.utils import _get_jira_accountID_by_user_email
+from agntcy_agents_common.config import Settings
 
 # Initialize logger
 logger = logging.getLogger()
@@ -159,7 +159,7 @@ class TestPromptsProjectsDev(unittest.TestCase):
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
-        tools_executed, tools_executed_dict = get_tools_executed(result)
+        tools_executed, _ = get_tools_executed(result)
 
         # create_project_tool must not be executed, as project already exists per mock response
         tools_not_expected = ['create_jira_project']

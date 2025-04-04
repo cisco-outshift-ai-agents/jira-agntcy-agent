@@ -1,5 +1,5 @@
 import os
-from langchain_openai import AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from setup_logging import logging
 from models import JarvisResponse
 
@@ -28,24 +28,45 @@ class LLMFactory:
     self.model_name = model_name
 
   def get_llm_connection(self, response_format=None):
-    if self.model_name not in ["gpt-4o", "gpt-4o-mini", "gpt-o1", "gpt-o1-mini"]:
+    if self.model_name not in ["gpt-4o", "gpt-4o-mini", "o1", "o1-mini"]:
       raise ValueError(f"Unsupported model name: {self.model_name}")
 
-    deployment = os.getenv(f"AZURE_OPENAI_DEPLOYMENT_{self.model_name.replace('-', '_').upper()}")
-    api_version = os.getenv(f"AZURE_OPENAI_API_VERSION_{self.model_name.replace('-', '_').upper()}")
-    logging.info(f"Using model: {self.model_name}, deployment: {deployment}, api_version: {api_version}")
+    provider = os.getenv("LLM_PROVIDER", "azure")
+    temperature = 0 if self.model_name in ["gpt-4o", "gpt-4o-mini", "o1", "o1-mini"] else 1
 
-    temperature = 0 if self.model_name in ["gpt-4o", "gpt-4o-mini"] else 1
+    if provider == "azure":
+        AZURE_OPENAI_DEPLOYMENT = os.getenv(f"AZURE_OPENAI_DEPLOYMENT")
+        AZURE_OPENAI_API_VERSION = os.getenv(f"AZURE_OPENAI_API_VERSION")
+        logging.info(f"Using model: {self.model_name}, deployment: {AZURE_OPENAI_DEPLOYMENT}, "
+                     "api_version: {AZURE_OPENAI_API_VERSION}")
 
-    return AzureChatOpenAI(
-      azure_deployment=deployment,
-      api_version=api_version,
-      temperature=temperature,
-      max_tokens=None,
-      timeout=None,
-      max_retries=5,
-      model_kwargs=({"response_format": response_format} if response_format else dict()),
-    )
+        return AzureChatOpenAI(
+          azure_deployment=AZURE_OPENAI_DEPLOYMENT,
+          api_version=AZURE_OPENAI_API_VERSION,
+          temperature=temperature,
+          max_tokens=None,
+          timeout=None,
+          max_retries=5,
+          model_kwargs=({"response_format": response_format} if response_format else dict()),
+        )
+
+    if provider == "openai":
+      OPENAI_API_VERSION = os.getenv("OPENAI_API_VERSION")
+      OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+      OPENAI_ENDPOINT = os.getenv("OPENAI_ENDPOINT")
+
+      if not OPENAI_API_VERSION or not OPENAI_API_KEY or not OPENAI_ENDPOINT:
+        raise ValueError("Missing required OpenAI environment variables: "
+        "OPENAI_API_VERSION, OPENAI_API_KEY, or OPENAI_ENDPOINT")
+
+      return ChatOpenAI(
+        model_name=OPENAI_API_VERSION,
+        api_key=OPENAI_API_KEY,
+        base_url=OPENAI_ENDPOINT,
+        temperature=temperature,
+      )
+
+    raise ValueError(f"Unsupported provider: {provider}")
 
 async def get_llm_connection_with_tools(tools, response_format=JarvisResponse):
   model_name = os.getenv("JARVIS_LLM_MODEL_NAME", "gpt-4o-mini")

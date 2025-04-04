@@ -5,7 +5,7 @@ import logging
 from dotenv import load_dotenv
 from tenacity import retry, stop_after_attempt
 from graph.graph import JiraGraph
-from core.config import Settings
+from agntcy_agents_common.config import Settings
 from tests.helper import contains_all_elements
 from tests.helper import get_tools_executed, verify_llm_settings_for_test
 # Initialize logger
@@ -55,7 +55,7 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'add_new_label_to_issue']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
@@ -67,7 +67,7 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_issue_details']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
@@ -79,7 +79,7 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'perform_jira_transition']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
@@ -91,9 +91,9 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'retrieve_multiple_jira_issues']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -103,7 +103,7 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
@@ -115,7 +115,7 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
@@ -127,7 +127,7 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'assign_jira']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
@@ -139,7 +139,7 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'update_issue_reporter']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
@@ -151,7 +151,7 @@ class TestPromptsIssues(unittest.TestCase):
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
-    tools_executed, tools_executed_dict = get_tools_executed(result)
+    tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_transitions']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))

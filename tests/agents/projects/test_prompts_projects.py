@@ -7,7 +7,7 @@ from graph.graph import JiraGraph
 
 from tests.helper import get_tools_executed
 
-from core.config import Settings
+from agntcy_agents_common.config import Settings
 
 from tests.helper import verify_llm_settings_for_test
 
@@ -84,7 +84,7 @@ class TestPromptsProjects(unittest.TestCase):
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
-        tools_executed, tools_executed_dict = get_tools_executed(result)
+        tools_executed, _ = get_tools_executed(result)
 
         # create_project_tool must not be executed, as project already exists per mock response
         tools_not_expected = ['create_jira_project']

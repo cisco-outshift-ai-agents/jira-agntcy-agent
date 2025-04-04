@@ -1,5 +1,4 @@
 import unittest
-from unittest import TestCase
 
 from projects_agent.projects_utils import is_valid_email
 

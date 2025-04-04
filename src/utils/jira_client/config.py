@@ -1,7 +1,7 @@
 # jira/config.py
 import os
 from dataclasses import dataclass
-from typing import Literal, Optional, Tuple, Any, Dict
+from typing import Literal, Optional, Any, Dict
 
 AUTH_TYPE_BASIC = "basic"
 AUTH_TYPE_TOKEN = "token"
