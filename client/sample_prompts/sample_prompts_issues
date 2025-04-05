@@ -5,3 +5,6 @@ user_prompt = "get transition data for APT-3"
 user_prompt = "get details for APT-3"
 user_prompt = "Retrieve the latest 5 JIRA issues in the project APT for the user with email samuyang@cisco.com."
 user_prompt = 'process this JQL:project = "APT" AND status = "In Progress" AND assignee = "samuyang@cisco.com" ORDER BY created DESC.'
+user_prompt = "create an EPIC with title 'Epic 1' in project APT"
+user_prompt = "create an EPIC with title 'Epic 1' in project APT and write acceptance criteria in Agile Acceptance format - Create common reusable templates that use AP/ACP along with unit tests and evaluation tests that can be reused/shared by other agents - Opensource Backstage Chat Plugin under CNOE - Opensource QnA Agent - Opensource Jira Agent - Opensource Github Agent - Opensource ArgoCD Agent"
+user_prompt = "Find me the latest jira tickets in project APT. Requested by: samuyang@cisco.com"

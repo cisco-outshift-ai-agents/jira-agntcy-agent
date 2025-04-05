@@ -38,7 +38,7 @@ class JiraClientConfig:
 
     if auth_type == AUTH_TYPE_BASIC:
       if not username or not api_token:
-        raise ValueError("Both 'JIRA_USERNAME' and 'JIRA_PASSWORD' are required for basic authentication.")
+        raise ValueError("Both 'JIRA_USERNAME' and 'JIRA_API_TOKEN' are required for basic authentication.")
 
     elif auth_type == AUTH_TYPE_TOKEN:
       if not personal_access_token:
