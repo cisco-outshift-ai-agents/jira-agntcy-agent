@@ -36,6 +36,9 @@ class JiraGraph:
         checkpointer = InMemorySaver()
         return graph.compile(checkpointer=checkpointer)
 
+    def get_graph(self):
+        return self.graph
+
     def serve(self, user_prompt: str):
         """
         Runs the LangGraph for Jira operations.
