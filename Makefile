@@ -98,7 +98,7 @@ eval-llm-as-judge: .env venv/bin/activate
 	export PYTHONPATH=$(PWD):$(PWD)/src:$PYTHONPATH && \
 	. .env && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
-	python3 eval/llm_as_judge/test_jarvis_agent_llm_as_judge.py
+	python3 eval/llm_as_judge/test_llm_as_judge.py
 
 langgraph: .env venv/bin/activate
 	@echo "Running langgraph dev..."
