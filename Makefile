@@ -4,6 +4,9 @@ AGENT_NAME := jira
 
 ROOT_DIR := $(shell pwd)
 
+# Define ${docker} as docker or podman based on availability
+docker := $(shell command -v docker >/dev/null 2>&1 && echo docker || echo podman)
+
 # .env is the build artifact of this step, so name the target so that make can do what make does.
 .env:
 	@echo "Checking if .env file exists..."
@@ -41,11 +44,11 @@ run-docker-local: .env
 		--env-file=.env \
 		-e ALLOWED_ORIGINS=* \
 		-e LANGGRAPH_CHECKPOINT_MEMORY_SAVER=memory \
-		-p 8000:8000 \
+		-p 8125:8125 \
 		-v $(shell pwd)/src:/home/src \
 		-v $(shell pwd)/.dockerconfigjson:/home/app/.dockerconfigjson \
-		jarvis-agent:dev \
-    python3 ./src/main.py --port 8000
+		jira-agent:dev \
+    python3 ./src/main.py --port 8125
 
 docker-run: .env venv/bin/activate run-docker-local
 
@@ -57,7 +60,7 @@ pytest: venv/bin/activate
 	@echo "Running pytest..."
 	. venv/bin/activate && export PYTHONPATH=app/src && python3 -m pytest tests
 
-test: venv/bin/activate lint pytest
+test: venv/bin/activate lint run-test
 
 run-test: .env venv/bin/activate
 	@echo "Setting up environment variables for tests..."
@@ -71,24 +74,22 @@ run-test-dev: .env venv/bin/activate
 	. venv/bin/activate && \
 	DEV_TEST=true python3 -m unittest tests.dev.test_prompts_projects_dev
 
-graph: .env venv/bin/activate
-	@echo "Running make graph..."
-	ENABLE_KNOWLEDGE_GRAPH=false \
-	venv/bin/dotenv run --no-override venv/bin/python3 app/src/jarvis_agent.py
-
-
 clean:
 	echo "" > .env
 	${docker} image rm ${AGENT_NAME}-agent:dev
 
-eval: eval-strict eval-llm-as-judge
+eval: eval-strict
 
 eval-strict: .env venv/bin/activate
-	@echo "Running Strict Evaluation Tests..."
-	export PYTHONPATH=$(PWD):$(PWD)/src:$PYTHONPATH && \
+	@echo "Running evaluation with LLM and mock Jira responses..."
+	. venv/bin/activate && \
 	. .env && \
-	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
-	python3 eval/strict_match/test_strict_match.py $(ARGS)
+	pip install --upgrade pip setuptools && \
+	pip install -r eval/requirements.txt && \
+	export PYTHONPATH=$(PWD):$(PWD)/src:$PYTHONPATH && \
+	export DRYRUN=true && \
+	export LANGSMITH_TRACING=true && \
+	python3 -m pytest eval/strict_match/test_strict_match.py
 
 eval-llm-as-judge: .env venv/bin/activate
 	@echo "Running Strict Evaluation Tests with Dry-run Enabled..."
@@ -99,10 +100,11 @@ eval-llm-as-judge: .env venv/bin/activate
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
 	python3 eval/llm_as_judge/test_jarvis_agent_llm_as_judge.py
 
-langgraph-dev: .env venv/bin/activate
+langgraph: .env venv/bin/activate
 	@echo "Running langgraph dev..."
 	export PYTHONPATH=$(PWD):$(PWD)/src && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
+	cd src && \
 	langgraph dev
 
 ######################

@@ -78,6 +78,12 @@ echo -n user@example.com:api_token_string | base64
 You can run the application by executing:
 
 ```bash
+make run
+```
+
+or
+
+```bash
 python app/main.py
 ```
 
@@ -183,7 +189,7 @@ http://0.0.0.0:8125/docs
 
 (Adjust the host and port if you override them via environment variable JIRA_AGENT_PORT.)
 
-## Running as a LangGraph Studio 
+## Running as a LangGraph Studio
 
 You need to install Rust: <https://www.rust-lang.org/tools/install>
 

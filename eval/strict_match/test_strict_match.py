@@ -20,7 +20,7 @@ import logging
 
 from graph.graph import JiraGraph
 
-from core.config import Settings
+from agntcy_agents_common.config import Settings
 
 # Initialize logger
 logger = logging.getLogger()
@@ -132,8 +132,12 @@ async def test_eval_strict(test_ids=None):
     # Run the evaluation
     results = []
     print(list(zip(test_ids_list, prompts, reference_trajectories, notes)))
-    for test_id, each_prompt, each_reference_trajectories, each_note in zip(test_ids_list, prompts,
-                                                                            reference_trajectories, notes):
+    for test_id, each_prompt, each_reference_trajectories, each_note in zip(
+      test_ids_list,
+      prompts,
+      reference_trajectories,
+      notes
+    ):
         print("#" * 80)
         print(f"Test ID: {test_id}")
         print(f"Prompt: {each_prompt}")

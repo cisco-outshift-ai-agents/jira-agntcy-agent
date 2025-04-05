@@ -35,8 +35,8 @@ class LLMFactory:
     temperature = 0 if self.model_name in ["gpt-4o", "gpt-4o-mini", "o1", "o1-mini"] else 1
 
     if provider == "azure":
-        AZURE_OPENAI_DEPLOYMENT = os.getenv(f"AZURE_OPENAI_DEPLOYMENT")
-        AZURE_OPENAI_API_VERSION = os.getenv(f"AZURE_OPENAI_API_VERSION")
+        AZURE_OPENAI_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT")
+        AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
         logging.info(f"Using model: {self.model_name}, deployment: {AZURE_OPENAI_DEPLOYMENT}, "
                      "api_version: {AZURE_OPENAI_API_VERSION}")
 

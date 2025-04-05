@@ -7,7 +7,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 # Builds the graph for use with LangGraph Studio
 
-def build_graph():
+def graph():
   """
   Constructs and compiles a LangGraph instance.
 

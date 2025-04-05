@@ -214,5 +214,8 @@ terraform_output.json
 
 .dockerconfigjson
 
+app/logs/*
+src/logs/*
+
 # LangGraph
 .langgraph_api

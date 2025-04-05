@@ -13,6 +13,6 @@
 # Ensure TEST_AZURE_OPENAI_API_VERSION, TEST_AZURE_OPENAI_ENDPOINT, TEST_AZURE_OPENAI_API_KEY, TEST_AZURE_OPENAI_DEPLOYMENT_NAME (default=gpt-4o) are set for Azure provider
 # Ensure TEST_OPENAI_ENDPOINT, TEST_OPENAI_API_KEY, OPENAI_API_VERSION (default=gpt-4o) are set for OpenAI provider
 # Ensure LANGCHAIN_API_KEY is set
-PYTHONPATH=./app DRYRUN=true LANGSMITH_TRACING='true' python3 -m pytest eval/strict_match/test_strict_match.py
+DRYRUN=true LANGSMITH_TRACING='true' python3 -m pytest eval/strict_match/test_strict_match.py
 
 #pytest tests/eval/strict_match/test_strict_match.py
