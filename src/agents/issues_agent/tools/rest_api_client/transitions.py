@@ -3,9 +3,6 @@ from typing import Any
 import requests
 import json
 import logging
-from langchain.agents import tool
-
-from agents.issues_agent.models import LLMResponseOutput
 
 from utils.jira_client.client import JiraRESTClient
 from utils.dryrun_utils import dryrun_response
@@ -17,7 +14,7 @@ from .dryrun.mock_responses import (
 )
 
 @dryrun_response(MOCK_GET_REQUIRED_FIELDS_FOR_TRANSITION_RESPONSE)
-def _get_required_fields_for_transition(issue_key: str, transition_name: str) -> list[Any] | None:
+def get_required_fields_for_transition(issue_key: str, transition_name: str) -> list[Any] | None:
   """
   Retrieves the required fields for a given transition in a JIRA issue.
 
@@ -56,7 +53,7 @@ def _get_required_fields_for_transition(issue_key: str, transition_name: str) ->
     return None
 
 @dryrun_response(MOCK_GET_JIRA_TRANSITIONS_RESPONSE)
-def _get_jira_transitions(issue_key: str) -> list:
+def get_jira_transitions(issue_key: str) -> list:
   """
   Retrieves available transitions for a given JIRA issue.
 
@@ -87,29 +84,8 @@ def _get_jira_transitions(issue_key: str) -> list:
     logging.error(f'Failed to retrieve transitions for JIRA ticket {issue_key}. Error: {e}')
     return None
 
-@tool
-def tool_get_jira_transitions(issue_key: str) -> LLMResponseOutput:
-  """
-  Retrieves available transitions for a given JIRA issue.
-
-  Args:
-    issue_key (str): The key of the JIRA issue.
-
-  Returns:
-    list: A list of dictionaries, where each dictionary represents a transition
-          and contains the 'id' and 'name' of the transition.
-          Returns None if an error occurs or if no transitions are found.
-  """
-  transition_list = _get_jira_transitions(issue_key=issue_key)
-  logging.info(f'Available transitions for JIRA ticket {issue_key}: {transition_list}')
-  if transition_list:
-    resp_str = f"Available transitions for JIRA ticket {issue_key}: {json.dumps(transition_list, indent=2)}"
-    return LLMResponseOutput(response=resp_str)
-
-  return LLMResponseOutput(response="Failed to retrieve transitions for JIRA ticket.")
-
 @dryrun_response(MOCK_PERFORM_JIRA_TRANSITION_RESPONSE)
-def _perform_jira_transition(
+def perform_jira_transition(
         issue_key: str,
         resolution_id: str,
         transition_name: str
@@ -133,7 +109,7 @@ def _perform_jira_transition(
 
   try:
     transition_url = f'{jira_server_url}/rest/api/3/issue/{issue_key}/transitions'
-    available_transitions = _get_jira_transitions(issue_key)
+    available_transitions = get_jira_transitions(issue_key)
     if not available_transitions:
       raise Exception(f"No transitions found for JIRA ticket {issue_key}.")
 
@@ -152,7 +128,7 @@ def _perform_jira_transition(
       }
     }
 
-    required_fields = _get_required_fields_for_transition(issue_key, transition_name)
+    required_fields = get_required_fields_for_transition(issue_key, transition_name)
     fields = {}
     logging.info(f'Required fields for transition {transition_name} on JIRA ticket {issue_key}: {json.dumps(required_fields, indent=2)}')
     if required_fields:
@@ -184,26 +160,3 @@ def _perform_jira_transition(
   except Exception as e:
     logging.error(f'Failed to transition JIRA ticket {issue_key} to state {transition_name}. Error: {e}')
     raise e
-
-@tool
-def tool_perform_jira_transition(
-        issue_key: str,
-        resolution_id: str,
-        transition_name: str
-) -> LLMResponseOutput:
-  """
-  Transitions a JIRA ticket to a specified state.
-
-  Args:
-      issue_key (str): The key of the JIRA issue to transition.
-      transition_name (str): The name of the transition to perform.
-      resolution_id (str, optional): The ID of the resolution to set when transitioning to a resolved state. Defaults to None.
-
-  Returns:
-      LLMResponseOutput: A message indicating the result of the transition.
-  """
-  try:
-    result = _perform_jira_transition(issue_key, resolution_id, transition_name)
-    return LLMResponseOutput(response=result)
-  except Exception as e:
-    return LLMResponseOutput(response=f"Failed to transition JIRA ticket to {transition_name}. Error: {str(e)}")

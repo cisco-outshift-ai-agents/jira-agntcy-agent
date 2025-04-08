@@ -1,23 +1,24 @@
-import json
 import logging
 from typing import List
-from langchain.agents import tool
-
-from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
 
 from .dryrun.mock_responses import (
   MOCK_RETRIEVE_MULTIPLE_JIRA_ISSUES_RESPONSE,
   MOCK_SEARCH_JIRA_ISSUES_USING_JQL_RESPONSE
 )
 
-from agents.issues_agent.models import LLMResponseOutput
-from agents.issues_agent.tools import _get_account_id_from_email, _create_jira_urlified_list
+from agents.issues_agent.tools.rest_api_client import (
+  get_account_id_from_email,
+  create_jira_urlified_list
+)
 
 from utils.jira_client.client import JiraClient
 from utils.dryrun_utils import dryrun_response
 
 @dryrun_response(MOCK_RETRIEVE_MULTIPLE_JIRA_ISSUES_RESPONSE)
-def _retrieve_multiple_jira_issues(user_email: str, project: str, num_jira_issues_to_retrieve: int) -> List:
+def retrieve_multiple_jira_issues(
+  user_email: str,
+  project: str,
+  num_jira_issues_to_retrieve: int) -> List:
   """
   Retrieve the latest Jira issues for a given user and project.
 
@@ -36,19 +37,19 @@ def _retrieve_multiple_jira_issues(user_email: str, project: str, num_jira_issue
 
   try:
     jira_api = JiraClient.get_jira_instance()
-    account_id = _get_account_id_from_email(user_email)
+    account_id = get_account_id_from_email(user_email)
     logging.info(f"Account ID for user {user_email}: {account_id}")
     issues = jira_api.search_issues(
       f"project={project} AND (reporter='{account_id}' OR assignee='{account_id}') ORDER BY created DESC",
       maxResults=num_jira_issues_to_retrieve,
     )
-    issues_md_list = _create_jira_urlified_list(issues)
+    issues_md_list = create_jira_urlified_list(issues)
     return issues_md_list
   except Exception as e:
     raise ValueError(f"Error retrieving service desk tickets: {e}")
 
 @dryrun_response(MOCK_SEARCH_JIRA_ISSUES_USING_JQL_RESPONSE)
-def _search_jira_issues_using_jql(jql_query: str, user_email: str) -> List:
+def search_jira_issues_using_jql(jql_query: str, user_email: str) -> List:
   """
   Search for Jira tickets based on a JQL query and user_email.
 
@@ -70,21 +71,3 @@ def _search_jira_issues_using_jql(jql_query: str, user_email: str) -> List:
     return issues_md_list
   except Exception as e:
     raise ValueError(f"Error searching Jira tickets: {e}")
-
-@tool
-def tool_search_jira_issues_using_jql(jql_query: str, user_email: str) -> LLMResponseOutput:
-  """
-  Search for Jira tickets based on a JQL query and user_email.
-
-  Args:
-    jql_query (str): The JQL query string.
-    user_email (str): The email of the user.
-
-  Returns:
-    LLMResponseOutput: List of Jira issue IDs in a markdown format.
-  """
-  try:
-    resp_str = _search_jira_issues_using_jql(jql_query, user_email)
-    return LLMResponseOutput(response=json.dumps(resp_str, indent=2))
-  except ValueError as e:
-    return LLMResponseOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
