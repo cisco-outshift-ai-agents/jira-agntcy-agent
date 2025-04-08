@@ -20,7 +20,7 @@ import logging
 
 from graph.graph import JiraGraph
 
-from core.config import Settings
+from agntcy_agents_common.config import Settings
 
 # Initialize logger
 logger = logging.getLogger()
@@ -132,8 +132,12 @@ async def test_eval_strict(test_ids=None):
     # Run the evaluation
     results = []
     print(list(zip(test_ids_list, prompts, reference_trajectories, notes)))
-    for test_id, each_prompt, each_reference_trajectories, each_note in zip(test_ids_list, prompts,
-                                                                            reference_trajectories, notes):
+    for test_id, each_prompt, each_reference_trajectories, each_note in zip(
+      test_ids_list,
+      prompts,
+      reference_trajectories,
+      notes
+    ):
         print("#" * 80)
         print(f"Test ID: {test_id}")
         print(f"Prompt: {each_prompt}")
@@ -216,4 +220,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run strict match evaluation.")
     parser.add_argument('--test_ids', type=str, help="Comma-separated list of test IDs to run.")
     args = parser.parse_args()
-    asyncio.run(eval_strict(test_ids=args.test_ids))
+    asyncio.run(test_eval_strict(test_ids=args.test_ids))
