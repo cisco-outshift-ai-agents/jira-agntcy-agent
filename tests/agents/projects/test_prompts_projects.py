@@ -45,13 +45,6 @@ class TestPromptsProjects(unittest.TestCase):
 
     def get_mock_settings(self):
         return Settings(
-            JIRA_INSTANCE="https://mock.jira.instance.test",
-            LANGCHAIN_TRACING_V2=False,
-            LANGCHAIN_ENDPOINT="",
-            LANGCHAIN_API_KEY="",
-            LANGCHAIN_PROJECT="",
-            LANGSMITH_API_KEY="",
-            OPENAI_TEMPERATURE=0.7,
             # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
             # OpenAI Setting
             OPENAI_ENDPOINT=os.getenv("TEST_OPENAI_ENDPOINT"),

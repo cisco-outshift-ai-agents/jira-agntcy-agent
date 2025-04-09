@@ -244,6 +244,34 @@ Upon successful execution, you should see:
 
 ![Langgraph Studio](./docs/imgs/search-issues-readme.png "Studio")
 
+## Running Tests
+
+To run the tests, you need to set up the environment variables and then execute the test command.
+
+1. **Set the Environment Variables**:  
+   Add the required variables to your `.env` file or export them directly in your shell.
+
+   Example `.env` file or export these environment variables directly in your shell:
+   ```bash
+   # OpenAI Configuration
+   TEST_OPENAI_ENDPOINT=https://api.openai.com/v1
+   TEST_OPENAI_API_KEY=your-openai-api-key
+   # Alternatively, for Azure OpenAI
+   TEST_AZURE_OPENAI_ENDPOINT=https://your-azure-endpoint.openai.azure.com
+   TEST_AZURE_OPENAI_API_KEY=your-azure-api-key
+   TEST_AZURE_OPENAI_API_VERSION=2023-03-15-preview
+   
+   TEST_LLM_PROVIDER=azure # or openai
+   ```
+
+2. **Run the Tests**:  
+   Execute the `make run-test` command to run the tests:
+   ```bash
+   make run-test
+   ```
+
+This will ensure the environment variables are loaded and the tests are executed.
+
 
 ---
 ## Roadmap
