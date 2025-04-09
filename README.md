@@ -45,7 +45,7 @@ Before installation, ensure you have:
 
 ```bash
 git clone https://github.com/cisco-outshift-alfred/jira-agntcy-agent.git
-cd jira-agent
+cd jira-agntcy-agent
 ```
 ---
 ### **2️⃣ Setup the environment variables**
