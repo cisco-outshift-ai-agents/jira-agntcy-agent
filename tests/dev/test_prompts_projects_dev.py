@@ -48,7 +48,8 @@ def validate_env_vars():
 
     jira_settings = [
         os.getenv("JIRA_INSTANCE"),
-        os.getenv("JIRA_BASIC_AUTH_TOKEN"),
+        os.getenv("JIRA_USERNAME"),
+        os.getenv("JIRA_API_TOKEN"),
         os.getenv("TEST_PROJECT_NAME"),
         os.getenv("TEST_PROJECT_KEY"),
         os.getenv("TEST_PROJECT_LEAD_EMAIL")
@@ -70,6 +71,8 @@ class TestPromptsProjectsDev(unittest.TestCase):
     def get_settings(self):
         return Settings(
             JIRA_INSTANCE=os.getenv("JIRA_INSTANCE"),
+            JIRA_USERNAME=os.getenv("JIRA_USERNAME"),
+            JIRA_API_TOKEN=os.getenv("JIRA_API_TOKEN"),
             LANGCHAIN_TRACING_V2=False,
             LANGCHAIN_ENDPOINT="",
             LANGCHAIN_API_KEY="",
