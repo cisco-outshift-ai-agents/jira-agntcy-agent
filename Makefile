@@ -58,14 +58,14 @@ lint: venv/bin/activate
 
 pytest: venv/bin/activate
 	@echo "Running pytest..."
-	. venv/bin/activate && export PYTHONPATH=app/src && python3 -m pytest tests
+	. venv/bin/activate && export PYTHONPATH=src && python3 -m pytest tests
 
 test: venv/bin/activate lint run-test
 
 run-test: .env venv/bin/activate
 	@echo "Setting up environment variables for tests..."
 	echo "Running quick validation tests..." && \
-	. venv/bin/activate && \
+	. venv/bin/activate && export PYTHONPATH=src && \
 	DRYRUN=true python3 -m unittest tests.agents.issues.test_prompts_issues && \
 	DRYRUN=true python3 -m unittest tests.agents.projects.test_prompts_projects
 

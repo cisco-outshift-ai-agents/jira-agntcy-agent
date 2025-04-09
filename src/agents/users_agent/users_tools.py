@@ -17,10 +17,10 @@
 import json
 import logging
 
-from users_agent.users_models import JiraUserOutput
-from users_agent.users_models import GetJiraAccountIdByUserEmailInput
+from users_models import JiraUserOutput
+from users_models import GetJiraAccountIdByUserEmailInput
 
-from utils.jira_utils import jira_request_get
+from utils.jira_client.rest import JiraRESTClient
 from utils.dryrun_utils import dryrun_response
 
 from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
@@ -52,7 +52,7 @@ def get_jira_accountID_by_user_email(input: GetJiraAccountIdByUserEmailInput) ->
             return JiraUserOutput(response="error performing the operation")
 
         url_path = f"/rest/api/3/groupuserpicker?query={input.user_email}"
-        jira_resp = jira_request_get(url_path)
+        jira_resp = JiraRESTClient.jira_request_get(url_path)
         user_data = json.loads(jira_resp)
 
         # Extract accountId from the response

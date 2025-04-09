@@ -18,7 +18,7 @@ import os
 import requests
 import json
 
-from src.utils.jira_client.client import JiraRESTClient
+from src.utils.jira_client.rest import JiraRESTClient
 
 
 def get_project_by_key(project_key: str):

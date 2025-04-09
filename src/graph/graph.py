@@ -63,8 +63,9 @@ class JiraGraph:
           }
         ],
       }, {"configurable": {"thread_id": uuid.uuid4()}})
-      for m in result["messages"]:
-        m.pretty_print()
+      if logging.getLogger().isEnabledFor(logging.DEBUG):
+        for m in result["messages"]:
+          m.pretty_print()
 
       return result["messages"][-1].content, result
 

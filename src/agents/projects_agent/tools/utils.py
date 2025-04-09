@@ -32,7 +32,7 @@ from .dryrun.mock_responses import (
   MOCK_UPDATE_PROJECT_LEAD_RESPONSE
 )
 
-from utils.jira_utils import jira_request_get, jira_request_post, jira_request_put
+from utils.jira_client.rest import JiraRESTClient
 from utils.dryrun_utils import dryrun_response
 
 from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
@@ -59,7 +59,7 @@ def _get_jira_project_by_name(input: GetJiraProjectByNameInput) -> LLMResponseOu
   """
   try:
     url_path = f"/rest/api/3/project/search?query={input.name}"
-    jira_resp = jira_request_get(url_path)
+    jira_resp = JiraRESTClient.jira_request_get(url_path)
     jira_resp_json = json.loads(jira_resp)
     if 'error' in jira_resp_json and 'exception' in jira_resp_json:
       response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
@@ -116,7 +116,7 @@ def _create_jira_project(input: CreateJiraProjectInput) -> LLMResponseOutput:
       "projectTypeKey": input.projectTypeKey
     })
 
-    jira_resp = jira_request_post(url_path, payload)
+    jira_resp = JiraRESTClient.jira_request_post(url_path, payload)
     jira_resp_json = json.loads(jira_resp)
     if 'error' in jira_resp_json and 'exception' in jira_resp_json:
       response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
@@ -151,7 +151,7 @@ def _update_jira_project_description(input: UpdateJiraProjectDescriptionInput) -
       "description": input.description
     })
 
-    jira_resp = jira_request_put(url_path, payload)
+    jira_resp = JiraRESTClient.jira_request_put(url_path, payload)
     jira_resp_json = json.loads(jira_resp)
     if 'error' in jira_resp_json and 'exception' in jira_resp_json:
       response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
@@ -194,7 +194,7 @@ def _update_jira_project_lead(input: UpdateJiraProjectLeadInput) -> LLMResponseO
       "leadAccountId": leadAccountId
     })
 
-    jira_resp = jira_request_put(url_path, payload)
+    jira_resp = JiraRESTClient.jira_request_put(url_path, payload)
     jira_resp_json = json.loads(jira_resp)
     if 'error' in jira_resp_json and 'exception' in jira_resp_json:
       response_str = f"{INTERNAL_ERROR_MESSAGE}:{jira_resp}"
@@ -249,7 +249,7 @@ def is_valid_email(email):
 def _get_jira_accountID_by_user_email(user_email):
   try:
     url_path = f"/rest/api/3/groupuserpicker?query={user_email}"
-    jira_resp = jira_request_get(url_path)
+    jira_resp = JiraRESTClient.jira_request_get(url_path)
     user_data = json.loads(jira_resp)
 
     # Extract accountId from the response

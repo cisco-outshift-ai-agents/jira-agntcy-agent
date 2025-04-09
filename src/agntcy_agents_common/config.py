@@ -31,10 +31,6 @@ class Settings(BaseSettings):
   PROJECT_NAME: str = "Jira Agent"
   DESCRIPTION: str = "Agent serving jira operations via natural language"
 
-  # Jira configuration
-  # registered Jira instance for this deployment
-  JIRA_INSTANCE: str = None
-
   # Langchain settings (optional)
   LANGCHAIN_TRACING_V2: bool = False
   LANGCHAIN_ENDPOINT: Optional[str] = None

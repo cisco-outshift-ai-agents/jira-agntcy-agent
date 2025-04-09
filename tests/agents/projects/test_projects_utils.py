@@ -16,7 +16,7 @@
 
 import unittest
 
-from projects_agent.projects_utils import is_valid_email
+from agents.projects_agent.tools.utils import is_valid_email
 
 
 class TestProjectsUtils(unittest.TestCase):

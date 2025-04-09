@@ -38,15 +38,6 @@ TEST_PROMPT_ISSUES_RETRY_COUNT = 3
 class TestPromptsIssues(unittest.TestCase):
   def get_mock_settings(self):
     return Settings(
-      JIRA_INSTANCE="https://mock.jira.instance.test",
-      TEST_USER_EMAIL="test_user@example.com",
-      TEST_PROJECT_KEY="TEST",
-      NUM_JIRA_ISSUES_TO_RETRIEVE=5,
-      LANGCHAIN_TRACING_V2=False,
-      LANGCHAIN_ENDPOINT="",
-      LANGCHAIN_API_KEY="",
-      LANGCHAIN_PROJECT="",
-      LANGSMITH_API_KEY="",
       OPENAI_TEMPERATURE=0.7,
       # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
       # OpenAI Setting
