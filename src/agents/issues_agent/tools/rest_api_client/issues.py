@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import requests
-from langchain.agents import tool
 
 from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
 from .dryrun.mock_responses import (
@@ -14,12 +13,12 @@ from .dryrun.mock_responses import (
   MOCK_GET_SUPPORTED_JIRA_ISSUE_TYPES_RESPONSE,
   MOCK_UPDATE_ISSUE_REPORTER_RESPONSE,
 )
-from agents.issues_agent.models import CreateJiraIssueInput, LLMResponseOutput
+from agents.issues_agent.models import CreateJiraIssueInput
 from utils.jira_client.client import JiraClient, JiraRESTClient
 from utils.dryrun_utils import dryrun_response
 
-@tool
-def tool_create_jira_issue(input_data: CreateJiraIssueInput) -> LLMResponseOutput:
+@dryrun_response(MOCK_CREATE_JIRA_ISSUE_RESPONSE)
+def create_jira_issue(input_data: CreateJiraIssueInput) -> str:
   """
   Create a new Jira issue.
 
@@ -27,19 +26,35 @@ def tool_create_jira_issue(input_data: CreateJiraIssueInput) -> LLMResponseOutpu
       input_data (CreateJiraIssueInput): The input model containing the details for creating the issue.
 
   Returns:
-      LLMResponseOutput: The output model containing the URL of the created Jira issue.
+      str: The URL of the created Jira issue.
   """
   logging.info(f"Creating a new Jira issue in project: {input_data.project_key}")
 
   try:
-    issue_url = create_jira_issue(input_data)
-    return LLMResponseOutput(response=issue_url)
+    supported_issue_types = _get_supported_issue_types(input_data.project_key)
+    if input_data.issue_type not in supported_issue_types:
+      raise ValueError(f"Unsupported issue type: {input_data.issue_type}. Supported issue types are: {supported_issue_types}")
+
+    issue_dict = {
+      'project': {'key': input_data.project_key},
+      'summary': input_data.summary,
+      'description': input_data.description,
+      'issuetype': {'name': input_data.issue_type},
+    }
+
+    if input_data.assignee_email:
+      issue_dict['assignee'] = {'id': _get_account_id_from_email(input_data.assignee_email)}
+
+    jira_api = JiraClient.get_jira_instance()
+    new_issue = jira_api.create_issue(fields=issue_dict)
+    return _urlify_jira_issue_id(new_issue.key)
+
   except Exception as e:
-    return LLMResponseOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
+    raise ValueError(e)
 
 
 @dryrun_response(MOCK_ASSIGN_JIRA_RESPONSE)
-def _assign_jira(issue_key: str, assignee_email: str) -> str:
+def assign_jira(issue_key: str, assignee_email: str) -> str:
   """
   Assign a Jira ticket to a specified user.
 
@@ -70,29 +85,8 @@ def _assign_jira(issue_key: str, assignee_email: str) -> str:
     logging.error(f'Failed to assign Jira ticket {issue_key} to {assignee_email}. Error: {e}')
     return INTERNAL_ERROR_MESSAGE + ":" + str(e)
 
-@tool
-def tool_assign_jira(issue_key: str, assignee_email: str) -> LLMResponseOutput:
-  """
-  Assign a Jira ticket to a specified user.
-
-  Args:
-      issue_key (str): The key of the Jira issue to assign.
-      assignee_email (str): The email of the user to assign the issue to.
-
-  Returns:
-      LLMResponseOutput: The output model containing the result of the assignment.
-  """
-  logging.info(f"Assigning Jira ticket {issue_key} to {assignee_email}")
-
-  try:
-    result = _assign_jira(issue_key, assignee_email)
-    return LLMResponseOutput(response=result)
-  except Exception as e:
-    logging.error(f'Failed to assign Jira ticket {issue_key} to {assignee_email}. Error: {e}')
-    return LLMResponseOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
-
 @dryrun_response(MOCK_UPDATE_ISSUE_REPORTER_RESPONSE)
-def _update_jira_reporter(issue_key: str, reporter_email: str) -> str:
+def update_jira_reporter(issue_key: str, reporter_email: str) -> str:
   """
   Update the reporter of a Jira issue.
 
@@ -117,44 +111,8 @@ def _update_jira_reporter(issue_key: str, reporter_email: str) -> str:
     logging.error(f"Error updating reporter: {e}")
     raise ValueError(INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
-@tool
-def tool_update_issue_reporter(issue_key: str, reporter_email: str) -> LLMResponseOutput:
-  """
-  Update the reporter of a Jira issue.
-
-  Args:
-      issue_key (str): The key of the Jira issue.
-      reporter_email (str): The email of the new reporter.
-
-  Returns:
-      LLMResponseOutput: The output model containing the result of the update.
-  """
-  try:
-    result = _update_jira_reporter(issue_key, reporter_email)
-    return LLMResponseOutput(response=result)
-  except Exception as e:
-    return LLMResponseOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
-
-@tool
-def tool_add_new_label_to_issue(issue_key: str, label: str) -> LLMResponseOutput:
-  """
-  Add a new label to a Jira issue.
-
-  Args:
-      issue_key (str): The key of the Jira issue.
-      label (str): The label to add.
-
-  Returns:
-      LLMResponseOutput: The output model containing the result of the operation.
-  """
-  try:
-    issue_url =  _add_new_label_to_issue(issue_key, label)
-    return LLMResponseOutput(response=issue_url)
-  except Exception as e:
-    return LLMResponseOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
-
 @dryrun_response(MOCK_GET_JIRA_ISSUE_DETAILS_RESPONSE)
-def _get_jira_issue_details(issue_key: str) -> dict:
+def get_jira_issue_details(issue_key: str) -> dict:
   """
   Retrieve the details of a Jira issue.
 
@@ -187,26 +145,8 @@ def _get_jira_issue_details(issue_key: str) -> dict:
     logging.error(f"Error retrieving Jira issue details: {e}")
     raise ValueError(INTERNAL_ERROR_MESSAGE + ":" + str(e))
 
-@tool
-def tool_get_jira_issue_details(issue_key: str) -> LLMResponseOutput:
-  """
-  Retrieve the details of a Jira issue.
-
-  Args:
-      issue_key (str): The key of the Jira issue.
-
-  Returns:
-      LLMResponseOutput: The output model containing the details of the issue.
-  """
-  try:
-    ticket_details = _get_jira_issue_details(issue_key)
-    resp_str = f"Jira Issue Details: {ticket_details}"
-    return LLMResponseOutput(response=resp_str)
-  except Exception as e:
-    return LLMResponseOutput(response=INTERNAL_ERROR_MESSAGE + ":" + str(e))
-
 @dryrun_response(MOCK_ADD_NEW_LABEL_TO_ISSUE_RESPONSE)
-def _add_new_label_to_issue(issue_key: str, label: str) -> str:
+def add_new_label_to_issue(issue_key: str, label: str) -> str:
   """
   Add a new label to a Jira issue.
 
@@ -262,7 +202,7 @@ def _create_jira_urlified_list(issues) -> list:
   return issues_md
 
 @dryrun_response(MOCK_GET_ACCOUNT_ID_FROM_EMAIL_RESPONSE)
-def _get_account_id_from_email(email: str) -> str:
+def get_account_id_from_email(email: str) -> str:
   """
   Retrieve the account ID associated with a given email address in Jira.
 
@@ -306,24 +246,8 @@ def _get_account_id_from_email(email: str) -> str:
     logging.error(f'Failed to get account ID for email {email}. Error: {e}')
     return ""
 
-@tool
-def tool_get_account_id_from_email(email: str) -> str:
-  """
-  Retrieve the account ID associated with a given email address in Jira.
-
-  Args:
-      email (str): The email address of the user whose account ID is to be retrieved.
-
-  Returns:
-      str: The account ID of the user, as a string. Returns None if the user is not found or if an error occurs.
-
-  Raises:
-      Exception: If the Jira API request fails or encounters an error.
-  """
-  return _get_account_id_from_email(email)
-
 @dryrun_response(MOCK_GET_SUPPORTED_JIRA_ISSUE_TYPES_RESPONSE)
-def _get_supported_issue_types(project_key: str) -> list[str]:
+def get_supported_issue_types(project_key: str) -> list[str]:
   """
   Retrieve supported issue types for Jira issues in a specific project.
 
