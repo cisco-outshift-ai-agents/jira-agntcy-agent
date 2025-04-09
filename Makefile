@@ -132,7 +132,7 @@ help:
 	@echo "  lint                Run linter on the codebase"
 	@echo "  pytest              Run tests using pytest"
 	@echo "  test                Run linter and tests"
-	@echo "  graph               Generate knowledge graph"
+	@echo "  graph-ap            Generate knowledge graph (Langgraph Agent Protocol)"
 	@echo "  clean               Clean up Docker images and .env file"
 	@echo "  eval                Run evaluation tests"
 	@echo "  langgraph-dev       Run langgraph dev command"
