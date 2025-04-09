@@ -14,11 +14,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from jira import JIRA
-from requests.auth import HTTPBasicAuth
-from .config import JiraClientConfig, AUTH_TYPE_BASIC, AUTH_TYPE_TOKEN, AUTH_TYPE_OAUTH
 import threading
-import os
+
+from jira import JIRA
+from .config import JiraClientConfig, AUTH_TYPE_BASIC, AUTH_TYPE_TOKEN, AUTH_TYPE_OAUTH
 from .utils import is_jira_cloud_url, get_url_with_proper_scheme
 
 class JiraClient:
@@ -60,28 +59,3 @@ class JiraClient:
           cls._client = JiraClient(config).client
     return cls._client
 
-
-class JiraRESTClient:
-  _jira_instance = None
-  _auth_instance = None
-  _jira_server_url = None
-  _jira_headers =   headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
-  _lock = threading.Lock()
-
-  @classmethod
-  def get_auth_instance(cls):
-    if cls._auth_instance is None:
-      user_email = os.getenv('JIRA_USERNAME')
-      access_token = os.getenv('JIRA_API_TOKEN')
-
-      cls._auth_instance = HTTPBasicAuth(user_email, access_token)
-    if cls._jira_server_url is None:
-      cls._jira_server_url = os.getenv("JIRA_INSTANCE") or os.getenv('JIRA_URL')
-
-      if is_jira_cloud_url(cls._jira_server_url):
-        cls._jira_server_url = get_url_with_proper_scheme(cls._jira_server_url)
-
-    return cls._jira_server_url, cls._auth_instance, cls._jira_headers

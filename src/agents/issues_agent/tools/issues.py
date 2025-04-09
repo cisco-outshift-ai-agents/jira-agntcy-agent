@@ -30,7 +30,8 @@ from .dryrun.mock_responses import (
   MOCK_UPDATE_ISSUE_REPORTER_RESPONSE,
 )
 from agents.issues_agent.models import CreateJiraIssueInput, LLMResponseOutput
-from utils.jira_client.client import JiraClient, JiraRESTClient
+from utils.jira_client.client import JiraClient
+from utils.jira_client.rest import JiraRESTClient
 from utils.dryrun_utils import dryrun_response
 
 @dryrun_response(MOCK_CREATE_JIRA_ISSUE_RESPONSE)

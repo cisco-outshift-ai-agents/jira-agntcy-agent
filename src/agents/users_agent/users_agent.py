@@ -14,13 +14,13 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from core.llm import get_llm
+from agntcy_agents_common.llm import get_llm
 
 from langgraph.prebuilt import create_react_agent
 
-from users_agent.users_models import JiraUserOutput
+from users_models import JiraUserOutput
 
-from users_agent.users_tools import get_jira_accountID_by_user_email
+from users_tools import get_jira_accountID_by_user_email
 
 
 # NOT TO BE USED CURRENTLY

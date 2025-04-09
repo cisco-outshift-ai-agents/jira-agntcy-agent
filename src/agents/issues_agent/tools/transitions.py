@@ -22,7 +22,7 @@ import logging
 
 from agents.issues_agent.models import LLMResponseOutput
 
-from utils.jira_client.client import JiraRESTClient
+from utils.jira_client.rest import JiraRESTClient
 from utils.dryrun_utils import dryrun_response
 
 from .dryrun.mock_responses import (
