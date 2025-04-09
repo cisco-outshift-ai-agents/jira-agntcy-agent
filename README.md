@@ -1,35 +1,67 @@
 # Agntcy Jira AI Agent
 
-## About the Project
+## **Overview**
+The **Jira AI Agent** conforms to AGNTCY specs as described https://github.com/agntcy.
 
-This repository contains a Jira AI Agent Protocol FastAPI application. It also includes examples of JSON-based logging, CORS configuration, and route tagging.
+This langchain agent performs specific Jira operations based on the user prompt supplied. It can easily be inserted into agentic applications via its supported APIs.
 
-## Prerequisites
 
-- Python 3.12+
-- A virtual environment is recommended for isolating dependencies.
+## **📌 About the Project**
 
-## Installation
+This repository contains a **Jira AI Agent**. It comprises a supervisor AI Agent and various sub-agents to perform various Jira related operations.
 
-1. Clone the repository:
+Existing functionality supported includes:
+1. Jira issue operations - querying, creation, updation, assignment, transitions.
+2. Jira project operations - querying, creation, updation, assignment.
 
-   ```bash
-   git clone https://github.com/cisco-outshift-alfred/jira-agntcy-agent.git
-   cd jira-agent
-   ```
+This agent was built with **FastAPI**, that can operate using:
 
-2. Install the dependencies in your virtual environment:
+- A **standard API** compatible with [LangChain’s Agent Protocol](https://github.com/langchain-ai/agent-protocol) — an open-source framework for interfacing with AI agents.
 
-   ```bash
-   python -m venv env
-   source env/bin/activate
-   pip install -r requirements.txt
-   ```
+## Key Features
 
-## Usage
+- **Interface Support**:
+  - **LangChain Agent Protocol API**: Exposes HTTP endpoints following the Agent Protocol spec for easy integration with LangChain-based ecosystems.
+
+- **JSON-based Logging**:  
+  Structured, machine-readable logs to support observability and debugging.
+
+- **CORS Configuration**:  
+  Enables secure cross-origin API access from web clients or frontends.
+
+- **Route Tagging**:  
+  Tagged routes for better documentation, navigation, and maintainability.
+
+---
+## **📋 Prerequisites**
+Before installation, ensure you have:
+- **Python 3.12+** installed
+- A **virtual environment** (recommended for dependency isolation)
+
+---
+## **⚙️ Installation Steps**
+
+### **1️⃣ Clone the Repository**
+
+```bash
+git clone https://github.com/cisco-outshift-alfred/jira-agntcy-agent.git
+cd jira-agent
+```
+---
+### **2️⃣ Setup the environment variables**
 
 ### Required Environment Variables
 Before running the application, ensure you have the following environment variables set in your .env file or in your environment:
+
+#### **🔹 Jira Configuration**
+
+```dotenv
+JIRA_INSTANCE=Your Jira domain (Eg. example.atlassian.net).
+JIRA_USERNAME=Your Jira email wih appropriate permissions.
+JIRA_API_TOKEN=Your Jira API token.
+```
+The **JIRA User** must be configured with the **appropriate permissions** for the **Jira instance**.
+TODO : add additional details
 
 #### **🔹 OpenAI API Configuration**
 
@@ -41,8 +73,6 @@ OPENAI_API_KEY=your-openai-api-key-here
 OPENAI_API_VERSION=gpt-4o  # Specify the model name
 OPENAI_TEMPERATURE=0.7    # Adjust temperature for response randomness
 ```
-
----
 
 #### **🔹 Azure OpenAI API Configuration**
 
@@ -58,17 +88,21 @@ OPENAI_TEMPERATURE=0.7 # Adjust temperature for response randomness
 ```
 
 ---
+### **3️⃣ Setup the virtual environment**
 
-#### **🔹 Jira Configuration**
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+A **Makefile** is provided to do the same:
 
-TODO Cleanup.
-
-```dotenv
-JIRA_INSTANCE=Your Jira domain (Eg. example.atlassian.net).
-JIRA_USERNAME=Your Jira email wih appropriate permissions.
-JIRA_API_TOKEN=Your Jira API token.
+```bash
+make venv/bin/activate
 ```
 
+---
+✅ **Now you're ready to run the application!**
 ### Server
 
 You can run the application by executing:
@@ -80,9 +114,8 @@ make run
 or
 
 ```bash
-python app/main.py
+python src/main.py
 ```
-
 ### Expected Console Output
 
 On a successful run, you should see logs in your terminal similar to the snippet below. The exact timestamps, process IDs, and file paths will vary:
@@ -105,34 +138,16 @@ This output confirms that:
 2. The server is listening on `0.0.0.0:8125`.
 3. Your environment variables (like `.env file loaded`) are read.
 
+### AP REST Client
 
-## Docker
+*Change to `clients` folder*
 
-Alternatively, you can run the application with Docker by building the Docker image and running the container.
-
-- **Build the Docker Image**: Create a Docker image from the Dockerfile in the current directory.
-
-  ```bash
-  docker build -t your_docker_image_name .
-  ```
-
-- **Run the Docker Container**: Start a container from the built image, using the `.env` file for environment variables and mapping port 8125.
-
-  ```bash
-  docker run --env-file .env -p 8125:8125 your_docker_image_name
-  ```
-
-
-## AP REST Client
-
-*Change to `client` folder*
-
-*Update the user_prompt in `rest.py` to the desired prompt (sample prompts available in sample_prompts/*
+*Update the user_prompt in `clients/ap_client/client.py` to the desired prompt (sample prompts available in `clients/sample_prompts/`*
 
 The REST client connects to the AP endpoint for the Server running at the default port 8125
 
 ```bash
-python rest.py
+python clients/ap_client/client.py
 ```
 On a successful remote graph run you should see logs in your terminal similar to the snippet below:
 
@@ -168,7 +183,26 @@ curl -X 'POST' \
 }
 ```
 
+---
+## Docker
 
+Alternatively, you can run the application with Docker by building the Docker image and running the container.
+
+```bash
+make docker-build
+make docker-run
+```
+
+or
+
+- **Build and Run the Docker Container**: Start a container from the built image, using the `.env` file for environment variables and mapping port 8125.
+
+```bash
+docker build -t your_docker_image_name .
+docker run --env-file .env -p 8125:8125 your_docker_image_name
+ ```
+
+---
 ## Logging
 
 - **Format**: The application is configured to use JSON logging by default. Each log line provides a timestamp, log level, module name, and the message.
@@ -185,6 +219,7 @@ http://0.0.0.0:8125/docs
 
 (Adjust the host and port if you override them via environment variable JIRA_AGENT_PORT.)
 
+---
 ## Running as a LangGraph Studio
 
 You need to install Rust: <https://www.rust-lang.org/tools/install>
@@ -193,8 +228,7 @@ Run the server
 
 *To see the graph for the end client using LangGraph AP*
 ```bash
-cd client
-langgraph dev
+make graph-ap
 ```
 Upon successful execution, you should see:
 
@@ -203,8 +237,7 @@ Upon successful execution, you should see:
 
 *To see the graph for the entire jira workflow server*
 ```bash
-cd app
-langgraph dev
+make langgraph-dev
 ```
 
 Upon successful execution, you should see:
@@ -212,12 +245,13 @@ Upon successful execution, you should see:
 ![Langgraph Studio](./docs/imgs/search-issues-readme.png "Studio")
 
 
-
+---
 ## Roadmap
 
-See the [open issues](TODO) for a list
+See the [open issues](https://github.com/cisco-outshift-alfred/jira-agntcy-agent/issues) for a list
 of proposed features (and known issues).
 
+---
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to
@@ -225,19 +259,24 @@ learn, inspire, and create. Any contributions you make are **greatly
 appreciated**. For detailed contributing guidelines, please see
 [CONTRIBUTING.md](CONTRIBUTING.md)
 
+---
 ## License
 
 Distributed under the Apache-2.0 License. See [LICENSE](LICENSE) for more
 information.
 
+---
 ## Contact
 
-Sushama Shroff - @ssmails - sushroff@cisco.com
-Samuel Yang - @samuyang - samuyang@cisco.com
+[cisco-outshift-ai-agents@cisco.com](mailto:cisco-outshift-ai-agents@cisco.com)
 
-Project Link: TODO
+Project Link: 
+[https://github.com/cisco-outshift-alfred/jira-agntcy-agent/](https://github.com/cisco-outshift-alfred/jira-agntcy-agent/)
 
+---
 ## Acknowledgements
 
 This template was adapted from
 [https://github.com/othneildrew/Best-README-Template](https://github.com/othneildrew/Best-README-Template).
+
+For more information about our various agents, please visit the [agntcy project page](https://github.com/agntcy).
