@@ -101,10 +101,17 @@ eval-llm-as-judge: .env venv/bin/activate
 	python3 eval/llm_as_judge/test_llm_as_judge.py
 
 langgraph-dev: .env venv/bin/activate
-	@echo "Running langgraph dev..."
+	@echo "Running server langgraph dev..."
 	export PYTHONPATH=$(PWD):$(PWD)/src && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
 	cd src && \
+	langgraph dev
+
+graph-ap: .env venv/bin/activate
+	@echo "Running client (agent protocol) langgraph dev..."
+	export PYTHONPATH=$(PWD):$(PWD)/src && \
+	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
+	cd clients/ap_client && \
 	langgraph dev
 
 ######################
@@ -125,7 +132,7 @@ help:
 	@echo "  lint                Run linter on the codebase"
 	@echo "  pytest              Run tests using pytest"
 	@echo "  test                Run linter and tests"
-	@echo "  graph               Generate knowledge graph"
+	@echo "  graph-ap            Generate knowledge graph (Langgraph Agent Protocol)"
 	@echo "  clean               Clean up Docker images and .env file"
 	@echo "  eval                Run evaluation tests"
 	@echo "  langgraph-dev       Run langgraph dev command"

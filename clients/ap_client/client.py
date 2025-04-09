@@ -1,6 +1,22 @@
-# Description: This file contains a sample graph client that makes a stateless request using langgraph agent protocol
+# Copyright 2025 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Description: This file contains a sample graph clients that makes a stateless request using langgraph agent protocol
 # to the Remote Graph Server.
-# Usage: python client/rest.py
+# Usage: python clients/ap_client/client.py
 
 import json
 import logging
@@ -79,7 +95,7 @@ def node_remote_request_stateless(state: GraphState) -> Dict[str, Any]:
     query = state["messages"][-1].content
     logger.info(json.dumps({"event": "sending_request", "query": query}))
 
-    # header and payload to be sent by a client of Jira Agent
+    # header and payload to be sent by a clients of Jira Agent
     headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -194,8 +210,7 @@ def main():
     graph = build_graph()
 
     logger.info({"event": "invoking_graph", "input": input})
-
-    user_prompt = "UPDATE THIS PROMPT BASED ON PROMPTS IN client/sample_prompts"
+    user_prompt = "UPDATE THIS PROMPT BASED ON PROMPTS IN clients/sample_prompts"
     inputs = {"messages": [HumanMessage(content=user_prompt)]}
     result = graph.invoke(inputs)
     logger.info({"event": "final_result", "result": result})
