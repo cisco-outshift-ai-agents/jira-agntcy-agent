@@ -100,7 +100,7 @@ eval-llm-as-judge: .env venv/bin/activate
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
 	python3 eval/llm_as_judge/test_llm_as_judge.py
 
-langgraph: .env venv/bin/activate
+langgraph-dev: .env venv/bin/activate
 	@echo "Running langgraph dev..."
 	export PYTHONPATH=$(PWD):$(PWD)/src && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
@@ -118,7 +118,7 @@ help:
 	@echo ""
 	@echo "Targets:"
 	@echo "  deps                Check if required dependencies are installed"
-	@echo "  venv                Set up virtual environment and install requirements"
+	@echo "  venv/bin/activate   Set up virtual environment and install requirements"
 	@echo "  docker-build        Build the Docker image"
 	@echo "  run-docker-local    Run the agent locally in Docker"
 	@echo "  docker-run          Run the agent in Docker with local source code"

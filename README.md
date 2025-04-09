@@ -67,10 +67,6 @@ TODO Cleanup.
 JIRA_INSTANCE=Your Jira domain (Eg. example.atlassian.net).
 JIRA_USERNAME=Your Jira email wih appropriate permissions.
 JIRA_API_TOKEN=Your Jira API token.
-JIRA_BASIC_AUTH_TOKEN=Your Jira Basic Auth token obtained as base64 encoded string of JIRA_USERNAME:JIRA_API_TOKEN.
-```
-```bash
-echo -n user@example.com:api_token_string | base64
 ```
 
 ### Server
