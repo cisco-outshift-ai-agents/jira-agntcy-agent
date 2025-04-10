@@ -91,15 +91,6 @@ eval-strict: .env venv/bin/activate
 	export LANGSMITH_TRACING=true && \
 	python3 -m pytest eval/strict_match/test_strict_match.py
 
-eval-llm-as-judge: .env venv/bin/activate
-	@echo "Running Strict Evaluation Tests with Dry-run Enabled..."
-	. venv/bin/activate && pip install -r eval/requirements.txt && \
-	DRY_RUN=true \
-	&& export PYTHONPATH=src && \
-	. .env && \
-	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
-	python3 eval/llm_as_judge/test_llm_as_judge.py
-
 langgraph-dev: .env venv/bin/activate
 	@echo "Running server langgraph dev..."
 	. venv/bin/activate && export PYTHONPATH=src && \

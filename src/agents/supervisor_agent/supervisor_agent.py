@@ -34,12 +34,9 @@ class SupervisorAgent:
         self.agents = [ProjectsAgent(settings).agent(), IssuesAgent(settings).agent()]
         self.prompt = (prompt.format(additional_context=""))
 
-    def agent(self, input_prompt=None):
+    def agent(self):
 
-        if input_prompt:
-            prompt = self.prompt + " " + input_prompt
-        else:
-            prompt = self.prompt
+        prompt = self.prompt
 
         # returns a state graph
         graph = create_supervisor(
