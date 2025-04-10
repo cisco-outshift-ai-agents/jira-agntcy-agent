@@ -54,7 +54,7 @@ docker-run: .env venv/bin/activate run-docker-local
 
 lint: venv/bin/activate
 	@echo "Running ruff..."
-	. venv/bin/activate && ruff check src tests
+	. venv/bin/activate && pip install ruff && ruff check src tests
 
 pytest: venv/bin/activate
 	@echo "Running pytest..."
