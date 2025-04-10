@@ -56,7 +56,7 @@ Before running the application, ensure you have the following environment variab
 #### **🔹 Jira Configuration**
 
 ```bash
-JIRA_INSTANCE=your-jira-domain # Ensure to include the protocol (http/https). For example, https://your-jira-instance.atlassian.net
+JIRA_INSTANCE=your-jira-domain # Ensure to include the https protocol and no trailing slash. For example: https://your-jira-domain.atlassian.net 
 JIRA_USERNAME=your-jira-username # Valid Jira username or email
 JIRA_API_TOKEN=your-jira-api-token # Jira API Token with proper permissions
 ```
