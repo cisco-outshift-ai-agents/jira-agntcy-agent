@@ -45,7 +45,7 @@ Before installation, ensure you have:
 
 ```bash
 git clone https://github.com/cisco-outshift-alfred/jira-agntcy-agent.git
-cd jira-agent
+cd jira-agntcy-agent
 ```
 ---
 ### **2️⃣ Setup the environment variables**
@@ -60,8 +60,9 @@ JIRA_INSTANCE=Your Jira domain (Eg. example.atlassian.net).
 JIRA_USERNAME=Your Jira email wih appropriate permissions.
 JIRA_API_TOKEN=Your Jira API token.
 ```
-The **JIRA User** must be configured with the **appropriate permissions** for the **Jira instance**.
-TODO : add additional details
+The **JIRA User and API Token** must be configured with the **appropriate permissions** for the **Jira instance**.
+The permissions supported on JIRA instance can be obtained using the [Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get)
+The permissions for a particular JIRA user can be obtained using the [My Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-mypermissions-get)
 
 #### **🔹 OpenAI API Configuration**
 
@@ -272,6 +273,32 @@ To run the tests, you need to set up the environment variables and then execute 
 
 This will ensure the environment variables are loaded and the tests are executed.
 
+---
+## Running Eval Tests
+
+1. **Set the Environment Variables**:  
+   Add the required variables to your `.env` file or export them directly in your shell.
+
+   Example `.env` file or export these environment variables directly in your shell:
+   ```bash
+   LANGCHAIN_API_KEY=your-langsmith-api-key
+   # OpenAI Configuration
+   TEST_OPENAI_ENDPOINT=https://api.openai.com/v1
+   TEST_OPENAI_API_KEY=your-openai-api-key
+   # Alternatively, for Azure OpenAI
+   TEST_AZURE_OPENAI_ENDPOINT=https://your-azure-endpoint.openai.azure.com
+   TEST_AZURE_OPENAI_API_KEY=your-azure-api-key
+   TEST_AZURE_OPENAI_API_VERSION=2023-03-15-preview
+   TEST_AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+   
+   TEST_LLM_PROVIDER=azure # or openai
+   ```
+
+2. **Run the Tests**:  
+   Execute the `make eval` command to run the tests:
+   ```bash
+   make eval
+   ```
 
 ---
 ## Roadmap

@@ -71,7 +71,7 @@ run-test: .env venv/bin/activate
 
 run-test-dev: .env venv/bin/activate
 	@echo "Running dev validation tests..."
-	. venv/bin/activate && \
+	. venv/bin/activate && export PYTHONPATH=src && \
 	DEV_TEST=true python3 -m unittest tests.dev.test_prompts_projects_dev
 
 clean:
@@ -86,7 +86,7 @@ eval-strict: .env venv/bin/activate
 	. .env && \
 	pip install --upgrade pip setuptools && \
 	pip install -r eval/requirements.txt && \
-	export PYTHONPATH=$(PWD):$(PWD)/src:$PYTHONPATH && \
+	export PYTHONPATH=src && \
 	export DRYRUN=true && \
 	export LANGSMITH_TRACING=true && \
 	python3 -m pytest eval/strict_match/test_strict_match.py
@@ -95,21 +95,21 @@ eval-llm-as-judge: .env venv/bin/activate
 	@echo "Running Strict Evaluation Tests with Dry-run Enabled..."
 	. venv/bin/activate && pip install -r eval/requirements.txt && \
 	DRY_RUN=true \
-	export PYTHONPATH=$(PWD):$(PWD)/src:$PYTHONPATH && \
+	&& export PYTHONPATH=src && \
 	. .env && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
 	python3 eval/llm_as_judge/test_llm_as_judge.py
 
 langgraph-dev: .env venv/bin/activate
 	@echo "Running server langgraph dev..."
-	export PYTHONPATH=$(PWD):$(PWD)/src && \
+	. venv/bin/activate && export PYTHONPATH=src && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
 	cd src && \
 	langgraph dev
 
 graph-ap: .env venv/bin/activate
 	@echo "Running client (agent protocol) langgraph dev..."
-	export PYTHONPATH=$(PWD):$(PWD)/src && \
+	. venv/bin/activate && export PYTHONPATH=src && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
 	cd clients/ap_client && \
 	langgraph dev

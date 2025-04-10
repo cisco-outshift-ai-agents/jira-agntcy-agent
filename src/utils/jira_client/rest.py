@@ -61,7 +61,7 @@ class JiraRESTClient:
       logging.info(f"Sending {method} request to: {url}")
 
       response = requests.request(
-        method, url, headers=headers, auth=auth, json=payload
+        method, url, headers=headers, auth=auth, data=payload
       )
       response.raise_for_status()
       logging.info(f"Received response: {response.status_code}")
