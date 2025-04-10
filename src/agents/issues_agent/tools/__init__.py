@@ -15,7 +15,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from typing import Any, Callable, List
-import os
 
 from .issues import (
   create_jira_issue,
