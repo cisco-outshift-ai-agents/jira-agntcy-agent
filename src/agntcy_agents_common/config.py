@@ -15,14 +15,20 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
+import os
 from typing import Literal, Optional
 
 from pydantic import model_validator
 from pydantic_settings import BaseSettings
+from agntcy_agents_common.jira_settings import JiraSettings
 
 # Error messages
 INTERNAL_ERROR_MESSAGE = "An unexpected error occurred"
 
+def _initialize_jira_settings() -> Optional[JiraSettings]:
+  if os.getenv("DRYRUN"):
+    return None
+  return JiraSettings()
 
 class Settings(BaseSettings):
   # Application settings
@@ -33,7 +39,8 @@ class Settings(BaseSettings):
 
   # Langchain settings (optional)
   LANGCHAIN_TRACING_V2: bool = False
-  LANGCHAIN_ENDPOINT: Optional[str] = None
+  LANGCHAIN_ENDPOINT: Optional[str] = None  # Jira settings
+  JIRA_SETTINGS: JiraSettings = _initialize_jira_settings()
   LANGCHAIN_API_KEY: Optional[str] = None
   LANGCHAIN_PROJECT: Optional[str] = None
   LANGSMITH_API_KEY: Optional[str] = None
@@ -58,9 +65,6 @@ class Settings(BaseSettings):
   def check_required_settings(self) -> "Settings":
       logger = logging.getLogger(__name__)
       logger.info("Running model validator for Settings...")
-      # jira_instance = self.JIRA_INSTANCE.lower()
-      # if not jira_instance:
-      #     raise ValueError("Missing required JIRA_INSTANCE environment variable")
 
       provider = self.LLM_PROVIDER.lower()
       if provider == "azure":
