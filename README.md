@@ -64,10 +64,11 @@ The **JIRA User and API Token** must be configured with the **appropriate permis
 The permissions supported on JIRA instance can be obtained using the [Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get)
 The permissions for a particular JIRA user can be obtained using the [My Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-mypermissions-get)
 
-#### **🔹 OpenAI API Configuration**
+#### **🔹 OpenAI or Azure OpenAI API Configuration**
 
-If configuring your AI agent to use OpenAI as its LLM provider, set these variables:
+You can configure your AI agent to use either OpenAI or Azure OpenAI as its LLM provider. Set the appropriate variables based on your choice:  
 
+For OpenAI:
 ```dotenv
 # OpenAI API Configuration
 OPENAI_API_KEY=your-openai-api-key-here
@@ -75,10 +76,7 @@ OPENAI_API_VERSION=gpt-4o  # Specify the model name
 OPENAI_TEMPERATURE=0.7    # Adjust temperature for response randomness
 ```
 
-#### **🔹 Azure OpenAI API Configuration**
-
-If configuring your AI agent to use Azure OpenAI as its LLM provider, set these variables:
-
+For Azure OpenAI:
 ```dotenv
 # Azure OpenAI API Configuration
 AZURE_OPENAI_API_KEY=your-azure-api-key-here
@@ -86,6 +84,16 @@ AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
 AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name  # Deployment name in Azure
 AZURE_OPENAI_API_VERSION=your-azure-openai-api-version  # API version
 OPENAI_TEMPERATURE=0.7 # Adjust temperature for response randomness
+```
+
+#### **🔹 LangChain Configuration(Optional)**
+Export these environment variables to integrate Langchain tracing and observability functionalities for your agent.
+```bash
+LANGCHAIN_TRACING_V2=true  # Enable LangChain tracing
+LANGCHAIN_ENDPOINT=your-langchain-endpoint  # The LangChain API endpoint
+LANGCHAIN_API_KEY=your-langchain-api-key   # API key for LangChain
+LANGCHAIN_PROJECT=your-langchain-project-name  # Project name in LangChain
+LANGSMITH_API_KEY=your-langsmith-api-key   # API key for LangSmith
 ```
 
 ---
@@ -219,17 +227,6 @@ http://0.0.0.0:8125/docs
 ```
 
 (Adjust the host and port if you override them via environment variable JIRA_AGENT_PORT.)
-
----
-## LangChain Configuration
-Export these environment variables to integrate Langchain tracing and observability functionalities for your agent.
-```bash
-LANGCHAIN_TRACING_V2=true  # Enable LangChain tracing
-LANGCHAIN_ENDPOINT=your-langchain-endpoint  # The LangChain API endpoint
-LANGCHAIN_API_KEY=your-langchain-api-key   # API key for LangChain
-LANGCHAIN_PROJECT=your-langchain-project-name  # Project name in LangChain
-LANGSMITH_API_KEY=your-langsmith-api-key   # API key for LangSmith
-```
 
 ---
 ## Running as a LangGraph Studio
