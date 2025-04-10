@@ -56,9 +56,7 @@ class JiraRESTClient:
     """Return the Jira server URL, authentication, and headers."""
     if cls._config is None:
       logging.info("JiraRESTClient is not initialized. Initializing with default JiraConfig...")
-      cls.initialize()
-      # Automatically initialize with default JiraConfig
-      logging.info(cls._config, cls._auth_instance, cls._jira_headers)
+      cls.initialize() # Automatically initialize with default JiraConfig
     return cls._config.JIRA_INSTANCE, cls._auth_instance, cls._jira_headers
 
   @staticmethod
