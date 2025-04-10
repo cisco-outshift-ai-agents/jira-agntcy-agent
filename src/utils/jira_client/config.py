@@ -14,64 +14,54 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# jira/config.py
-import os
-from dataclasses import dataclass
+from pydantic_settings import BaseSettings
+from pydantic import Field, model_validator
 from typing import Literal, Optional, Any, Dict
+import os
 
-AUTH_TYPE_BASIC = "basic"
-AUTH_TYPE_TOKEN = "token"
-AUTH_TYPE_OAUTH = "oauth"
+class JiraConfig(BaseSettings):
+  JIRA_INSTANCE: str = Field(..., description="Jira instance URL")
+  JIRA_AUTH_TYPE: Literal["basic", "token", "oauth"] = Field("basic", description="Authentication type")
+  JIRA_USERNAME: Optional[str] = Field(None, description="Jira username")
+  JIRA_API_TOKEN: Optional[str] = Field(None, description="Jira API token")
+  JIRA_PERSONAL_ACCESS_TOKEN: Optional[str] = Field(None, description="Personal access token")
+  JIRA_OAUTH_CREDENTIALS: Optional[Dict[str, Any]] = Field(None, description="OAuth credentials")
 
-@dataclass
-class JiraClientConfig:
-  url: str  # Base URL for Jira
-  auth_type: Literal["basic", "token", "oauth"]  # Authentication type
-  username: Optional[str] = None  # Username for basic authentication
-  api_token: Optional[str] = None  # API token for token authentication
-  personal_access_token: Optional[str] = None  # Token for PAT bearer token authorization
-  oauth_credentials: Optional[Dict[str, Any]] = None  # Dict of properties for OAuth authentication
+  class Config:
+    env_file = ".env"
+    extra = "ignore"
 
-  @classmethod
-  def from_env(cls):
-    url =  os.getenv("JIRA_INSTANCE") or os.getenv("JIRA_URL")
-    if not url:
-      raise ValueError("The environment variable 'JIRA_URL' is required but not set.")
+  @model_validator(mode="after")
+  def validate_jira_config(self):
+    if not self.JIRA_INSTANCE.startswith(("http://", "https://")):
+      raise ValueError("JIRA_INSTANCE must start with 'http://' or 'https://'")
 
-    username = os.getenv("JIRA_USERNAME")
-    api_token = os.getenv("JIRA_API_TOKEN")
-    personal_access_token = os.getenv("JIRA_PERSONAL_ACCESS_TOKEN")
-    oauth_credentials = {
+    if self.JIRA_AUTH_TYPE == "basic":
+      if not self.JIRA_USERNAME or not self.JIRA_API_TOKEN:
+        raise ValueError("Both JIRA_USERNAME and JIRA_API_TOKEN are required for basic authentication.")
+    elif self.JIRA_AUTH_TYPE == "token":
+      if not self.JIRA_PERSONAL_ACCESS_TOKEN:
+        raise ValueError("JIRA_PERSONAL_ACCESS_TOKEN is required for token authentication.")
+    elif self.JIRA_AUTH_TYPE == "oauth":
+      self.JIRA_OAUTH_CREDENTIALS = self.get_oauth_credentials()
+      if not self.JIRA_OAUTH_CREDENTIALS:
+        raise ValueError("OAuth credentials are required for OAuth authentication.")
+    else:
+      raise ValueError("Unsupported authentication type. Use 'basic', 'token', or 'oauth'.")
+    return self
+
+  @staticmethod
+  def get_oauth_credentials() -> Dict[str, Any]:
+    credentials = {
       "access_token": os.getenv("JIRA_OAUTH_ACCESS_TOKEN"),
       "access_token_secret": os.getenv("JIRA_OAUTH_ACCESS_TOKEN_SECRET"),
       "consumer_key": os.getenv("JIRA_OAUTH_CONSUMER_KEY"),
       "key_cert": os.getenv("JIRA_OAUTH_KEY_CERT"),
-      "signature_method": os.getenv("JIRA_OAUTH_SIGNATURE_METHOD", "oauthlib.oauth1.SIGNATURE_HMAC_SHA1")
+      "signature_method": os.getenv("JIRA_OAUTH_SIGNATURE_METHOD", "oauthlib.oauth1.SIGNATURE_HMAC_SHA1"),
     }
 
-    # Determine authentication type based on available environment variables
-    auth_type = os.getenv("JIRA_AUTH_TYPE", AUTH_TYPE_BASIC).lower()
+    missing_vars = [key for key, value in credentials.items() if value is None]
+    if missing_vars:
+      raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
 
-    if auth_type == AUTH_TYPE_BASIC:
-      if not username or not api_token:
-        raise ValueError("Both 'JIRA_USERNAME' and 'JIRA_API_TOKEN' are required for basic authentication.")
-
-    elif auth_type == AUTH_TYPE_TOKEN:
-      if not personal_access_token:
-        raise ValueError("'JIRA_PERSONAL_ACCESS_TOKEN' is required for token authentication.")
-
-    elif auth_type == AUTH_TYPE_OAUTH:
-      if not all(oauth_credentials.values()):
-        raise ValueError("All OAuth credentials are required for OAuth authentication.")
-
-    else:
-      raise ValueError(f"Unsupported authentication type: '{auth_type}'. Supported types are 'basic', 'token', and 'oauth'.")
-
-    return cls(
-      url=url,
-      auth_type=auth_type,
-      username=username,
-      api_token=api_token,
-      personal_access_token=personal_access_token,
-      oauth_credentials=oauth_credentials,
-    )
+    return credentials

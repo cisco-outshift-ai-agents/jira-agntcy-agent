@@ -24,7 +24,6 @@ from graph.graph import JiraGraph
 from agntcy_agents_common.config import Settings
 from tests.helper import contains_all_elements
 from tests.helper import get_tools_executed, verify_llm_settings_for_test
-from agntcy_agents_common.jira_settings import JiraSettings
 # Initialize logger
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
@@ -39,12 +38,6 @@ TEST_PROMPT_ISSUES_RETRY_COUNT = 3
 class TestPromptsIssues(unittest.TestCase):
   def get_mock_settings(self):
     return Settings(
-      JIRA_SETTINGS=JiraSettings(
-        JIRA_INSTANCE="https://test-jira-instance.atlassian.net",
-        JIRA_USERNAME="test-jira-username",
-        JIRA_API_TOKEN="test-jira-api-token",
-      ),
-
       OPENAI_TEMPERATURE=0.7,
       # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
       # OpenAI Setting

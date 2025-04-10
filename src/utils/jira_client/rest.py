@@ -14,47 +14,55 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+from .config import JiraConfig
+from requests.auth import HTTPBasicAuth
+from typing import Tuple, Union
+import requests
 import json
 import logging
-import os
-import threading
 import traceback
-from typing import Tuple, Union
-
-import requests
-from requests.auth import HTTPBasicAuth
-from requests.exceptions import ConnectionError, HTTPError, RequestException, Timeout
-
-from .utils import is_jira_cloud_url, get_url_with_proper_scheme
 
 class JiraRESTClient:
+  _config = None
   _auth_instance = None
-  _jira_server_url = None
   _jira_headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
   }
-  _lock = threading.Lock()
 
   @classmethod
-  def get_auth_instance(cls) -> Tuple[str, HTTPBasicAuth, dict]:
-    with cls._lock:
-      if cls._auth_instance is None:
-        user_email = os.getenv("JIRA_USERNAME")
-        access_token = os.getenv("JIRA_API_TOKEN")
-        cls._auth_instance = HTTPBasicAuth(user_email, access_token)
+  def initialize(cls, config: JiraConfig = None):
+    """Initialize the JiraRESTClient with a JiraConfig instance."""
+    cls._config = config or JiraConfig()
+    cls._setup_auth()
 
-      if cls._jira_server_url is None:
-        cls._jira_server_url = os.getenv("JIRA_INSTANCE") or os.getenv("JIRA_URL")
-        if is_jira_cloud_url(cls._jira_server_url):
-          cls._jira_server_url = get_url_with_proper_scheme(cls._jira_server_url)
+  @classmethod
+  def _setup_auth(cls):
+    """Set up authentication based on the JiraConfig."""
+    if cls._config.JIRA_AUTH_TYPE == "basic":
+      cls._auth_instance = HTTPBasicAuth(
+        cls._config.JIRA_USERNAME, cls._config.JIRA_API_TOKEN
+      )
+    elif cls._config.JIRA_AUTH_TYPE == "token":
+      cls._jira_headers["Authorization"] = f"Bearer {cls._config.JIRA_PERSONAL_ACCESS_TOKEN}"
+    elif cls._config.JIRA_AUTH_TYPE == "oauth":
+      cls._auth_instance = None  # OAuth logic can be added here
+      cls._jira_headers.update(cls._config.JIRA_OAUTH_CREDENTIALS)
+    else:
+      raise ValueError("Unsupported authentication type.")
 
-    return cls._jira_server_url, cls._auth_instance, cls._jira_headers
+  @classmethod
+  def get_auth_instance(cls) -> Tuple[str, Union[HTTPBasicAuth, None], dict]:
+    """Return the Jira server URL, authentication, and headers."""
+    if cls._config is None:
+      logging.info("JiraRESTClient is not initialized. Initializing with default JiraConfig...")
+      cls.initialize()
+      # Automatically initialize with default JiraConfig
+      logging.info(cls._config, cls._auth_instance, cls._jira_headers)
+    return cls._config.JIRA_INSTANCE, cls._auth_instance, cls._jira_headers
 
   @staticmethod
-  def _send_request(
-          method: str, url_path: str, payload: Union[dict, str, None] = None
-  ) -> str:
+  def _send_request(method: str, url_path: str, payload: Union[dict, str, None] = None) -> str:
     try:
       jira_instance, auth, headers = JiraRESTClient.get_auth_instance()
       url = f"{jira_instance}{url_path}"
@@ -69,18 +77,6 @@ class JiraRESTClient:
       return json.dumps(
         json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")
       )
-
-    except (Timeout, ConnectionError) as conn_err:
-      return json.dumps({"error": "Connection timeout or failure", "exception": str(conn_err)})
-
-    except HTTPError as http_err:
-      return json.dumps({"error": "HTTP request failed", "exception": str(http_err)})
-
-    except RequestException as req_err:
-      return json.dumps({"error": "Request failed", "exception": str(req_err)})
-
-    except json.JSONDecodeError as json_err:
-      return json.dumps({"error": "Invalid JSON response", "exception": str(json_err)})
 
     except Exception as e:
       return json.dumps(

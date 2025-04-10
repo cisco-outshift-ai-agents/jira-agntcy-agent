@@ -22,10 +22,7 @@ from dotenv import load_dotenv
 from graph.graph import JiraGraph
 
 from tests.helper import get_tools_executed
-
 from agntcy_agents_common.config import Settings
-from agntcy_agents_common.jira_settings import JiraSettings
-
 from tests.helper import verify_llm_settings_for_test
 
 # Initialize logger
@@ -46,12 +43,6 @@ class TestPromptsProjects(unittest.TestCase):
 
     def get_mock_settings(self):
         return Settings(
-            JIRA_SETTINGS=JiraSettings(
-              JIRA_INSTANCE="https://test-jira-instance.atlassian.net",
-              JIRA_USERNAME="test-jira-username",
-              JIRA_API_TOKEN="test-jira-api-token",
-            ),
-
             # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
             # OpenAI Setting
             OPENAI_ENDPOINT=os.getenv("TEST_OPENAI_ENDPOINT"),

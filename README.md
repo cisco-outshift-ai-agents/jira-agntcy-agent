@@ -221,6 +221,17 @@ http://0.0.0.0:8125/docs
 (Adjust the host and port if you override them via environment variable JIRA_AGENT_PORT.)
 
 ---
+## LangChain Configuration
+Export these environment variables to integrate Langchain tracing and observability functionalities for your agent.
+```bash
+LANGCHAIN_TRACING_V2=true  # Enable LangChain tracing
+LANGCHAIN_ENDPOINT=your-langchain-endpoint  # The LangChain API endpoint
+LANGCHAIN_API_KEY=your-langchain-api-key   # API key for LangChain
+LANGCHAIN_PROJECT=your-langchain-project-name  # Project name in LangChain
+LANGSMITH_API_KEY=your-langsmith-api-key   # API key for LangSmith
+```
+
+---
 ## Running as a LangGraph Studio
 
 You need to install Rust: <https://www.rust-lang.org/tools/install>
@@ -244,7 +255,7 @@ make langgraph-dev
 Upon successful execution, you should see:
 
 ![Langgraph Studio](./docs/imgs/search-issues-readme.png "Studio")
-
+---
 ## Running Tests
 
 To run the tests, you need to set up the environment variables and then execute the test command.
