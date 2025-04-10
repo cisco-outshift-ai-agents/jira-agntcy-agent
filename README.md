@@ -56,10 +56,11 @@ Before running the application, ensure you have the following environment variab
 #### **🔹 Jira Configuration**
 
 ```bash
-JIRA_INSTANCE=your-jira-domain # Ensure to include the https protocol and no trailing slash. For example: https://your-jira-domain.atlassian.net 
+JIRA_INSTANCE=your-jira-domain # For example: https://your-jira-domain.atlassian.net 
 JIRA_USERNAME=your-jira-username # Valid Jira username or email
 JIRA_API_TOKEN=your-jira-api-token # Jira API Token with proper permissions
 ```
+The **Jira Instance** must be https only and should not have a trailing slash (i.e., `https://your-jira-domain.atlassian.net`). 
 The **JIRA User and API Token** must be configured with the **appropriate permissions** for the **Jira instance**.
 The permissions supported on JIRA instance can be obtained using the [Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get)
 The permissions for a particular JIRA user can be obtained using the [My Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-mypermissions-get)
