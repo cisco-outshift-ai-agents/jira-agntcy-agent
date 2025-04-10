@@ -55,10 +55,10 @@ Before running the application, ensure you have the following environment variab
 
 #### **🔹 Jira Configuration**
 
-```dotenv
-JIRA_INSTANCE=Your Jira domain (Eg. example.atlassian.net).
-JIRA_USERNAME=Your Jira email wih appropriate permissions.
-JIRA_API_TOKEN=Your Jira API token.
+```bash
+JIRA_INSTANCE=your-jira-domain # Ensure to include the protocol (http/https). For example, https://your-jira-instance.atlassian.net
+JIRA_USERNAME=your-jira-username # Valid Jira username or email
+JIRA_API_TOKEN=your-jira-api-token # Jira API Token with proper permissions
 ```
 The **JIRA User and API Token** must be configured with the **appropriate permissions** for the **Jira instance**.
 The permissions supported on JIRA instance can be obtained using the [Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get)
@@ -69,16 +69,14 @@ The permissions for a particular JIRA user can be obtained using the [My Permiss
 You can configure your AI agent to use either OpenAI or Azure OpenAI as its LLM provider. Set the appropriate variables based on your choice:  
 
 For OpenAI:
-```dotenv
-# OpenAI API Configuration
+```bash
 OPENAI_API_KEY=your-openai-api-key-here
 OPENAI_API_VERSION=gpt-4o  # Specify the model name
 OPENAI_TEMPERATURE=0.7    # Adjust temperature for response randomness
 ```
 
 For Azure OpenAI:
-```dotenv
-# Azure OpenAI API Configuration
+```bash
 AZURE_OPENAI_API_KEY=your-azure-api-key-here
 AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
 AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name  # Deployment name in Azure
