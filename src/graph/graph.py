@@ -15,10 +15,20 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
+import os
 import uuid
-from langgraph.checkpoint.memory import InMemorySaver
+from typing import Optional
+
 from agntcy_agents_common.config import Settings, get_settings_from_env
 from agents.supervisor_agent.supervisor_agent import SupervisorAgent
+from langgraph.checkpoint.memory import InMemorySaver
+from utils.jira_client.config import JiraConfig
+
+# If DRYRUN is set, we don't want to initialize Jira settings
+def _init_jira_config() -> Optional[JiraConfig]:
+  if os.getenv("DRYRUN"):
+    return None
+  return JiraConfig()
 
 class JiraGraph:
   def __init__(self, settings:Settings=None):
@@ -26,6 +36,7 @@ class JiraGraph:
     Initialize the JiraGraph as a LangGraph.
     """
     self.settings = settings or get_settings_from_env()
+    self.jira_config = _init_jira_config() # This is just for validation purposes
     self.graph = self.build_graph()
 
   def build_graph(self):

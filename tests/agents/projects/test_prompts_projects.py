@@ -22,9 +22,7 @@ from dotenv import load_dotenv
 from graph.graph import JiraGraph
 
 from tests.helper import get_tools_executed
-
 from agntcy_agents_common.config import Settings
-
 from tests.helper import verify_llm_settings_for_test
 
 # Initialize logger

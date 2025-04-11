@@ -55,37 +55,44 @@ Before running the application, ensure you have the following environment variab
 
 #### **🔹 Jira Configuration**
 
-```dotenv
-JIRA_INSTANCE=Your Jira domain (Eg. example.atlassian.net).
-JIRA_USERNAME=Your Jira email wih appropriate permissions.
-JIRA_API_TOKEN=Your Jira API token.
+```bash
+JIRA_INSTANCE=your-jira-domain # For example: https://your-jira-domain.atlassian.net 
+JIRA_USERNAME=your-jira-username # Valid Jira username or email
+JIRA_API_TOKEN=your-jira-api-token # Jira API Token with proper permissions
 ```
+The **Jira Instance** must be https only and should not have a trailing slash (i.e., `https://your-jira-domain.atlassian.net`). 
 The **JIRA User and API Token** must be configured with the **appropriate permissions** for the **Jira instance**.
 The permissions supported on JIRA instance can be obtained using the [Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get)
 The permissions for a particular JIRA user can be obtained using the [My Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-mypermissions-get)
 
-#### **🔹 OpenAI API Configuration**
+#### **🔹 OpenAI or Azure OpenAI API Configuration**
 
-If configuring your AI agent to use OpenAI as its LLM provider, set these variables:
+You can configure your AI agent to use either OpenAI or Azure OpenAI as its LLM provider. Set the appropriate variables based on your choice:  
 
-```dotenv
-# OpenAI API Configuration
+For OpenAI:
+```bash
 OPENAI_API_KEY=your-openai-api-key-here
 OPENAI_API_VERSION=gpt-4o  # Specify the model name
 OPENAI_TEMPERATURE=0.7    # Adjust temperature for response randomness
 ```
 
-#### **🔹 Azure OpenAI API Configuration**
-
-If configuring your AI agent to use Azure OpenAI as its LLM provider, set these variables:
-
-```dotenv
-# Azure OpenAI API Configuration
+For Azure OpenAI:
+```bash
 AZURE_OPENAI_API_KEY=your-azure-api-key-here
 AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
 AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name  # Deployment name in Azure
 AZURE_OPENAI_API_VERSION=your-azure-openai-api-version  # API version
 OPENAI_TEMPERATURE=0.7 # Adjust temperature for response randomness
+```
+
+#### **🔹 LangChain Configuration(Optional)**
+Export these environment variables to integrate Langchain tracing and observability functionalities for your agent.
+```bash
+LANGCHAIN_TRACING_V2=true  # Enable LangChain tracing
+LANGCHAIN_ENDPOINT=your-langchain-endpoint  # The LangChain API endpoint
+LANGCHAIN_API_KEY=your-langchain-api-key   # API key for LangChain
+LANGCHAIN_PROJECT=your-langchain-project-name  # Project name in LangChain
+LANGSMITH_API_KEY=your-langsmith-api-key   # API key for LangSmith
 ```
 
 ---
@@ -244,7 +251,7 @@ make langgraph-dev
 Upon successful execution, you should see:
 
 ![Langgraph Studio](./docs/imgs/search-issues-readme.png "Studio")
-
+---
 ## Running Tests
 
 To run the tests, you need to set up the environment variables and then execute the test command.
