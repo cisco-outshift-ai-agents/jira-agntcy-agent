@@ -35,9 +35,10 @@ jobs:
         uses: super-linter/super-linter@4e8a7c2bf106c4c766c816b35ec612638dc9b6b2 # v7.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_GITLEAKS: true
+          VALIDATE_JSCPD_ALL_CODEBASE: false
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_MARKDOWN_PRETTIER: false
           VALIDATE_YAML_PRETTIER: false
           VALIDATE_NATURAL_LANGUAGE: false
           MULTI_STATUS: false
+          # VALIDATE_GITLEAKS: true
