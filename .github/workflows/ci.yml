@@ -1,0 +1,41 @@
+---
+name: CI - Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Create .env file
+        run: |
+          echo "AZURE_OPENAI_ENDPOINT=${{ secrets.TEST_AZURE_OPENAI_ENDPOINT }}" >> .env
+          echo "AZURE_OPENAI_API_KEY=${{ secrets.TEST_AZURE_OPENAI_API_KEY }}" >> .env
+          echo "AZURE_OPENAI_API_VERSION=${{ secrets.TEST_AZURE_OPENAI_API_VERSION }}" >> .env
+
+      - name: Run tests
+        run: make run-test
