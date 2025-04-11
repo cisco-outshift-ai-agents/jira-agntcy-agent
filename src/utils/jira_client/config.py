@@ -14,10 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+import os
+
 from pydantic_settings import BaseSettings
 from pydantic import Field, model_validator
 from typing import Literal, Optional, Any, Dict
-import os
 
 class JiraConfig(BaseSettings):
   JIRA_INSTANCE: str = Field(..., description="Jira instance URL")
@@ -44,8 +45,6 @@ class JiraConfig(BaseSettings):
         raise ValueError("JIRA_PERSONAL_ACCESS_TOKEN is required for token authentication.")
     elif self.JIRA_AUTH_TYPE == "oauth":
       self.JIRA_OAUTH_CREDENTIALS = self.get_oauth_credentials()
-      if not self.JIRA_OAUTH_CREDENTIALS:
-        raise ValueError("OAuth credentials are required for OAuth authentication.")
     else:
       raise ValueError("Unsupported authentication type. Use 'basic', 'token', or 'oauth'.")
     return self
