@@ -8,7 +8,7 @@ Note that by _not_ including a description, you are asking reviewers to do extra
 work to understand the context of this change, which may lead to your PR taking
 much longer to review, or result in it not being reviewed at all.
 
-Please ensure commits conform to the [Commit Guideline](https://www.conventionalcommits.org/en/v1.0.0-beta.2/)
+Please ensure commits conform to the [Commit Guideline](https://www.conventionalcommits.org/en/v1.0.0/)
 
 
 ## Type of Change
