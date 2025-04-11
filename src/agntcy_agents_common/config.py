@@ -15,7 +15,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
-import os
 from typing import Literal, Optional
 
 from pydantic import model_validator

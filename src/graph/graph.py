@@ -15,13 +15,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
-import uuid
 import os
-from langgraph.checkpoint.memory import InMemorySaver
+import uuid
+from typing import Optional
+
 from agntcy_agents_common.config import Settings, get_settings_from_env
 from agents.supervisor_agent.supervisor_agent import SupervisorAgent
+from langgraph.checkpoint.memory import InMemorySaver
 from utils.jira_client.config import JiraConfig
-from typing import Literal, Optional
 
 # If DRYRUN is set, we don't want to initialize Jira settings
 def _init_jira_config() -> Optional[JiraConfig]:
