@@ -13,7 +13,7 @@ on:
 permissions: read-all
 
 jobs:
-  ruff-linter:
+  linter:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,7 +27,12 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-      - name: run ruff linter
+      - name: run ruff linter # python linting
         run: make lint
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🧹 run superlinter
+        uses: super-linter/super-linter@4e8a7c2bf106c4c766c816b35ec612638dc9b6b2 # v7.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_GITLEAKS: true
