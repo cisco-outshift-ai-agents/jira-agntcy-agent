@@ -33,8 +33,8 @@ class JiraConfig(BaseSettings):
 
   @model_validator(mode="after")
   def validate_jira_config(self):
-    if not self.JIRA_INSTANCE.startswith(("http://", "https://")):
-      raise ValueError("JIRA_INSTANCE must start with 'http://' or 'https://'")
+    if not self.JIRA_INSTANCE.startswith("https://") or self.JIRA_INSTANCE.endswith("/"):
+      raise ValueError("JIRA_INSTANCE must be a valid HTTPS URL without trailing slash.")
 
     if self.JIRA_AUTH_TYPE == "basic":
       if not self.JIRA_USERNAME or not self.JIRA_API_TOKEN:
