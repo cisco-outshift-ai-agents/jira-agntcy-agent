@@ -31,16 +31,13 @@ from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 from langgraph.graph import END, START, StateGraph
 from requests.exceptions import (ConnectionError, HTTPError, RequestException,
                                  Timeout)
-
 from logging_config import configure_logging
 
-# Initialize logger
 logger = configure_logging()
 
 # URL for the Remote Graph Server /runs endpoint
 REMOTE_SERVER_URL = f"http://localhost:8125/api/v1/runs"
 logging.info(f"Remote server URL: {REMOTE_SERVER_URL}")
-
 
 def load_environment_variables(env_file: str | None = None) -> None:
     """
@@ -70,12 +67,9 @@ def load_environment_variables(env_file: str | None = None) -> None:
         logger.warning("No .env file found. Ensure environment variables are set.")
 
 # Define the graph state
-# Define the graph state
 class GraphState(TypedDict):
     """Represents the state of the graph, containing a list of messages."""
-
     messages: Annotated[List[BaseMessage], add_messages]
-
 
 def node_remote_request_stateless(state: GraphState) -> Dict[str, Any]:
     """
@@ -163,8 +157,6 @@ def node_remote_request_stateless(state: GraphState) -> Dict[str, Any]:
 
     return {"messages": [AIMessage(content=json.dumps(error_msg))]}
 
-
-
 def decode_response(response_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     Decodes the JSON response from the remote server and extracts relevant information.
@@ -190,7 +182,6 @@ def decode_response(response_data: Dict[str, Any]) -> Dict[str, Any]:
     except Exception as e:
         return {"error": f"Failed to decode response: {str(e)}"}
 
-
 def build_graph() -> Any:
     """
     Constructs the state graph for handling request with the Remote Graph Server.
@@ -204,7 +195,6 @@ def build_graph() -> Any:
     builder.add_edge("node_remote_request_stateless", END)
     return builder.compile()
 
-
 def main():
     # load_environment_variables()
     graph = build_graph()
@@ -214,7 +204,6 @@ def main():
     inputs = {"messages": [HumanMessage(content=user_prompt)]}
     result = graph.invoke(inputs)
     logger.info({"event": "final_result", "result": result})
-
 
 if __name__ == "__main__":
     main()

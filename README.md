@@ -61,9 +61,9 @@ JIRA_USERNAME=your-jira-username # Valid Jira username or email
 JIRA_API_TOKEN=your-jira-api-token # Jira API Token with proper permissions
 ```
 The **Jira Instance** must be https only and should not have a trailing slash (i.e., `https://your-jira-domain.atlassian.net`). 
-The **JIRA User and API Token** must be configured with the **appropriate permissions** for the **Jira instance**.
-The permissions supported on JIRA instance can be obtained using the [Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get)
-The permissions for a particular JIRA user can be obtained using the [My Permissions JIRA API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-mypermissions-get)
+The **Jira User and API Token** must be configured with the **appropriate permissions** for the **Jira instance**.
+The permissions supported on Jira instance can be obtained using the [Permissions Jira API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get)
+The permissions for a particular Jira user can be obtained using the [My Permissions Jira API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-mypermissions-get)
 
 #### **🔹 OpenAI or Azure OpenAI API Configuration**
 
@@ -252,36 +252,9 @@ Upon successful execution, you should see:
 
 ![Langgraph Studio](./docs/imgs/search-issues-readme.png "Studio")
 ---
-## Running Tests
+## Running Unit and Evaluation Tests
 
-To run the tests, you need to set up the environment variables and then execute the test command.
-
-1. **Set the Environment Variables**:  
-   Add the required variables to your `.env` file or export them directly in your shell.
-
-   Example `.env` file or export these environment variables directly in your shell:
-   ```bash
-   # OpenAI Configuration
-   TEST_OPENAI_ENDPOINT=https://api.openai.com/v1
-   TEST_OPENAI_API_KEY=your-openai-api-key
-   # Alternatively, for Azure OpenAI
-   TEST_AZURE_OPENAI_ENDPOINT=https://your-azure-endpoint.openai.azure.com
-   TEST_AZURE_OPENAI_API_KEY=your-azure-api-key
-   TEST_AZURE_OPENAI_API_VERSION=2023-03-15-preview
-   
-   TEST_LLM_PROVIDER=azure # or openai
-   ```
-
-2. **Run the Tests**:  
-   Execute the `make run-test` command to run the tests:
-   ```bash
-   make run-test
-   ```
-
-This will ensure the environment variables are loaded and the tests are executed.
-
----
-## Running Eval Tests
+To run the tests or eval tests, you need to set up the environment variables and then execute the respective test command.
 
 1. **Set the Environment Variables**:  
    Add the required variables to your `.env` file or export them directly in your shell.
@@ -301,11 +274,17 @@ This will ensure the environment variables are loaded and the tests are executed
    TEST_LLM_PROVIDER=azure # or openai
    ```
 
-2. **Run the Tests**:  
-   Execute the `make eval` command to run the tests:
-   ```bash
-   make eval
-   ```
+2. **Run the Tests**:
+    - To run the standard tests, execute:
+      ```bash
+      make run-test
+      ```
+    - To run the eval tests, execute:
+      ```bash
+      make eval
+      ```
+
+This will ensure the environment variables are loaded and the tests are executed.
 
 ---
 ## Roadmap
