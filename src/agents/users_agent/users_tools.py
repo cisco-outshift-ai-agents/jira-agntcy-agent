@@ -47,7 +47,7 @@ def get_jira_accountID_by_user_email(input: GetJiraAccountIdByUserEmailInput) ->
              which must have a `model_dump()` method for JSON conversion.
     """
     try:
-        logging.info(f"tool input:{input}")
+        logging.debug(f"tool input:{input}")
         if not input or input is None:
             return JiraUserOutput(response="error performing the operation")
 
@@ -67,7 +67,7 @@ def get_jira_accountID_by_user_email(input: GetJiraAccountIdByUserEmailInput) ->
             response_str = f"Could not find Jira account ID for user email: {input.user_email}, user details: {jira_resp}"
 
         resp = JiraUserOutput(response=response_str)
-        logging.info(f"tool output:{resp}")
+        logging.debug(f"tool output:{resp}")
 
     except Exception as e:
         response_str = INTERNAL_ERROR_MESSAGE + ":" + str(e)
