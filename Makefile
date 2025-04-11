@@ -62,7 +62,7 @@ pytest: venv/bin/activate
 
 test: venv/bin/activate lint run-test
 
-run-test: .env venv/bin/activate
+run-test: venv/bin/activate
 	@echo "Setting up environment variables for tests..."
 	echo "Running quick validation tests..." && \
 	. venv/bin/activate && export PYTHONPATH=src && \
