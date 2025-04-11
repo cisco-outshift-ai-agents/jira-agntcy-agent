@@ -300,6 +300,8 @@ learn, inspire, and create. Any contributions you make are **greatly
 appreciated**. For detailed contributing guidelines, please see
 [CONTRIBUTING.md](CONTRIBUTING.md)
 
+Please ensure commits conform to the [Commit Guideline](https://www.conventionalcommits.org/en/v1.0.0/ )
+
 ---
 ## License
 
