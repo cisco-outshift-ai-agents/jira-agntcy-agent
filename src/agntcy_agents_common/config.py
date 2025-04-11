@@ -23,20 +23,12 @@ from pydantic_settings import BaseSettings
 # Error messages
 INTERNAL_ERROR_MESSAGE = "An unexpected error occurred"
 
-
 class Settings(BaseSettings):
   # Application settings
   API_V1_STR: str = "/api/v1"
   ENVIRONMENT: Literal["local", "staging", "production"] = "local"
   PROJECT_NAME: str = "Jira Agent"
   DESCRIPTION: str = "Agent serving jira operations via natural language"
-
-  # Langchain settings (optional)
-  LANGCHAIN_TRACING_V2: bool = False
-  LANGCHAIN_ENDPOINT: Optional[str] = None
-  LANGCHAIN_API_KEY: Optional[str] = None
-  LANGCHAIN_PROJECT: Optional[str] = None
-  LANGSMITH_API_KEY: Optional[str] = None
 
   # Mandatory LLM settings
   LLM_PROVIDER: Optional[str] = "azure"  # or "openai"
@@ -58,9 +50,6 @@ class Settings(BaseSettings):
   def check_required_settings(self) -> "Settings":
       logger = logging.getLogger(__name__)
       logger.info("Running model validator for Settings...")
-      # jira_instance = self.JIRA_INSTANCE.lower()
-      # if not jira_instance:
-      #     raise ValueError("Missing required JIRA_INSTANCE environment variable")
 
       provider = self.LLM_PROVIDER.lower()
       if provider == "azure":

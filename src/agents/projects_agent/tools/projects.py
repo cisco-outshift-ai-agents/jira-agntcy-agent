@@ -51,9 +51,9 @@ def get_jira_project_by_name(input: GetJiraProjectByNameInput) -> LLMResponseOut
     This response is serialized from a `LLMResponseOutput` object,
     which must have a `model_dump()` method for JSON conversion.
   """
-  logging.info(f"tool input:{input}")
+  logging.debug(f"tool input:{input}")
   resp = _get_jira_project_by_name(input)
-  logging.info(f"tool output:{resp}")
+  logging.debug(f"tool output:{resp}")
   return resp
 
 @tool
@@ -73,9 +73,9 @@ def create_jira_project(input: CreateJiraProjectInput) -> LLMResponseOutput:
       This response is serialized from a `LLMResponseOutput` object,
       which must have a `model_dump()` method for JSON conversion.
   """
-  logging.info(f"tool input:{input}")
+  logging.debug(f"tool input:{input}")
   resp = _create_jira_project(input)
-  logging.info(f"tool output:{resp}")
+  logging.debug(f"tool output:{resp}")
   return resp
 
 @tool
@@ -94,9 +94,9 @@ def update_jira_project_description(input: UpdateJiraProjectDescriptionInput) ->
       This response is serialized from a `LLMResponseOutput` object,
       which must have a `model_dump()` method for JSON conversion.
   """
-  logging.info(f"tool input:{input}")
+  logging.debug(f"tool input:{input}")
   resp = _update_jira_project_description(input)
-  logging.info(f"tool output:{resp}")
+  logging.debug(f"tool output:{resp}")
   return resp
 
 @tool
@@ -116,7 +116,7 @@ def update_jira_project_lead(input: UpdateJiraProjectLeadInput) -> LLMResponseOu
       This response is serialized from a `LLMResponseOutput` object,
       which must have a `model_dump()` method for JSON conversion.
   """
-  logging.info(f"tool input:{input}")
+  logging.debug(f"tool input:{input}")
   resp = _update_jira_project_lead(input)
-  logging.info(f"tool output:{resp}")
+  logging.debug(f"tool output:{resp}")
   return resp
