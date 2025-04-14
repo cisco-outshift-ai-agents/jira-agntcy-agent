@@ -37,4 +37,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: make run-test
+        run: |
+          make run-test
+          make eval-langsmith-tracking-disabled

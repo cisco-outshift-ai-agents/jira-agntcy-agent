@@ -80,10 +80,21 @@ clean:
 
 eval: eval-strict
 
-eval-strict: .env venv/bin/activate
+eval-langsmith-tracking-disabled: eval-strict-langsmith-tracking-disabled
+
+eval-strict-langsmith-tracking-disabled: venv/bin/activate
 	@echo "Running evaluation with LLM and mock Jira responses..."
 	. venv/bin/activate && \
-	. .env && \
+	pip install --upgrade pip setuptools && \
+	pip install -r eval/requirements.txt && \
+	export PYTHONPATH=src && \
+	export DRYRUN=true && \
+	export LANGSMITH_TEST_TRACKING=false && \
+	python3 -m pytest eval/strict_match/test_strict_match.py
+
+eval-strict: venv/bin/activate
+	@echo "Running evaluation with LLM and mock Jira responses..."
+	. venv/bin/activate && \
 	pip install --upgrade pip setuptools && \
 	pip install -r eval/requirements.txt && \
 	export PYTHONPATH=src && \

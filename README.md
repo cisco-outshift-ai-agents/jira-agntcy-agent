@@ -283,6 +283,11 @@ To run the tests or eval tests, you need to set up the environment variables and
       ```bash
       make eval
       ```
+    - To run the eval tests (with Langsmith tracing disabled), execute:
+      ```bash
+      make eval-langsmith-tracking-disabled
+      ```
+      *Note* - When running the Eval Tests. If not using Langsmith for tracing, the `LANGCHAIN_API_KEY' is not required.
 
 This will ensure the environment variables are loaded and the tests are executed.
 

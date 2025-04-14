@@ -59,9 +59,6 @@ def verify_llm_settings_for_strict_eval():
   if not os.getenv("DRYRUN"):
     return False, "DRYRUN environment not set"
 
-  if not os.getenv("LANGCHAIN_API_KEY") or not os.getenv("LANGSMITH_TRACING"):
-    return False, "Missing LANGCHAIN_API_KEY or LANGSMITH_TRACING."
-
   openai_settings = [
     os.getenv("TEST_OPENAI_ENDPOINT"),
     os.getenv("TEST_OPENAI_API_KEY"),
@@ -97,7 +94,7 @@ def get_mock_settings():
         AZURE_OPENAI_ENDPOINT=os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
         AZURE_OPENAI_API_KEY=os.getenv("TEST_AZURE_OPENAI_API_KEY"),
         AZURE_OPENAI_API_VERSION=os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
-        AZURE_OPENAI_DEPLOYMENT_NAME=os.getenv("TEST_AZURE_OPENAI_DEPLOYMENT_NAME"),
+        AZURE_OPENAI_DEPLOYMENT_NAME=os.getenv("TEST_AZURE_OPENAI_DEPLOYMENT_NAME") or "gpt-4o",
         # Azure or OpenAI (default is Azure)
         LLM_PROVIDER=os.getenv("TEST_LLM_PROVIDER") or "azure",
     )
