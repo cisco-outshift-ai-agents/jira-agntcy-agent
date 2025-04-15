@@ -18,20 +18,6 @@ This agent was built with **FastAPI**, that can operate using:
 
 - A **standard API** compatible with [LangChain’s Agent Protocol](https://github.com/langchain-ai/agent-protocol) — an open-source framework for interfacing with AI agents.
 
-## Key Features
-
-- **Interface Support**:
-  - **LangChain Agent Protocol API**: Exposes HTTP endpoints following the Agent Protocol spec for easy integration with LangChain-based ecosystems.
-
-- **JSON-based Logging**:  
-  Structured, machine-readable logs to support observability and debugging.
-
-- **CORS Configuration**:  
-  Enables secure cross-origin API access from web clients or frontends.
-
-- **Route Tagging**:  
-  Tagged routes for better documentation, navigation, and maintainability.
-
 ---
 ## **📋 Prerequisites**
 Before installation, ensure you have:
@@ -283,6 +269,11 @@ To run the tests or eval tests, you need to set up the environment variables and
       ```bash
       make eval
       ```
+    - To run the eval tests (with Langsmith tracing disabled), execute:
+      ```bash
+      make eval-langsmith-tracking-disabled
+      ```
+      *Note* - When running the Eval Tests. If not using Langsmith for tracing, the `LANGCHAIN_API_KEY' is not required.
 
 This will ensure the environment variables are loaded and the tests are executed.
 
