@@ -18,15 +18,6 @@ This agent was built with **FastAPI**, that can operate using:
 
 - A **standard API** compatible with [LangChain’s Agent Protocol](https://github.com/langchain-ai/agent-protocol) — an open-source framework for interfacing with AI agents.
 
-## Key Features
-
-- **Interface Support**:
-  - **LangChain Agent Protocol API**: Exposes HTTP endpoints following the Agent Protocol spec for easy integration with LangChain-based ecosystems.
-
-- **Jira Operations**:
-  - **Issue Operations**: Create, update, and query Jira issues.
-  - **Project Operations**: Create, update, and query Jira projects.
-
 ---
 ## **📋 Prerequisites**
 Before installation, ensure you have:
