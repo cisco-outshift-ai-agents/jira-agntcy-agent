@@ -23,14 +23,9 @@ This agent was built with **FastAPI**, that can operate using:
 - **Interface Support**:
   - **LangChain Agent Protocol API**: Exposes HTTP endpoints following the Agent Protocol spec for easy integration with LangChain-based ecosystems.
 
-- **JSON-based Logging**:  
-  Structured, machine-readable logs to support observability and debugging.
-
-- **CORS Configuration**:  
-  Enables secure cross-origin API access from web clients or frontends.
-
-- **Route Tagging**:  
-  Tagged routes for better documentation, navigation, and maintainability.
+- **Jira Operations**:
+  - **Issue Operations**: Create, update, and query Jira issues.
+  - **Project Operations**: Create, update, and query Jira projects.
 
 ---
 ## **📋 Prerequisites**
