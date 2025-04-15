@@ -23,6 +23,7 @@ from typing import AsyncGenerator
 
 # Start the FastAPI application using Uvicorn
 import asyncio
+from datetime import datetime
 from uvicorn import Config, Server
 
 from graph.graph import JiraGraph
@@ -115,45 +116,17 @@ def custom_generate_unique_id(route: APIRoute) -> str:
   return route.name
 
 
-def add_handlers(app: FastAPI) -> None:
+def add_health_check_handler(app: FastAPI) -> None:
   """
-  Adds global route handlers to the FastAPI application.
-
-  This function registers common endpoints, such as the root message
-  and the favicon.
-
-  Args:
-      app (FastAPI): The FastAPI application instance.
-
-  Returns:
-      None
+  Adds a health check endpoint to the FastAPI application.
   """
-
-  @app.get(
-    "/",
-    summary="Root endpoint",
-    description="Returns a welcome message for the API.",
-    tags=["General"],
-  )
-  async def root() -> dict:
-    """
-    Root endpoint that provides a welcome message.
-
-    Returns:
-        dict: A JSON response with a greeting message.
-    """
-    user_prompt = "create a project for my venture test-venture-1 with key TV1"
-    #user_prompt = "get details for project with key TV1"
-    result = JiraGraph().serve(user_prompt)
-    print(result)
-    # result to send back to the user as part of JiraAgentApiResponse
-    # logging.info(result['messages'][-1].content)
-    # below for debugging
-    # for m in result["messages"]:
-    #     m.pretty_print()
-
-    return {"message": "Gateway of the App"}
-
+  @app.get("/healthz")
+  def health_check():
+    return {
+      "service_name": "jira-agntcy-agent",
+      "service_state": "Up",
+      "last_updated": datetime.now().isoformat(),
+    }
 
 def create_app() -> FastAPI:
   """
@@ -178,7 +151,7 @@ def create_app() -> FastAPI:
     lifespan=lifespan,  # Use the new lifespan approach for startup/shutdown
   )
 
-  add_handlers(app)
+  add_health_check_handler(app)
   app.include_router(stateless_runs.router, prefix=settings.API_V1_STR)
 
   # Set all CORS enabled origins

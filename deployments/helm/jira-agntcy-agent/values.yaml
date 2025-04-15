@@ -19,11 +19,16 @@ service:
 #   annotations:
 #     eks.amazonaws.com/role-arn: REPLACE_WITH_ROLE_ARN
 
-probes:
-  livenessProbeEnabled: false
-  readinessProbeEnabled: false
-  port: 5500
-  endpoint: /v1/health
+# TODO: Move this to xxx-deployment values.yaml
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8125
+  initialDelaySeconds: 10
+  periodSeconds: 60
+
+readinessProbe: {}
+startupProbe: {}
 
 resources:
   enabled: false
