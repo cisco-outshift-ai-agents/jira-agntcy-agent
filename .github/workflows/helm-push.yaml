@@ -37,13 +37,13 @@ jobs:
           version: "3.12.1" # Default Helm version
 
       - name: Helm lint
-        run: helm lint deployments/helm/tf-code-reviewer-agntcy-agent --with-subcharts
+        run: helm lint deployments/helm/jira-agntcy-agent --with-subcharts
 
       - name: Package and Push Helm Chart
         run: |
           # Extract the version from Chart.yaml
-          CHART_VERSION=$(grep '^version:' deployments/helm/tf-code-reviewer-agntcy-agent/Chart.yaml | awk '{print $2}')
+          CHART_VERSION=$(grep '^version:' deployments/helm/jira-agntcy-agent/Chart.yaml | awk '{print $2}')
 
           # Package and push the Helm chart
-          helm package deployments/helm/tf-code-reviewer-agntcy-agent --dependency-update --version $CHART_VERSION
-          helm push tf-code-reviewer-agntcy-agent-$CHART_VERSION.tgz oci://ghcr.io/${{ github.repository_owner }}/helm
+          helm package deployments/helm/jira-agntcy-agent --dependency-update --version $CHART_VERSION
+          helm push jira-agntcy-agent-$CHART_VERSION.tgz oci://ghcr.io/${{ github.repository_owner }}/helm
