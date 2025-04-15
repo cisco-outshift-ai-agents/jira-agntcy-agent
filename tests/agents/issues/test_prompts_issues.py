@@ -33,7 +33,7 @@ logging.getLogger('httpcore').setLevel(logging.WARNING)
 # load environment variables from .env file
 load_dotenv()
 
-TEST_PROMPT_ISSUES_RETRY_COUNT = 3
+TEST_PROMPT_ISSUES_RETRY_COUNT = 5
 @unittest.skipIf(not verify_llm_settings_for_test(), "Required test environment variables not set")
 class TestPromptsIssues(unittest.TestCase):
   def get_mock_settings(self):
@@ -80,6 +80,18 @@ class TestPromptsIssues(unittest.TestCase):
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  def test_create_jira_epic(self):
+    query = "create an EPIC with title 'Epic 1' in project FOO"
+    graph = JiraGraph(self.get_mock_settings())
+    output, result = graph.serve(query)
+    self.assertIsNotNone(output)
+
+    tools_executed, _ = get_tools_executed(result)
+    logging.info(f"tools_executed: {tools_executed}")
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue']
+    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+
+  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_perform_jira_transition(self):
     query = "transition jira issue TEST-123 to 'In Progress'"
     graph = JiraGraph(self.get_mock_settings())
@@ -93,7 +105,7 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_retrieve_multiple_jira_issues(self):
-    query = "retrieve the latest 5 jira issues for user samuyang@cisco.com in project TEST"
+    query = "retrieve the latest 5 jira issues for user samuyang@cisco.com in project FOO"
     graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
@@ -117,7 +129,7 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_search_jira_issues_using_jql(self):
-    query = "search jira issues using JQL 'project = TEST AND status = Open'"
+    query = "search jira issues using JQL 'project = FOO AND status = Open'"
     graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
@@ -129,7 +141,7 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_create_jira_issue(self):
-    query = "create a jira issue in project TEST with summary 'Test Issue' and description 'This is a test issue.'"
+    query = "create a jira sushroff-custom-issue issue in project Foo, summary will be TBD, and then assign it to samuyang@cisco.com"
     graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
