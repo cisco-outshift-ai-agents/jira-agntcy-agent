@@ -22,7 +22,6 @@ import traceback
 from pathlib import Path
 from typing import Dict
 
-
 class JSONFormatter(logging.Formatter):
     """
     Custom logging formatter that outputs logs in structured JSON format.
@@ -52,13 +51,11 @@ class JSONFormatter(logging.Formatter):
 
         return json.dumps(log_data)
 
-
 def get_log_dir() -> Path:
     """Returns the log directory path and ensures it exists."""
     log_dir = Path(__file__).parent.parent / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     return log_dir
-
 
 def get_log_file() -> Path:
     """Returns the log file path and ensures it is removed on every startup."""
@@ -74,11 +71,9 @@ def get_log_file() -> Path:
 
     return log_file
 
-
 def get_log_level() -> str:
     """Retrieves the log level from environment variables (defaults to INFO)."""
     return os.getenv("LOG_LEVEL", "INFO").upper()
-
 
 def get_logging_config(log_file: Path, log_level: str) -> Dict:
     """Generates logging configuration dictionary with JSON formatting."""
@@ -112,7 +107,6 @@ def get_logging_config(log_file: Path, log_level: str) -> Dict:
         },
         "root": {"handlers": ["console", "file"], "level": log_level},
     }
-
 
 def configure_logging() -> logging.Logger:
     """Configures structured JSON logging for the clients."""

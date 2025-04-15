@@ -62,7 +62,7 @@ pytest: venv/bin/activate
 
 test: venv/bin/activate lint run-test
 
-run-test: .env venv/bin/activate
+run-test: venv/bin/activate
 	@echo "Setting up environment variables for tests..."
 	echo "Running quick validation tests..." && \
 	. venv/bin/activate && export PYTHONPATH=src && \
@@ -80,25 +80,27 @@ clean:
 
 eval: eval-strict
 
-eval-strict: .env venv/bin/activate
+eval-langsmith-tracking-disabled: eval-strict-langsmith-tracking-disabled
+
+eval-strict-langsmith-tracking-disabled: venv/bin/activate
 	@echo "Running evaluation with LLM and mock Jira responses..."
 	. venv/bin/activate && \
-	. .env && \
+	pip install --upgrade pip setuptools && \
+	pip install -r eval/requirements.txt && \
+	export PYTHONPATH=src && \
+	export DRYRUN=true && \
+	export LANGSMITH_TEST_TRACKING=false && \
+	python3 -m pytest eval/strict_match/test_strict_match.py
+
+eval-strict: venv/bin/activate
+	@echo "Running evaluation with LLM and mock Jira responses..."
+	. venv/bin/activate && \
 	pip install --upgrade pip setuptools && \
 	pip install -r eval/requirements.txt && \
 	export PYTHONPATH=src && \
 	export DRYRUN=true && \
 	export LANGSMITH_TRACING=true && \
 	python3 -m pytest eval/strict_match/test_strict_match.py
-
-eval-llm-as-judge: .env venv/bin/activate
-	@echo "Running Strict Evaluation Tests with Dry-run Enabled..."
-	. venv/bin/activate && pip install -r eval/requirements.txt && \
-	DRY_RUN=true \
-	&& export PYTHONPATH=src && \
-	. .env && \
-	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
-	python3 eval/llm_as_judge/test_llm_as_judge.py
 
 langgraph-dev: .env venv/bin/activate
 	@echo "Running server langgraph dev..."
