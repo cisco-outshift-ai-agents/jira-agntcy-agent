@@ -18,20 +18,6 @@ This agent was built with **FastAPI**, that can operate using:
 
 - A **standard API** compatible with [LangChain’s Agent Protocol](https://github.com/langchain-ai/agent-protocol) — an open-source framework for interfacing with AI agents.
 
-## Key Features
-
-- **Interface Support**:
-  - **LangChain Agent Protocol API**: Exposes HTTP endpoints following the Agent Protocol spec for easy integration with LangChain-based ecosystems.
-
-- **JSON-based Logging**:  
-  Structured, machine-readable logs to support observability and debugging.
-
-- **CORS Configuration**:  
-  Enables secure cross-origin API access from web clients or frontends.
-
-- **Route Tagging**:  
-  Tagged routes for better documentation, navigation, and maintainability.
-
 ---
 ## **📋 Prerequisites**
 Before installation, ensure you have:

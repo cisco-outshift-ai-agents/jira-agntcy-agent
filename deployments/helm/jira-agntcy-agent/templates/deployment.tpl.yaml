@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ .Values.appName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    version: {{ .Values.appVersion }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app:  {{ .Values.appName }}
+      version: {{ .Values.appVersion }}
+  template:
+    metadata:
+      labels:
+        app:  {{ .Values.appName }}
+        version: {{ .Values.appVersion }}
+    spec:
+    {{ if .Values.image.pullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
+    {{ end }}
+      serviceAccountName: {{ .Values.appName }}-sa
+      containers:
+      - name: {{ .Values.appName }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{ if .Values.resources.enabled }}
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+        {{ end }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        {{- with .Values.livenessProbe }}
+        livenessProbe: {{ toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .Values.readinessProbe }}
+        readinessProbe: {{ toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .Values.startupProbe }}
+        startupProbe: {{ toYaml . | nindent 12 }}
+        {{- end }}
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.appName }}-configmap
+        {{ if .Values.externalSecrets }}
+          - secretRef:
+              name: {{ .Values.appName }}-secrets
+        {{ end }}

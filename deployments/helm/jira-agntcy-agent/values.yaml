@@ -1,0 +1,69 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+appName: jira-agntcy-agent
+namespace: jira-dev
+appVersion: v1
+replicaCount: 1
+
+image:
+  repository: ghcr.io/cisco-outshift-ai-agents/jira-agntcy-agent
+  tag: latest
+  pullPolicy: Always
+  pullSecret:
+
+service:
+  port: 8125
+
+# serviceaccount:
+#   annotations:
+#     eks.amazonaws.com/role-arn: REPLACE_WITH_ROLE_ARN
+
+# TODO: Move this to xxx-deployment values.yaml
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8125
+  initialDelaySeconds: 10
+  periodSeconds: 60
+
+readinessProbe: {}
+startupProbe: {}
+
+resources:
+  enabled: false
+  limits:
+    cpu: 2000m
+    memory: 2500Mi
+  requests:
+    cpu: 200m
+    memory: 500Mi
+
+# Jira configuration
+jira:
+  instance: https://your-jira-domain.atlassian.net
+  username: your-jira-username
+  apiToken: your-jira-api-token
+
+# OpenAI configuration
+openai:
+  apiKey: your-openai-api-key
+  apiVersion: gpt-4o
+  temperature: 0.7
+
+# Azure OpenAI configuration
+azureOpenAI:
+  apiKey: your-azure-api-key
+  endpoint: https://your-resource-name.openai.azure.com
+  deploymentName: your-deployment-name
+  apiVersion: your-azure-api-version
+
+# LangChain configuration
+langchain:
+  tracingV2: true
+  endpoint: your-langchain-endpoint
+  apiKey: your-langchain-api-key
+  project: your-langchain-project-name
+
+langsmith:
+    apiKey: your-langsmith-api-key
