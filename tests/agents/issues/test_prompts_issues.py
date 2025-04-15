@@ -104,6 +104,18 @@ class TestPromptsIssues(unittest.TestCase):
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  def test_get_all_jira_issues_for_user_using_jql(self):
+    query = "find a list of all my jiras (asked by user_email: samuyang@cisco.com)"
+    graph = JiraGraph(self.get_mock_settings())
+    output, result = graph.serve(query)
+    self.assertIsNotNone(output)
+
+    tools_executed, _ = get_tools_executed(result)
+    logging.info(f"tools_executed: {tools_executed}")
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql']
+    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+
+  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_search_jira_issues_using_jql(self):
     query = "search jira issues using JQL 'project = TEST AND status = Open'"
     graph = JiraGraph(self.get_mock_settings())
