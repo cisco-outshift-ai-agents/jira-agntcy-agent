@@ -16,7 +16,7 @@
 
 from langchain_core.tools import tool
 
-from agntcy_agents_common.logging_config import logging
+from common.logging_config import logging
 
 from agents.projects_agent.models import LLMResponseOutput
 

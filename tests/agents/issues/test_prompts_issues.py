@@ -14,14 +14,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-import os
 import unittest
 import logging
 
 from dotenv import load_dotenv
 from tenacity import retry, stop_after_attempt
 from graph.graph import JiraGraph
-from agntcy_agents_common.config import Settings
 from tests.helper import contains_all_elements
 from tests.helper import get_tools_executed, verify_llm_settings_for_test
 # Initialize logger
@@ -36,21 +34,6 @@ load_dotenv()
 TEST_PROMPT_ISSUES_RETRY_COUNT = 5
 @unittest.skipIf(not verify_llm_settings_for_test(), "Required test environment variables not set")
 class TestPromptsIssues(unittest.TestCase):
-  def get_mock_settings(self):
-    return Settings(
-      OPENAI_TEMPERATURE=0.7,
-      # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
-      # OpenAI Setting
-      OPENAI_ENDPOINT=os.getenv("TEST_OPENAI_ENDPOINT"),
-      OPENAI_API_KEY=os.getenv("TEST_OPENAI_API_KEY"),
-      # Azure Setting
-      AZURE_OPENAI_ENDPOINT=os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
-      AZURE_OPENAI_API_KEY=os.getenv("TEST_AZURE_OPENAI_API_KEY"),
-      AZURE_OPENAI_API_VERSION=os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
-      # Azure or OpenAI (default is Azure)
-      LLM_PROVIDER= os.getenv("TEST_LLM_PROVIDER") or "azure",
-    )
-
   @classmethod
   def tearDownClass(cls):
     pass
@@ -58,7 +41,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_add_new_label_to_issue(self):
     query = "add a new label 'urgent' to jira issue TEST-123"
-    graph = JiraGraph(self.get_mock_settings())
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -70,7 +53,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_get_jira_issue_details(self):
     query = "get details of jira issue TEST-123"
-    graph = JiraGraph(self.get_mock_settings())
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -82,7 +65,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_create_jira_epic(self):
     query = "create an EPIC with title 'Epic 1' in project FOO"
-    graph = JiraGraph(self.get_mock_settings())
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -94,7 +77,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_perform_jira_transition(self):
     query = "transition jira issue TEST-123 to 'In Progress'"
-    graph = JiraGraph(self.get_mock_settings())
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -106,7 +89,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_retrieve_multiple_jira_issues(self):
     query = "retrieve the latest 5 jira issues for user samuyang@cisco.com in project FOO"
-    graph = JiraGraph(self.get_mock_settings())
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -118,7 +101,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_get_all_jira_issues_for_user_using_jql(self):
     query = "find a list of all my jiras (asked by user_email: samuyang@cisco.com)"
-    graph = JiraGraph(self.get_mock_settings())
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -130,7 +113,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_search_jira_issues_using_jql(self):
     query = "search jira issues using JQL 'project = FOO AND status = Open'"
-    graph = JiraGraph(self.get_mock_settings())
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -142,7 +125,7 @@ class TestPromptsIssues(unittest.TestCase):
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_create_jira_issue(self):
     query = "create a jira sushroff-custom-issue issue in project Foo, summary will be TBD, and then assign it to samuyang@cisco.com"
-    graph = JiraGraph(self.get_mock_settings())
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -153,8 +136,8 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_assign_jira(self):
-    query = "assign the jira issue TEST-123 to samuyang@cisco.com"
-    graph = JiraGraph(self.get_mock_settings())
+    query = "for project FOO, assign the jira issue TEST-123 to samuyang@cisco.com"
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -165,8 +148,8 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_update_issue_reporter(self):
-    query = "update the reporter of jira issue TEST-123 to samuyang@cisco.com"
-    graph = JiraGraph(self.get_mock_settings())
+    query = "for project FOO, update the reporter of jira issue TEST-123 to samuyang@cisco.com"
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 
@@ -177,8 +160,8 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_get_jira_transitions(self):
-    query = "get transitions for jira issue TEST-123"
-    graph = JiraGraph(self.get_mock_settings())
+    query = "for project FOO, get transitions for jira issue TEST-123"
+    graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
 

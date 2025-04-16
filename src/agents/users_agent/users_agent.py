@@ -14,7 +14,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from agntcy_agents_common.llm import get_llm
+from common.llm import get_llm
 
 from langgraph.prebuilt import create_react_agent
 
