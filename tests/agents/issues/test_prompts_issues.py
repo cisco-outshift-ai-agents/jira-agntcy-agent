@@ -153,7 +153,7 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_assign_jira(self):
-    query = "assign the jira issue TEST-123 to samuyang@cisco.com"
+    query = "for project FOO, assign the jira issue TEST-123 to samuyang@cisco.com"
     graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
@@ -165,7 +165,7 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_update_issue_reporter(self):
-    query = "update the reporter of jira issue TEST-123 to samuyang@cisco.com"
+    query = "for project FOO, update the reporter of jira issue TEST-123 to samuyang@cisco.com"
     graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
@@ -177,7 +177,7 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_get_jira_transitions(self):
-    query = "get transitions for jira issue TEST-123"
+    query = "for project FOO, get transitions for jira issue TEST-123"
     graph = JiraGraph(self.get_mock_settings())
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
