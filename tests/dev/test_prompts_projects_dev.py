@@ -83,20 +83,19 @@ def validate_env_vars():
 
 @unittest.skipIf(not validate_env_vars(), "Required test environment variables not set")
 class TestPromptsProjectsDev(unittest.TestCase):
-
     def get_settings(self):
         return Settings(
             OPENAI_TEMPERATURE=0.7,
             # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
             # OpenAI Setting
-            OPENAI_ENDPOINT=os.getenv("TEST_OPENAI_ENDPOINT"),
-            OPENAI_API_KEY=os.getenv("TEST_OPENAI_API_KEY"),
+            OPENAI_ENDPOINT=os.getenv("OPENAI_ENDPOINT"),
+            OPENAI_API_KEY=os.getenv("OPENAI_API_KEY"),
             # Azure Setting
-            AZURE_OPENAI_ENDPOINT=os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
-            AZURE_OPENAI_API_KEY=os.getenv("TEST_AZURE_OPENAI_API_KEY"),
-            AZURE_OPENAI_API_VERSION=os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
+            AZURE_OPENAI_ENDPOINT=os.getenv("AZURE_OPENAI_ENDPOINT"),
+            AZURE_OPENAI_API_KEY=os.getenv("AZURE_OPENAI_API_KEY"),
+            AZURE_OPENAI_API_VERSION=os.getenv("AZURE_OPENAI_API_VERSION"),
             # Azure or OpenAI (default is Azure)
-            LLM_PROVIDER=os.getenv("TEST_LLM_PROVIDER") or "azure",
+            LLM_PROVIDER=os.getenv("LLM_PROVIDER") or "azure",
         )
 
     def setUp(self):

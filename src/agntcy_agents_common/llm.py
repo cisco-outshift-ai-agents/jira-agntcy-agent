@@ -16,7 +16,6 @@
 
 from cisco_outshift_agent_utils.llm_factory import LLMFactory
 from .config import Settings
-import os
 from dotenv import load_dotenv
 
 def get_llm(settings: Settings):
