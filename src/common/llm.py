@@ -15,15 +15,15 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from cisco_outshift_agent_utils.llm_factory import LLMFactory
-from .config import Settings
+import os
 from dotenv import load_dotenv
 
-def get_llm(settings: Settings):
+def get_llm():
     """
     Get the LLM provider based on the configuration using LLMFactory.
     """
     load_dotenv()
     factory = LLMFactory(
-        provider=settings.LLM_PROVIDER
+        provider=os.getenv("LLM_PROVIDER"),
     )
-    return factory.get_llm(temperature=settings.OPENAI_TEMPERATURE)
+    return factory.get_llm()

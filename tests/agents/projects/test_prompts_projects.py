@@ -14,7 +14,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-import os
 import unittest
 import logging
 
@@ -22,7 +21,6 @@ from dotenv import load_dotenv
 from graph.graph import JiraGraph
 
 from tests.helper import get_tools_executed
-from agntcy_agents_common.config import Settings
 from tests.helper import verify_llm_settings_for_test
 
 # Initialize logger
@@ -40,21 +38,6 @@ TEST_PROJECT_LEAD_EMAIL="test_alfred_user@example.com"
 
 @unittest.skipIf(not verify_llm_settings_for_test(), "Required test environment variables not set")
 class TestPromptsProjects(unittest.TestCase):
-
-    def get_mock_settings(self):
-        return Settings(
-            # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
-            # OpenAI Setting
-            OPENAI_ENDPOINT=os.getenv("OPENAI_ENDPOINT"),
-            OPENAI_API_KEY=os.getenv("OPENAI_API_KEY"),
-            # Azure Setting
-            AZURE_OPENAI_ENDPOINT=os.getenv("AZURE_OPENAI_ENDPOINT"),
-            AZURE_OPENAI_API_KEY=os.getenv("AZURE_OPENAI_API_KEY"),
-            AZURE_OPENAI_API_VERSION=os.getenv("AZURE_OPENAI_API_VERSION"),
-            # Azure or OpenAI (default is Azure)
-            LLM_PROVIDER=os.getenv("LLM_PROVIDER") or "azure",
-        )
-
     @classmethod
     def tearDownClass(cls):
         pass
@@ -62,7 +45,7 @@ class TestPromptsProjects(unittest.TestCase):
     def test_get_project_by_name(self):
 
         query = f"get details for my project {TEST_PROJECT_NAME}"
-        graph = JiraGraph(self.get_mock_settings())
+        graph = JiraGraph()
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -87,7 +70,7 @@ class TestPromptsProjects(unittest.TestCase):
         query = (f"create a JIRA project for my venture {TEST_PROJECT_NAME} "
                  f"with key {TEST_PROJECT_KEY} "
                  f"and user {TEST_PROJECT_LEAD_EMAIL}")
-        graph = JiraGraph(self.get_mock_settings())
+        graph = JiraGraph()
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -106,7 +89,7 @@ class TestPromptsProjects(unittest.TestCase):
 
         expected_description = "description updated by Alfred jira tests"
         query = f"update description for project {TEST_PROJECT_NAME} to {expected_description}"
-        graph = JiraGraph(self.get_mock_settings())
+        graph = JiraGraph()
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -131,7 +114,7 @@ class TestPromptsProjects(unittest.TestCase):
     def test_update_project_lead(self):
 
         query = f"update lead for project {TEST_PROJECT_NAME} to {TEST_PROJECT_LEAD_EMAIL}"
-        graph = JiraGraph(self.get_mock_settings())
+        graph = JiraGraph()
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 

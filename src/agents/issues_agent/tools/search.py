@@ -18,7 +18,7 @@ import json
 import logging
 from typing import List
 
-from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
+from common.config import INTERNAL_ERROR_MESSAGE
 
 from .dryrun.mock_responses import (
   MOCK_RETRIEVE_MULTIPLE_JIRA_ISSUES_RESPONSE,

@@ -21,6 +21,7 @@ jobs:
       AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
       AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
       AZURE_OPENAI_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_DEPLOYMENT }}
+      LLM_PROVIDER: ${{ secrets.LLM_PROVIDER }}
 
     steps:
       - name: Checkout code
