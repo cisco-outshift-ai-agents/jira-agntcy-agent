@@ -25,7 +25,6 @@ from tests.helper import get_tools_executed
 from tests.dev.projects_helper import get_project_by_key, project_update_description
 
 from agents.projects_agent.tools.utils import _get_jira_accountID_by_user_email
-from agntcy_agents_common.config import Settings
 
 # Initialize logger
 logger = logging.getLogger()
@@ -83,30 +82,6 @@ def validate_env_vars():
 
 @unittest.skipIf(not validate_env_vars(), "Required test environment variables not set")
 class TestPromptsProjectsDev(unittest.TestCase):
-
-    def get_settings(self):
-        return Settings(
-            JIRA_INSTANCE=os.getenv("JIRA_INSTANCE"),
-            JIRA_USERNAME=os.getenv("JIRA_USERNAME"),
-            JIRA_API_TOKEN=os.getenv("JIRA_API_TOKEN"),
-            LANGCHAIN_TRACING_V2=False,
-            LANGCHAIN_ENDPOINT="",
-            LANGCHAIN_API_KEY="",
-            LANGCHAIN_PROJECT="",
-            LANGSMITH_API_KEY="",
-            OPENAI_TEMPERATURE=0.7,
-            # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
-            # OpenAI Setting
-            OPENAI_ENDPOINT=os.getenv("TEST_OPENAI_ENDPOINT"),
-            OPENAI_API_KEY=os.getenv("TEST_OPENAI_API_KEY"),
-            # Azure Setting
-            AZURE_OPENAI_ENDPOINT=os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
-            AZURE_OPENAI_API_KEY=os.getenv("TEST_AZURE_OPENAI_API_KEY"),
-            AZURE_OPENAI_API_VERSION=os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
-            # Azure or OpenAI (default is Azure)
-            LLM_PROVIDER=os.getenv("TEST_LLM_PROVIDER") or "azure",
-        )
-
     def setUp(self):
 
         # common setup for all tests
@@ -132,7 +107,7 @@ class TestPromptsProjectsDev(unittest.TestCase):
     def test_get_project_by_name(self):
 
         query = f"get details for my project {self.TEST_PROJECT_NAME}"
-        graph = JiraGraph(self.get_settings())
+        graph = JiraGraph()
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -174,7 +149,7 @@ class TestPromptsProjectsDev(unittest.TestCase):
         query = (f"create a project for my venture {self.TEST_PROJECT_NAME} "
                  f"with key {self.TEST_PROJECT_KEY} "
                  f"and user {self.TEST_PROJECT_LEAD_EMAIL}")
-        graph = JiraGraph(self.get_settings())
+        graph = JiraGraph()
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -198,7 +173,7 @@ class TestPromptsProjectsDev(unittest.TestCase):
         # Run the test
         expected_description = "description updated by Alfred jira tests"
         query = f"update description for project {self.TEST_PROJECT_NAME} to {expected_description}"
-        graph = JiraGraph(self.get_settings())
+        graph = JiraGraph()
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 
@@ -238,7 +213,7 @@ class TestPromptsProjectsDev(unittest.TestCase):
 
         # Run the test
         query = f"update lead for project {self.TEST_PROJECT_NAME} to {self.TEST_PROJECT_LEAD_EMAIL}"
-        graph = JiraGraph(self.get_settings())
+        graph = JiraGraph()
         output, result = graph.serve(query)
         self.assertIsNotNone(output)
 

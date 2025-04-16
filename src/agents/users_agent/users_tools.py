@@ -23,7 +23,7 @@ from users_models import GetJiraAccountIdByUserEmailInput
 from utils.jira_client.rest import JiraRESTClient
 from utils.dryrun_utils import dryrun_response
 
-from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
+from common.config import INTERNAL_ERROR_MESSAGE
 
 
 # option 1-if using the users_agent to get_jira_accountID_by_user_email, add this to the supervisor prompt under projects section.

@@ -20,9 +20,6 @@ from agentevals.graph_trajectory.utils import (
 from agentevals.graph_trajectory.strict import graph_trajectory_strict_match_async
 from dotenv import load_dotenv
 
-from langgraph.store.memory import InMemoryStore
-from langgraph.checkpoint.memory import MemorySaver
-
 import os
 import pprint
 import pytest
@@ -35,8 +32,6 @@ import argparse
 import logging
 
 from graph.graph import JiraGraph
-
-from agntcy_agents_common.config import Settings
 
 # Initialize logger
 logger = logging.getLogger()
@@ -77,30 +72,7 @@ def verify_llm_settings_for_strict_eval():
   else:
     return False, "Either OpenAI or Azure settings must be set."
 
-def get_mock_settings():
-    return Settings(
-        JIRA_INSTANCE="https://mock.jira.instance.test",
-        LANGCHAIN_TRACING_V2=False,
-        LANGCHAIN_ENDPOINT="",
-        LANGCHAIN_API_KEY="",
-        LANGCHAIN_PROJECT="",
-        LANGSMITH_API_KEY=os.getenv("LANGSMITH_API_KEY"),
-        OPENAI_TEMPERATURE=0.7,
-        # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
-        # OpenAI Setting
-        OPENAI_ENDPOINT=os.getenv("TEST_OPENAI_ENDPOINT"),
-        OPENAI_API_KEY=os.getenv("TEST_OPENAI_API_KEY"),
-        # Azure Setting
-        AZURE_OPENAI_ENDPOINT=os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
-        AZURE_OPENAI_API_KEY=os.getenv("TEST_AZURE_OPENAI_API_KEY"),
-        AZURE_OPENAI_API_VERSION=os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
-        AZURE_OPENAI_DEPLOYMENT_NAME=os.getenv("TEST_AZURE_OPENAI_DEPLOYMENT_NAME") or "gpt-4o",
-        # Azure or OpenAI (default is Azure)
-        LLM_PROVIDER=os.getenv("TEST_LLM_PROVIDER") or "azure",
-    )
-
-graph = JiraGraph(get_mock_settings())
-
+graph = JiraGraph()
 
 def format_results(results):
     output = "# Evaluation Results\n\n"

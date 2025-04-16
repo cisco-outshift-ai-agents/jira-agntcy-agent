@@ -30,16 +30,9 @@ class Settings(BaseSettings):
   PROJECT_NAME: str = "Jira Agent"
   DESCRIPTION: str = "Agent serving jira operations via natural language"
 
+  # TODO: Keep these LLM-related env vars for now for validator purposes, but consider removing them in the future
   # Mandatory LLM settings
   LLM_PROVIDER: Optional[str] = "azure"  # or "openai"
-  OPENAI_TEMPERATURE: float = 0.7
-
-  # Azure settings
-  AZURE_OPENAI_ENDPOINT: Optional[str] = None
-  AZURE_OPENAI_DEPLOYMENT_NAME: Optional[str] = "gpt-4o"
-  AZURE_OPENAI_API_KEY: Optional[str] = None
-  AZURE_OPENAI_API_VERSION: Optional[str] = None
-
   # OpenAI settings
   OPENAI_ENDPOINT: Optional[str] = None
   OPENAI_API_KEY: Optional[str] = None
@@ -52,19 +45,7 @@ class Settings(BaseSettings):
       logger.info("Running model validator for Settings...")
 
       provider = self.LLM_PROVIDER.lower()
-      if provider == "azure":
-          missing = []
-          if not self.AZURE_OPENAI_ENDPOINT:
-              missing.append("AZURE_OPENAI_ENDPOINT")
-          if not self.AZURE_OPENAI_API_KEY:
-              missing.append("AZURE_OPENAI_API_KEY")
-          if not self.AZURE_OPENAI_API_VERSION:
-              missing.append("AZURE_OPENAI_API_VERSION")
-          if missing:
-              raise ValueError(
-                  f"Missing required Azure OpenAI environment variables: {', '.join(missing)}"
-              )
-      elif provider == "openai":
+      if provider == "openai":
           missing = []
           if not self.OPENAI_ENDPOINT:
               missing.append("OPENAI_ENDPOINT")
@@ -85,5 +66,6 @@ class Settings(BaseSettings):
       extra = "ignore"  # This will ignore any extra environment variables.
 
 def get_settings_from_env() -> Settings:
+    # This will load the settings from the environment variables
     return Settings()
 

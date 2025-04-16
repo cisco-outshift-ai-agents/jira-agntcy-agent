@@ -35,7 +35,7 @@ from .dryrun.mock_responses import (
 from utils.jira_client.rest import JiraRESTClient
 from utils.dryrun_utils import dryrun_response
 
-from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
+from common.config import INTERNAL_ERROR_MESSAGE
 
 
 ############################## Tool helper functions ##############################

@@ -41,14 +41,14 @@ def verify_llm_settings_for_test():
     return False
 
   openai_settings = [
-    os.getenv("TEST_OPENAI_ENDPOINT"),
-    os.getenv("TEST_OPENAI_API_KEY"),
+    os.getenv("OPENAI_ENDPOINT"),
+    os.getenv("OPENAI_API_KEY"),
   ]
 
   azure_settings = [
-    os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
-    os.getenv("TEST_AZURE_OPENAI_API_KEY"),
-    os.getenv("TEST_AZURE_OPENAI_API_VERSION")
+    os.getenv("AZURE_OPENAI_ENDPOINT"),
+    os.getenv("AZURE_OPENAI_API_KEY"),
+    os.getenv("AZURE_OPENAI_API_VERSION")
   ]
 
   if all(openai_settings):

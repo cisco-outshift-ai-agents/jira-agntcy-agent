@@ -14,26 +14,16 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from langgraph.prebuilt import create_react_agent
+from cisco_outshift_agent_utils.llm_factory import LLMFactory
+import os
+from dotenv import load_dotenv
 
-from common.llm import get_llm
-
-from .models import LLMResponseOutput
-from .tools import TOOLS
-from .prompt import prompt
-
-class IssuesAgent:
-  def __init__(self):
-    self.name = "jira_issues_agent"
-    self.tools = TOOLS
-    self.prompt = prompt.format(additional_context="")
-
-  def agent(self):
-    agent = create_react_agent(
-      name=self.name,
-      model=get_llm(),
-      tools=self.tools,
-      prompt=self.prompt,
-      response_format=LLMResponseOutput
+def get_llm():
+    """
+    Get the LLM provider based on the configuration using LLMFactory.
+    """
+    load_dotenv()
+    factory = LLMFactory(
+        provider=os.getenv("LLM_PROVIDER"),
     )
-    return agent
+    return factory.get_llm()

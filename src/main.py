@@ -16,7 +16,7 @@
 
 from __future__ import annotations
 
-from agntcy_agents_common.logging_config import logging
+from common.logging_config import logging, configure_logging
 import os
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
@@ -26,8 +26,7 @@ import asyncio
 from datetime import datetime
 from uvicorn import Config, Server
 
-from agntcy_agents_common.config import get_settings_from_env
-from agntcy_agents_common.logging_config import configure_logging
+from common.config import get_settings_from_env
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI
 from fastapi.routing import APIRoute

@@ -19,7 +19,7 @@ import logging
 import os
 import requests
 
-from agntcy_agents_common.config import INTERNAL_ERROR_MESSAGE
+from common.config import INTERNAL_ERROR_MESSAGE
 from .dryrun.mock_responses import (
   MOCK_ADD_NEW_LABEL_TO_ISSUE_RESPONSE,
   MOCK_ASSIGN_JIRA_RESPONSE,

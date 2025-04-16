@@ -19,7 +19,6 @@ import os
 import uuid
 from typing import Optional
 
-from agntcy_agents_common.config import Settings, get_settings_from_env
 from agents.supervisor_agent.supervisor_agent import SupervisorAgent
 from langgraph.checkpoint.memory import InMemorySaver
 from utils.jira_client.config import JiraConfig
@@ -31,11 +30,10 @@ def _init_jira_config() -> Optional[JiraConfig]:
   return JiraConfig()
 
 class JiraGraph:
-  def __init__(self, settings:Settings=None):
+  def __init__(self):
     """
     Initialize the JiraGraph as a LangGraph.
     """
-    self.settings = settings or get_settings_from_env()
     self.jira_config = _init_jira_config() # This is just for validation purposes
     self.graph = self.build_graph()
 
@@ -46,7 +44,7 @@ class JiraGraph:
     Returns:
       CompiledGraph: A compiled LangGraph instance.
     """
-    graph = SupervisorAgent(settings=self.settings).agent()
+    graph = SupervisorAgent().agent()
 
     checkpointer = InMemorySaver()
     return graph.compile(checkpointer=checkpointer)

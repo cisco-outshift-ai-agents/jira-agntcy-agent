@@ -249,15 +249,15 @@ To run the tests or eval tests, you need to set up the environment variables and
    ```bash
    LANGCHAIN_API_KEY=your-langsmith-api-key
    # OpenAI Configuration
-   TEST_OPENAI_ENDPOINT=https://api.openai.com/v1
-   TEST_OPENAI_API_KEY=your-openai-api-key
+   OPENAI_ENDPOINT=https://api.openai.com/v1
+   OPENAI_API_KEY=your-openai-api-key
    # Alternatively, for Azure OpenAI
-   TEST_AZURE_OPENAI_ENDPOINT=https://your-azure-endpoint.openai.azure.com
-   TEST_AZURE_OPENAI_API_KEY=your-azure-api-key
-   TEST_AZURE_OPENAI_API_VERSION=2023-03-15-preview
-   TEST_AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+   AZURE_OPENAI_ENDPOINT=https://your-azure-endpoint.openai.azure.com
+   AZURE_OPENAI_API_KEY=your-azure-api-key
+   AZURE_OPENAI_API_VERSION=2023-03-15-preview
+   AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
    
-   TEST_LLM_PROVIDER=azure # or openai
+   LLM_PROVIDER=azure # or openai
    ```
 
 2. **Run the Tests**:
