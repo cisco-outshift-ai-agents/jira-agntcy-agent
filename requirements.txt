@@ -115,5 +115,5 @@ websockets==15.0.1
 xattr==1.1.4
 yarl==1.18.3
 zstandard==0.23.0
-cisco-outshift-agent-utils
+cisco-outshift-agent-utils==0.0.2
 langchain_anthropic
