@@ -200,7 +200,7 @@ def main():
     graph = build_graph()
 
     logger.info({"event": "invoking_graph", "input": input})
-    user_prompt = "give me the project key of the project Alfred Plus Test"
+    user_prompt = "UPDATE THIS PROMPT BASED ON PROMPTS IN clients/sample_prompts"
     inputs = {"messages": [HumanMessage(content=user_prompt)]}
     result = graph.invoke(inputs)
     logger.info({"event": "final_result", "result": result})

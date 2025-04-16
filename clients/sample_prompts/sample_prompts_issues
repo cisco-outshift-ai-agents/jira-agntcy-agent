@@ -1,5 +1,5 @@
-user_prompt = "create a jira sushroff-custom-issue issue in project Alfred Plus Test, summary will be TBD"
-user_prompt = "create a jira sushroff-custom-issue issue in project Alfred Plus Test, summary will be TBD, and then assign it to samuyang@cisco.com"
+user_prompt = "create a jira sushroff-custom-issue issue in project APT, summary will be TBD"
+user_prompt = "create a jira sushroff-custom-issue issue in project APT, summary will be TBD, and then assign it to samuyang@cisco.com"
 user_prompt = "assign APT-3 to samuyang@cisco.com"
 user_prompt = "get transition data for APT-3"
 user_prompt = "get details for APT-3"
