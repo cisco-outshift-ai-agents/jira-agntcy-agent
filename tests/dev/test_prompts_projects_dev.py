@@ -86,14 +86,6 @@ class TestPromptsProjectsDev(unittest.TestCase):
 
     def get_settings(self):
         return Settings(
-            JIRA_INSTANCE=os.getenv("JIRA_INSTANCE"),
-            JIRA_USERNAME=os.getenv("JIRA_USERNAME"),
-            JIRA_API_TOKEN=os.getenv("JIRA_API_TOKEN"),
-            LANGCHAIN_TRACING_V2=False,
-            LANGCHAIN_ENDPOINT="",
-            LANGCHAIN_API_KEY="",
-            LANGCHAIN_PROJECT="",
-            LANGSMITH_API_KEY="",
             OPENAI_TEMPERATURE=0.7,
             # We need real values for the following settings so the tool calling sequence can be tested. Either OpenAI or Azure settings must be set.
             # OpenAI Setting
