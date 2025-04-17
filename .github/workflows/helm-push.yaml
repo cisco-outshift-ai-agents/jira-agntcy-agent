@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
+      - "refs/tags/v*"
   pull_request:
     branches:
-      - "main"
+      - main
   workflow_dispatch:
 
 
@@ -40,6 +41,7 @@ jobs:
         run: helm lint deployments/helm/jira-agntcy-agent --with-subcharts
 
       - name: Package and Push Helm Chart
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
         run: |
           # Extract the version from Chart.yaml
           CHART_VERSION=$(grep '^version:' deployments/helm/jira-agntcy-agent/Chart.yaml | awk '{print $2}')
