@@ -53,7 +53,11 @@ The permissions for a particular Jira user can be obtained using the [My Permiss
 
 #### **🔹 OpenAI or Azure OpenAI API Configuration**
 
-You can configure your AI agent to use either OpenAI or Azure OpenAI as its LLM provider. Set the appropriate variables based on your choice:  
+You can configure your AI agent to use either OpenAI or Azure OpenAI as its LLM provider. 
+Set the appropriate variables based on your choice (if unspecified , defaults to 'azure'): 
+```bash
+LLM_PROVIDER=azure # or openai
+```
 
 For OpenAI:
 ```bash
@@ -66,7 +70,7 @@ For Azure OpenAI:
 ```bash
 AZURE_OPENAI_API_KEY=your-azure-api-key-here
 AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
-AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name  # Deployment name in Azure
+AZURE_OPENAI_DEPLOYMENT=your-deployment-name  # Deployment name in Azure
 AZURE_OPENAI_API_VERSION=your-azure-openai-api-version  # API version
 OPENAI_TEMPERATURE=0.7 # Adjust temperature for response randomness
 ```
@@ -255,7 +259,7 @@ To run the tests or eval tests, you need to set up the environment variables and
    AZURE_OPENAI_ENDPOINT=https://your-azure-endpoint.openai.azure.com
    AZURE_OPENAI_API_KEY=your-azure-api-key
    AZURE_OPENAI_API_VERSION=2023-03-15-preview
-   AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+   AZURE_OPENAI_DEPLOYMENT=gpt-4o
    
    LLM_PROVIDER=azure # or openai
    ```
