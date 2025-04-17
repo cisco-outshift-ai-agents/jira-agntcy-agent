@@ -39,6 +39,8 @@ resources:
     cpu: 200m
     memory: 500Mi
 
+llmProvider: azure
+
 # Jira configuration
 jira:
   instance: https://your-jira-domain.atlassian.net
@@ -48,6 +50,7 @@ jira:
 # OpenAI configuration
 openai:
   apiKey: your-openai-api-key
+  endpoint: https://api.openai.com/v1
   apiVersion: gpt-4o
   temperature: 0.7
 

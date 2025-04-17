@@ -1,7 +1,7 @@
 # Security Policies and Procedures
 
 This document outlines security procedures and general policies for the
-`<project name>` project.
+`Jira Agntcy Agent` project.
 
 - [Security Policies and Procedures](#security-policies-and-procedures)
   - [Disclosing a security issue](#disclosing-a-security-issue)
@@ -10,12 +10,12 @@ This document outlines security procedures and general policies for the
 
 ## Disclosing a security issue
 
-The `<project name>` maintainers take all security issues in the project
-seriously. Thank you for improving the security of `<project name>`. We
+The `Jira Agntcy Agent` maintainers take all security issues in the project
+seriously. Thank you for improving the security of `Jira Agntcy Agent`. We
 appreciate your dedication to responsible disclosure and will make every effort
 to acknowledge your contributions.
 
-`<project name>` leverages GitHub's private vulnerability reporting.
+`Jira Agntcy Agent` leverages GitHub's private vulnerability reporting.
 
 To learn more about this feature and how to submit a vulnerability report,
 review [GitHub's documentation on private reporting](https://docs.github.com/code-security/security-advisories/guidance-on-reporting-and-writing-information-about-vulnerabilities/privately-reporting-a-security-vulnerability).
@@ -33,7 +33,7 @@ indicating the next steps in handling your report.
 
 If you've been unable to successfully draft a vulnerability report via GitHub or
 have not received a response during the alloted response window, please reach out via
-[security@agntcy.org](mailto:security@agntcy.org) contact email.
+[oss-security@cisco.com](mailto:oss-security@cisco.com) contact email.
 
 After the initial reply to your report, the maintainers will endeavor to keep
 you informed of the progress towards a fix and full announcement, and may ask

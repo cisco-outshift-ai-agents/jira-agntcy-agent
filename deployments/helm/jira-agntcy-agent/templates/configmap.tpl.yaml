@@ -9,10 +9,13 @@ data:
   JIRA_USERNAME: "{{ .Values.jira.username }}"
   JIRA_API_TOKEN: "{{ .Values.jira.apiToken }}" # TODO: This should go in the external secret
 
+  LLM_PROVIDER: "{{ .Values.llmProvider }}"
+
   # OpenAI Configuration
   OPENAI_API_KEY: "{{ .Values.openai.apiKey }}" # TODO: This should go in the external secret
   OPENAI_API_VERSION: "{{ .Values.openai.apiVersion }}"
   OPENAI_TEMPERATURE: "{{ .Values.openai.temperature }}"
+  OPENAI_ENDPOINT: "{{ .Values.openai.endpoint }}"
 
   # Azure OpenAI Configuration
   AZURE_OPENAI_API_KEY: "{{ .Values.azureOpenAI.apiKey }}"
