@@ -32,12 +32,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image (main)
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
-          push: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
-          tags: |
-            ${{ startsWith(github.ref, 'refs/heads/main') && 'ghcr.io/${{ github.repository_owner }}/jira-agntcy-agent:latest' || '' }}
-            ${{ startsWith(github.ref, 'refs/tags/v') && 'ghcr.io/${{ github.repository_owner }}/jira-agntcy-agent:${{ github.ref_name }}' || '' }}
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} # only publish when pr merged to main
+          tags: ghcr.io/${{ github.repository_owner }}/jira-agntcy-agent:latest
+
+      - name: Build and push Docker image (tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/jira-agntcy-agent:${{ github.ref_name }}
