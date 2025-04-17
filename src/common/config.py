@@ -57,8 +57,6 @@ class Settings(BaseSettings):
               raise ValueError(
                   f"Missing required OpenAI environment variables: {', '.join(missing)}"
               )
-      else:
-          raise ValueError(f"Unsupported LLM provider: {provider}")
       return self
 
   class Config:
