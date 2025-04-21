@@ -33,6 +33,17 @@ from pydantic import (
     conint,
 )
 
+class JiraRequest(BaseModel):
+    """Expected input format for jira request"""
+    query:str
+
+class JiraResponse(BaseModel):
+    agent_id: str = Field(..., description="The agent that generated the response")
+    output: Dict[str, Any] = Field(..., description="jira response")
+    model: str = Field(..., description="Model used for code review")
+    metadata: Dict[str, Any] = Field(
+        ..., description="Additional metadata related to the response"
+    )
 
 class Agent(BaseModel):
     agent_id: str = Field(..., description="The ID of the agent.", title="Agent Id")

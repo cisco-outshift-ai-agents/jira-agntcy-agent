@@ -1,0 +1,170 @@
+{
+  "metadata": {
+    "ref": {
+      "name": "org.agntcy.jira-agent",
+      "version": "0.0.1"
+    },
+    "description": "Agent that automates JIRA operations in response to natural language queries using LLM and domain specific sub-agents."
+  },
+  "specs": {
+    "capabilities": {},
+    "input": {
+      "description": "Expected input format for jira request",
+      "properties": {
+        "query": {
+          "title": "Query",
+          "type": "string"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "title": "JiraRequest",
+      "type": "object"
+    },
+    "output": {
+      "properties": {
+        "agent_id": {
+          "description": "The agent that generated the response",
+          "title": "Agent Id",
+          "type": "string"
+        },
+        "output": {
+          "description": "jira response",
+          "title": "Output",
+          "type": "object"
+        },
+        "model": {
+          "description": "Model used for code review",
+          "title": "Model",
+          "type": "string"
+        },
+        "metadata": {
+          "description": "Additional metadata related to the response",
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "agent_id",
+        "output",
+        "model",
+        "metadata"
+      ],
+      "title": "JiraResponse",
+      "type": "object"
+    },
+    "config": {
+      "properties": {
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
+        },
+        "recursion_limit": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recursion Limit"
+        },
+        "configurable": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configurable"
+        }
+      },
+      "title": "Config",
+      "type": "object"
+    }
+  },
+  "deployment": {
+    "deployment_options": [
+      {
+        "type": "source_code",
+        "name": "src",
+        "url": "https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent",
+        "framework_config": {
+          "framework_type": "langgraph",
+          "graph": "clients.ap_client.client:build_graph"
+        }
+      }
+    ],
+    "env_vars": [
+      {
+        "desc": "Open AI API Key",
+        "name": "OPENAI_API_KEY"
+      },
+      {
+        "desc": "Open AI Version",
+        "name": "OPENAI_API_VERSION"
+      },
+      {
+        "desc": "Open AI Endpoint",
+        "name": "OPENAI_ENDPOINT"
+      },
+      {
+        "desc": "Open AI Temperature",
+        "name": "OPENAI_TEMPERATURE"
+      },
+      {
+        "desc": "AZURE Open AI API Key",
+        "name": "AZURE_OPENAI_API_KEY"
+      },
+      {
+        "desc": "AZURE Open AI Endpoint",
+        "name": "AZURE_OPENAI_ENDPOINT"
+      },
+      {
+        "desc": "AZURE Open AI Deployment Name",
+        "name": "AZURE_OPENAI_DEPLOYMENT"
+      },
+      {
+        "desc": "AZURE Open AI API Version",
+        "name": "AZURE_OPENAI_API_VERSION"
+      },
+      {
+        "desc": "AZURE Open AI Temperature",
+        "name": "AZURE_OPENAI_TEMPERATURE"
+      },
+      {
+        "desc": "LLM Provider",
+        "name": "LLM_PROVIDER"
+      },
+      {
+        "desc": "JIRA Instance",
+        "name": "JIRA_INSTANCE"
+      },
+      {
+        "desc": "JIRA Username",
+        "name": "JIRA_USERNAME"
+      },
+      {
+        "desc": "JIRA Api Token",
+        "name": "JIRA_API_TOKEN"
+      }
+    ]
+  }
+}
