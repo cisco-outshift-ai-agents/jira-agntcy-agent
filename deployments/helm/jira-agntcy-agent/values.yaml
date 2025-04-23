@@ -55,7 +55,7 @@ openai:
 # Azure OpenAI configuration
 azureOpenAI:
   endpoint: https://your-resource-name.openai.azure.com
-  deploymentName: your-deployment-name
+  deployment: your-deployment-name
   apiVersion: your-azure-api-version
 
 # LangChain configuration
