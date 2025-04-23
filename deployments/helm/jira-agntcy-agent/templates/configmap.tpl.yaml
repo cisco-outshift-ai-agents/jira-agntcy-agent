@@ -16,7 +16,7 @@ data:
 
   # Azure OpenAI Configuration
   AZURE_OPENAI_ENDPOINT: "{{ .Values.azureOpenAI.endpoint }}"
-  AZURE_OPENAI_DEPLOYMENT: "{{ .Values.azureOpenAI.deploymentName }}"
+  AZURE_OPENAI_DEPLOYMENT: "{{ .Values.azureOpenAI.deployment }}"
   AZURE_OPENAI_API_VERSION: "{{ .Values.azureOpenAI.apiVersion }}"
 
   # LangChain Configuration
