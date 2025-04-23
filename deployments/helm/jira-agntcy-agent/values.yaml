@@ -45,7 +45,6 @@ llmProvider: azure
 jira:
   instance: https://your-jira-domain.atlassian.net
   username: your-jira-username
-  apiToken: your-jira-api-token
 
 # OpenAI configuration
 openai:
@@ -56,7 +55,6 @@ openai:
 
 # Azure OpenAI configuration
 azureOpenAI:
-  apiKey: your-azure-api-key
   endpoint: https://your-resource-name.openai.azure.com
   deploymentName: your-deployment-name
   apiVersion: your-azure-api-version
@@ -65,8 +63,4 @@ azureOpenAI:
 langchain:
   tracingV2: true
   endpoint: your-langchain-endpoint
-  apiKey: your-langchain-api-key
   project: your-langchain-project-name
-
-langsmith:
-    apiKey: your-langsmith-api-key
