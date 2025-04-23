@@ -19,7 +19,7 @@ import logging
 
 from dotenv import load_dotenv
 from tenacity import retry, stop_after_attempt
-from graph.graph import JiraGraph
+from jira_agent.graph.graph import JiraGraph
 from tests.helper import contains_all_elements
 from tests.helper import get_tools_executed, verify_llm_settings_for_test
 # Initialize logger

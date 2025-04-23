@@ -20,6 +20,7 @@
 
 import json
 import logging
+import os
 import traceback
 import uuid
 from typing import Any, Dict, TypedDict, List, Annotated
@@ -33,11 +34,18 @@ from requests.exceptions import (ConnectionError, HTTPError, RequestException,
                                  Timeout)
 from logging_config import configure_logging
 
+from agntcy_acp import ACPClient, ApiClientConfiguration
+from agntcy_acp.acp_v0.sync_client.api_client import ApiClient
+
+from agntcy_acp.models import (
+    RunCreateStateless,
+    RunResult,
+    RunError,
+    Config,
+)
+
 logger = configure_logging()
 
-# URL for the Remote Graph Server /runs endpoint
-REMOTE_SERVER_URL = f"http://localhost:8125/api/v1/runs"
-logging.info(f"Remote server URL: {REMOTE_SERVER_URL}")
 
 def load_environment_variables(env_file: str | None = None) -> None:
     """
@@ -66,14 +74,16 @@ def load_environment_variables(env_file: str | None = None) -> None:
     else:
         logger.warning("No .env file found. Ensure environment variables are set.")
 
+
 # Define the graph state
 class GraphState(TypedDict):
     """Represents the state of the graph, containing a list of messages."""
     messages: Annotated[List[BaseMessage], add_messages]
 
+
 def node_remote_request_stateless(state: GraphState) -> Dict[str, Any]:
     """
-    Sends a stateless request to the Remote Graph Server.
+    Create a stateless run with the input spec from jira_agent.json and get the output.
 
     Args:
         state (GraphState): The current graph state containing messages.
@@ -85,102 +95,58 @@ def node_remote_request_stateless(state: GraphState) -> Dict[str, Any]:
         logger.error(json.dumps({"error": "GraphState contains no messages"}))
         return {"messages": [HumanMessage(content="Error: No messages in state")]}
 
-    logger.info("state[messages][-1]:", state["messages"][-1])
     query = state["messages"][-1].content
     logger.info(json.dumps({"event": "sending_request", "query": query}))
 
-    # header and payload to be sent by a clients of Jira Agent
-    headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-    }
+    # Host can't have trailing slash
+    client_config = ApiClientConfiguration(
+        host=f"http://localhost:{os.environ['API_PORT']}", api_key={"x-api-key": os.environ["API_KEY"]}, retries=3
+    )
 
-    payload = {
-        "agent_id": "remote_agent",
-        "model": "gpt-4o",
-        "metadata": {"id": str(uuid.uuid4())},
-        "input": {"query": query},
-    }
-    logger.info(f"Sending request to remote server with payload: {payload}")
-
-    # Use a session for efficiency
-    with requests.Session() as session:
+    with ApiClient(configuration=client_config) as api_client:
+        acp_client = ACPClient(api_client)
+        agent_id = os.environ["AGENT_ID"]
+        # Compose input according to the input spec in jira_agent.json
+        input_obj = {"query": query}
+        run_create = RunCreateStateless(
+            agent_id=agent_id,
+            metadata={"id": str(uuid.uuid4())},
+            input=input_obj,
+            config=Config(configurable={}),
+        )
         try:
-            response = session.post(REMOTE_SERVER_URL, headers=headers, json=payload)
-            response.raise_for_status()  # Raises HTTPError for 4xx and 5xx
-
-            # Parse response as JSON
-            response_data = response.json()
-            logger.info(f"decoding response: {response_data}")
-            # Decode JSON response
-            decoded_response = decode_response(response_data)
-            logger.info(f"decoded response:{decoded_response}")
-            return {"messages": decoded_response.get("messages", [])}
-
-        except (Timeout, ConnectionError) as conn_err:
-            error_msg = {
-                "error": "Connection timeout or failure",
-                "exception": str(conn_err),
-            }
-            logger.error(json.dumps(error_msg))
-            return {"messages": [HumanMessage(content=json.dumps(error_msg))]}
-
-        except HTTPError as http_err:
-            error_msg = {
-                "error": "HTTP request failed",
-                "status_code": response.status_code,
-                "exception": str(http_err),
-            }
-            logger.error(json.dumps(error_msg))
-            return {"messages": [HumanMessage(content=json.dumps(error_msg))]}
-
-        except RequestException as req_err:
-            error_msg = {"error": "Request failed", "exception": str(req_err)}
-            logger.error(json.dumps(error_msg))
-            return {"messages": [HumanMessage(content=json.dumps(error_msg))]}
-
-        except json.JSONDecodeError as json_err:
-            error_msg = {"error": "Invalid JSON response", "exception": str(json_err)}
-            logger.error(json.dumps(error_msg))
-            return {"messages": [HumanMessage(content=json.dumps(error_msg))]}
-
+            run_output = acp_client.create_and_wait_for_stateless_run_output(run_create)
+            if run_output.output is None:
+                raise Exception("Run output is None")
+            actual_output = run_output.output.actual_instance
+            if isinstance(actual_output, RunResult):
+                run_result: RunResult = actual_output
+            elif isinstance(actual_output, RunError):
+                run_error: RunError = actual_output
+                raise Exception(f"Run Failed: {run_error}")
+            else:
+                raise Exception(f"ACP Server returned a unsupported response: {run_output}")
+            run_state = run_result.values  # type: ignore
+            logging.info(f"run_state:{run_state}")
+            if "messages" in run_state:
+                for i, m in enumerate(run_state["messages"]):
+                    msg = m["content"]
+                    logging.info(f"{msg}")
+            return {"messages": [AIMessage(content=json.dumps(msg))]}
         except Exception as e:
-            error_msg = {
-                "error": "Unexpected failure",
-                "exception": str(e),
-                "stack_trace": traceback.format_exc(),
-            }
-            logger.error(json.dumps(error_msg))
+            error_msg = "Unexpected failure"
+            logger.error(
+                json.dumps(
+                    {
+                        "error": error_msg,
+                        "exception": str(e),
+                        "stack_trace": traceback.format_exc(),
+                    }
+                )
+            )
 
-        finally:
-            session.close()
+    return {"messages": [HumanMessage(content=json.dumps(error_msg))]}
 
-    return {"messages": [AIMessage(content=json.dumps(error_msg))]}
-
-def decode_response(response_data: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Decodes the JSON response from the remote server and extracts relevant information.
-
-    Args:
-        response_data (Dict[str, Any]): The JSON response from the server.
-
-    Returns:
-        Dict[str, Any]: A structured dictionary containing extracted response fields.
-    """
-    try:
-        agent_id = response_data.get("agent_id", "Unknown")
-        output = response_data.get("output", {})
-        model = response_data.get("model", "Unknown")
-        metadata = response_data.get("metadata", {})
-
-        return {
-            "agent_id": agent_id,
-            "messages": output,
-            "model": model,
-            "metadata": metadata,
-        }
-    except Exception as e:
-        return {"error": f"Failed to decode response: {str(e)}"}
 
 def build_graph() -> Any:
     """
@@ -195,16 +161,19 @@ def build_graph() -> Any:
     builder.add_edge("node_remote_request_stateless", END)
     return builder.compile()
 
+
 def main():
-    # load_environment_variables()
+    load_environment_variables()
     graph = build_graph()
 
     logger.info({"event": "invoking_graph", "input": input})
-    user_prompt = "get details for project APT"
-    #user_prompt = "UPDATE THIS PROMPT BASED ON PROMPTS IN clients/sample_prompts"
+    user_prompt = "please retrieve information for JIRA project APT"
+    # user_prompt = "get details for APT-3"
+    # user_prompt = "UPDATE THIS PROMPT BASED ON PROMPTS IN clients/sample_prompts"
     inputs = {"messages": [HumanMessage(content=user_prompt)]}
     result = graph.invoke(inputs)
     logger.info({"event": "final_result", "result": result})
+
 
 if __name__ == "__main__":
     main()

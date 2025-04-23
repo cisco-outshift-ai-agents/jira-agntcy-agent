@@ -112,7 +112,7 @@ make run
 or
 
 ```bash
-python src/main.py
+python jira_agent/main.py
 ```
 ### Expected Console Output
 

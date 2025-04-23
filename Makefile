@@ -34,7 +34,7 @@ venv/bin/activate:
 
 run: .env venv/bin/activate
 	@echo "Running the application with Uvicorn reload on port 8125..."
-	. venv/bin/activate && export PYTHONPATH=$PYTHONPATH:$(ROOT_DIR)/src && python src/main.py
+	. venv/bin/activate && export PYTHONPATH=$PYTHONPATH:$(ROOT_DIR)/jira_agent && python jira_agent/main.py
 
 docker-build:
 	${docker} build --platform linux/amd64 -t ${AGENT_NAME}-agent:dev -f ./Dockerfile  .
@@ -45,33 +45,33 @@ run-docker-local: .env
 		-e ALLOWED_ORIGINS=* \
 		-e LANGGRAPH_CHECKPOINT_MEMORY_SAVER=memory \
 		-p 8125:8125 \
-		-v $(shell pwd)/src:/home/src \
+		-v $(shell pwd)/jira_agent:/home/jira_agent \
 		-v $(shell pwd)/.dockerconfigjson:/home/app/.dockerconfigjson \
 		jira-agent:dev \
-    python3 ./src/main.py --port 8125
+    python3 ./jira_agent/main.py --port 8125
 
 docker-run: .env venv/bin/activate run-docker-local
 
 lint: venv/bin/activate
 	@echo "Running ruff..."
-	. venv/bin/activate && pip install --upgrade ruff && ruff check src tests
+	. venv/bin/activate && pip install --upgrade ruff && ruff check jira_agent tests
 
 pytest: venv/bin/activate
 	@echo "Running pytest..."
-	. venv/bin/activate && export PYTHONPATH=src && python3 -m pytest tests
+	. venv/bin/activate && export PYTHONPATH=jira_agent && python3 -m pytest tests
 
 test: venv/bin/activate lint run-test
 
 run-test: venv/bin/activate
 	@echo "Setting up environment variables for tests..."
 	echo "Running quick validation tests..." && \
-	. venv/bin/activate && export PYTHONPATH=src && \
+	. venv/bin/activate && export PYTHONPATH=jira_agent && \
 	DRYRUN=true python3 -m unittest tests.agents.issues.test_prompts_issues && \
 	DRYRUN=true python3 -m unittest tests.agents.projects.test_prompts_projects
 
 run-test-dev: .env venv/bin/activate
 	@echo "Running dev validation tests..."
-	. venv/bin/activate && export PYTHONPATH=src && \
+	. venv/bin/activate && export PYTHONPATH=jira_agent && \
 	DEV_TEST=true python3 -m unittest tests.dev.test_prompts_projects_dev
 
 clean:
@@ -87,7 +87,7 @@ eval-strict-langsmith-tracking-disabled: venv/bin/activate
 	. venv/bin/activate && \
 	pip install --upgrade pip setuptools && \
 	pip install -r eval/requirements.txt && \
-	export PYTHONPATH=src && \
+	export PYTHONPATH=jira_agent && \
 	export DRYRUN=true && \
 	export LANGSMITH_TEST_TRACKING=false && \
 	python3 -m pytest eval/strict_match/test_strict_match.py
@@ -97,21 +97,21 @@ eval-strict: venv/bin/activate
 	. venv/bin/activate && \
 	pip install --upgrade pip setuptools && \
 	pip install -r eval/requirements.txt && \
-	export PYTHONPATH=src && \
+	export PYTHONPATH=jira_agent && \
 	export DRYRUN=true && \
 	export LANGSMITH_TRACING=true && \
 	python3 -m pytest eval/strict_match/test_strict_match.py
 
 langgraph-dev: .env venv/bin/activate
 	@echo "Running server langgraph dev..."
-	. venv/bin/activate && export PYTHONPATH=src && \
+	. venv/bin/activate && export PYTHONPATH=jira_agent && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
-	cd src && \
-	langgraph dev
+	cd jira_agent && \
+	langgraph dev --allow-blocking
 
 graph-ap: .env venv/bin/activate
 	@echo "Running client (agent protocol) langgraph dev..."
-	. venv/bin/activate && export PYTHONPATH=src && \
+	. venv/bin/activate && export PYTHONPATH=jira_agent && \
 	echo "PYTHONPATH is set to: $(PYTHONPATH)" && \
 	cd clients/ap_client && \
 	langgraph dev

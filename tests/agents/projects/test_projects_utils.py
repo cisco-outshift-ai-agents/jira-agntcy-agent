@@ -16,7 +16,7 @@
 
 import unittest
 
-from agents.projects_agent.tools.utils import is_valid_email
+from jira_agent.agents.projects_agent.tools.utils import is_valid_email
 
 
 class TestProjectsUtils(unittest.TestCase):

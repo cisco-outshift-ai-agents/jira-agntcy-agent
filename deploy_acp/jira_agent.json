@@ -1,0 +1,149 @@
+{
+  "metadata": {
+    "ref": {
+      "name": "org.agntcy.jiraagent",
+      "version": "0.0.1"
+    },
+    "description": "Agent that automates JIRA operations in response to natural language queries using LLM and domain specific sub-agents."
+  },
+  "specs": {
+    "capabilities": {},
+    "input": {
+      "description": "Expected input format for jira request",
+      "properties": {
+        "query": {
+          "title": "Query",
+          "type": "string"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "title": "JiraRequest",
+      "type": "object"
+    },
+    "output": {
+      "properties": {
+        "messages": {
+          "title": "Messages"
+        }
+      },
+      "required": [
+      ],
+      "title": "Messages",
+      "type": "object"
+    },
+    "config": {
+      "properties": {
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
+        },
+        "recursion_limit": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recursion Limit"
+        },
+        "configurable": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configurable"
+        }
+      },
+      "title": "Config",
+      "type": "object"
+    }
+  },
+  "deployment": {
+    "deployment_options": [
+      {
+        "type": "source_code",
+        "name": "source_code_local",
+        "url": ".",
+        "framework_config": {
+          "framework_type": "langgraph",
+          "graph": "jira_agent.build_graph:graph"
+        }
+      }
+    ],
+    "env_vars": [
+      {
+        "desc": "Open AI API Key",
+        "name": "OPENAI_API_KEY"
+      },
+      {
+        "desc": "Open AI Version",
+        "name": "OPENAI_API_VERSION"
+      },
+      {
+        "desc": "Open AI Endpoint",
+        "name": "OPENAI_ENDPOINT"
+      },
+      {
+        "desc": "Open AI Temperature",
+        "name": "OPENAI_TEMPERATURE"
+      },
+      {
+        "desc": "AZURE Open AI API Key",
+        "name": "AZURE_OPENAI_API_KEY"
+      },
+      {
+        "desc": "AZURE Open AI Endpoint",
+        "name": "AZURE_OPENAI_ENDPOINT"
+      },
+      {
+        "desc": "AZURE Open AI Deployment Name",
+        "name": "AZURE_OPENAI_DEPLOYMENT"
+      },
+      {
+        "desc": "AZURE Open AI API Version",
+        "name": "AZURE_OPENAI_API_VERSION"
+      },
+      {
+        "desc": "AZURE Open AI Temperature",
+        "name": "AZURE_OPENAI_TEMPERATURE"
+      },
+      {
+        "desc": "LLM Provider",
+        "name": "LLM_PROVIDER"
+      },
+      {
+        "desc": "JIRA Instance",
+        "name": "JIRA_INSTANCE"
+      },
+      {
+        "desc": "JIRA Username",
+        "name": "JIRA_USERNAME"
+      },
+      {
+        "desc": "JIRA Api Token",
+        "name": "JIRA_API_TOKEN"
+      }
+    ]
+  }
+}
