@@ -34,6 +34,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from jira_agent.protocol.ap.api.routes import stateless_runs
 
+
 def load_environment_variables(env_file: str | None = None) -> None:
   """
   Load environment variables from a .env file safely.
@@ -109,7 +110,7 @@ def custom_generate_unique_id(route: APIRoute) -> str:
   - If no tags exist, the route name is used as the ID.
   """
   if route.tags:
-      return f"{route.tags[0]}-{route.name}"
+    return f"{route.tags[0]}-{route.name}"
   return route.name
 
 
@@ -117,6 +118,7 @@ def add_health_check_handler(app: FastAPI) -> None:
   """
   Adds a health check endpoint to the FastAPI application.
   """
+
   @app.get("/healthz")
   def health_check():
     return {
@@ -124,6 +126,7 @@ def add_health_check_handler(app: FastAPI) -> None:
       "service_state": "Up",
       "last_updated": datetime.now().isoformat(),
     }
+
 
 def create_app() -> FastAPI:
   """
@@ -201,6 +204,7 @@ def main() -> None:
     asyncio.ensure_future(server.serve())
   else:
     asyncio.run(server.serve())
+
 
 if __name__ == "__main__":
   main()

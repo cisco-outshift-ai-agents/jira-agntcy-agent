@@ -14,9 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# Description: This file contains a sample graph clients that makes a stateless request using langgraph agent protocol
-# to the Remote Graph Server.
-# Usage: python clients/ap_client/client.py
+# Description: This is an example client demonstrating -
+# ACP request for a stateless run using SDK function-create_and_wait_for_stateless_run_output
+# and a sync Client via the SDK
+# Prerequisites: create a .env similar to .env.sample based on the Agent deployment output (Refer deploy_acp/README.md).
+# Usage: python clients/acp_client/client.py
 
 import json
 import logging
@@ -107,12 +109,11 @@ def node_remote_request_stateless(state: GraphState) -> Dict[str, Any]:
         acp_client = ACPClient(api_client)
         agent_id = os.environ["AGENT_ID"]
         # Compose input according to the input spec in jira_agent.json
-        input_obj = {"query": query}
+        input_obj = {"messages": [{"type": "human", "content": query}], "is_completed": False}
         run_create = RunCreateStateless(
             agent_id=agent_id,
-            metadata={"id": str(uuid.uuid4())},
             input=input_obj,
-            config=Config(configurable={}),
+            config=Config(),
         )
         try:
             run_output = acp_client.create_and_wait_for_stateless_run_output(run_create)
@@ -167,8 +168,7 @@ def main():
     graph = build_graph()
 
     logger.info({"event": "invoking_graph", "input": input})
-    user_prompt = "please retrieve information for JIRA project APT"
-    # user_prompt = "get details for APT-3"
+    user_prompt = "please provide details for project APT"
     # user_prompt = "UPDATE THIS PROMPT BASED ON PROMPTS IN clients/sample_prompts"
     inputs = {"messages": [HumanMessage(content=user_prompt)]}
     result = graph.invoke(inputs)

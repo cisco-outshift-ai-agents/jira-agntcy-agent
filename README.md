@@ -17,6 +17,7 @@ Existing functionality supported includes:
 This agent was built with **FastAPI**, that can operate using:
 
 - A **standard API** compatible with [LangChain’s Agent Protocol](https://github.com/langchain-ai/agent-protocol) — an open-source framework for interfacing with AI agents.
+- A **ACP complaint agent interface** using [Agntcy ACP Protocol](https://spec.acp.agntcy.org/#/) — an open-source protocol for interfacing with AI agents.
 
 ---
 ## **📋 Prerequisites**
@@ -179,6 +180,30 @@ curl -X 'POST' \
   "model": "gpt-4o",
   "metadata": {}
 }
+```
+
+---
+### ACP Client (using the agent deployed via Workflow server Manager)
+
+#### PreRequisites
+The agent must be deployed using Workflow Server Manager following [these instructions](https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/blob/main/deploy_acp/README.md).
+
+Detailed instruction on running the clients with this agent are available [here](https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/blob/main/deploy_acp/README.md).
+
+*Change to `clients` folder*
+
+*Depending on the specific client to be run, Update the user_prompt in `clients/acp_client/client_*.py` to the desired prompt (sample prompts available in `clients/sample_prompts/`*
+
+*Update the env variables in .env per clients/acp_client/.env.sample*
+
+Run either of the clients provided. Eg.
+```bash
+python clients/acp_client/client_async.py
+```
+
+on a successful run, you should see the output to your prompt as below:
+```bash
+Query:get me details for project APT, Event: data, Data: {"answer": "Here are the details for the project \"APT\":\n\n- **Name**: Alfred Plus Test\n- **Key**: APT\n- **ID**: 10112\n- **Project Type**: Software\n- **Style**: Next-gen\n- **Is Private**: No\n- **UUID**: 025651a6-f8fa-4023-90fe-11ea2c7182d9\n- **Avatar URLs**:\n  - [16x16](https://cisco-eti-sandbox-858.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10200?size=xsmall)\n  - [24x24](https://cisco-eti-sandbox-858.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10200?size=small)\n  - [32x32](https://cisco-eti-sandbox-858.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10200?size=medium)\n  - [48x48](https://cisco-eti-sandbox-858.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10200)\n\nFor more details, you can visit the [project link](https://cisco-eti-sandbox-858.atlassian.net/rest/api/3/project/10112).", "metadata": {}}
 ```
 
 ---

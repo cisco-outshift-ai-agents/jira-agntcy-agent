@@ -7,39 +7,48 @@
     "description": "Agent that automates JIRA operations in response to natural language queries using LLM and domain specific sub-agents."
   },
   "specs": {
-    "capabilities": {},
+    "capabilities": {
+      "threads": false,
+      "interrupts": false,
+      "callbacks": false
+    },
     "input": {
-      "description": "Expected input format for jira request",
-      "properties": {
-        "query": {
-          "title": "Query",
+      "$defs": {
+        "Message": {
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/Type",
+              "description": "indicates the originator of the message, a human or an assistant"
+            },
+            "content": {
+              "description": "the content of the message",
+              "title": "Content",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "content"
+          ],
+          "title": "Message",
+          "type": "object"
+        },
+        "Type": {
+          "enum": [
+            "human",
+            "assistant",
+            "ai"
+          ],
+          "title": "Type",
           "type": "string"
         }
       },
-      "required": [
-        "query"
-      ],
-      "title": "JiraRequest",
-      "type": "object"
-    },
-    "output": {
       "properties": {
         "messages": {
-          "title": "Messages"
-        }
-      },
-      "required": [
-      ],
-      "title": "Messages",
-      "type": "object"
-    },
-    "config": {
-      "properties": {
-        "tags": {
           "anyOf": [
             {
               "items": {
-                "type": "string"
+                "$ref": "#/$defs/Message"
               },
               "type": "array"
             },
@@ -48,34 +57,68 @@
             }
           ],
           "default": null,
-          "title": "Tags"
-        },
-        "recursion_limit": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Recursion Limit"
-        },
-        "configurable": {
-          "anyOf": [
-            {
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Configurable"
+          "title": "Messages"
         }
       },
-      "title": "Config",
+      "title": "InputState",
+      "type": "object"
+    },
+    "output": {
+      "$defs": {
+        "Message": {
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/Type",
+              "description": "indicates the originator of the message, a human or an assistant"
+            },
+            "content": {
+              "description": "the content of the message",
+              "title": "Content",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "content"
+          ],
+          "title": "Message",
+          "type": "object"
+        },
+        "Type": {
+          "enum": [
+            "human",
+            "assistant",
+            "ai",
+            "tool"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "properties": {
+        "messages": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Message"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Messages"
+        }
+      },
+      "title": "OutputState",
+      "type": "object"
+    },
+    "config": {
+      "properties": {
+      },
+      "title": "ConfigSchema",
       "type": "object"
     }
   },
@@ -144,6 +187,7 @@
         "desc": "JIRA Api Token",
         "name": "JIRA_API_TOKEN"
       }
-    ]
+    ],
+    "dependencies": []
   }
 }

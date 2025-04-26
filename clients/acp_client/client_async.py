@@ -1,3 +1,25 @@
+# Copyright 2025 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Description: This is an example client demonstrating -
+# ACP request for a stateless run using SDK function-create_and_wait_for_stateless_run_output
+# and an async Client via the SDK
+# Prerequisites: create a .env similar to .env.sample based on the Agent deployment output (Refer deploy_acp/README.md).
+# Usage: python clients/acp_client/client_async.py
+
 import json
 import logging
 
@@ -64,13 +86,12 @@ async def run_stateless(query, process_event):
         acp_client = AsyncACPClient(api_client)
         agent_id = os.environ["AGENT_ID"]
 
-        # Compose input according to the input spec in jarvis-agent.json
-        # input_obj = {"messages": [{"type": "human", "content": query}], "is_completed": False}
-        input_obj = {"query": query}
+        # Compose input according to the input spec in jira_agent.json
+        input_obj = {"messages": [{"type": "human", "content": query}], "is_completed": False}
         # Ensure all message types are valid
-        # for message in input_obj["messages"]:
-        #     if message["type"] not in ["human", "assistant", "ai", "tool"]:
-        #         raise ValueError(f"Invalid message type: {message['type']}")
+        for message in input_obj["messages"]:
+            if message["type"] not in ["human", "assistant", "ai", "tool"]:
+                raise ValueError(f"Invalid message type: {message['type']}")
         run_create = RunCreateStateless(
             agent_id=agent_id,
             input=input_obj,
@@ -89,7 +110,7 @@ async def run_stateless(query, process_event):
         else:
             raise Exception(f"ACP Server returned a unsupported response: {run_output}")
         run_state = run_result.values  # type: ignore
-        logging.info(run_state)
+        # logging.info(run_state)
         if "messages" in run_state:
             for i, m in enumerate(run_state["messages"]):
                 metadata = run_state.get("metadata", [{}] * len(run_state["messages"]))
@@ -97,18 +118,13 @@ async def run_stateless(query, process_event):
                     event="data", data=json.dumps({"answer": m["content"], "metadata": metadata[i]})
                 )
                 await process_event(query, event)  # run = await acp_client.create_stateless_run(run_create)
-        # run_id = run.run_id
-        # async for event in await acp_client.stream_stateless_run_output(run_id):
-        #   process_event(event, user_email)
 
 
 if __name__ == "__main__":
     load_environment_variables()
 
-
-    async def process_event(chat_id, event):
-        print(f"Chat ID: {chat_id}, Event: {event.event}, Data: {event.data}")
-
+    async def process_event(query, event):
+        print(f"Query:{query}, Event: {event.event}, Data: {event.data}")
 
     loop = asyncio.get_event_loop()
     loop.run_until_complete(run_stateless("get me details for project APT", process_event))
