@@ -22,11 +22,11 @@ sushroff@SUSHROFF-M-7MJQ jira-agntcy-agent % ./wfsm deploy --manifestPath deploy
 2025-04-22T17:08:57-07:00 INF ACP agent deployment name: org.agntcy.jiraagent
 2025-04-22T17:08:57-07:00 INF ACP agent running in container: org.agntcy.jiraagent, listening for ACP requests on: http://127.0.0.1:54316
 2025-04-22T17:08:57-07:00 INF Agent ID: 0ea38b60-12b7-41ea-88ed-f2e907a6411c
-2025-04-22T17:08:57-07:00 INF API Key: b7a82c6f-428d-4db3-be39-09a22ca754f5
+2025-04-22T17:08:57-07:00 INF API Key: redacted-api-key
 2025-04-22T17:08:57-07:00 INF API Docs: http://127.0.0.1:54316/agents/0ea38b60-12b7-41ea-88ed-f2e907a6411c/docs
 2025-04-22T17:08:57-07:00 INF ---------------------------------------------------------------------
 ```
-- Save the details of the agent. The details are also saved to a docker-compose file created on your local setup as indicated in the logs above.
+- Save the details of the agent.They are required to populate the clients/.env file. (The details are also saved to a docker-compose file created on your local setup as indicated in the logs above).
 - [Server APIs] (http://127.0.0.1:54316/agents/0ea38b60-12b7-41ea-88ed-f2e907a6411c/docs).
 - '54316' is API_PORT value to be used by clients accessing the agents endpoints via ACP and workflow server.
 
