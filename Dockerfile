@@ -11,7 +11,7 @@ COPY poetry.lock pyproject.toml ./
 # Install Rust (required for some Python packages)
 RUN apt-get update && apt-get install -y curl && curl https://sh.rustup.rs -sSf | sh -s -- -y && \
 	export PATH="/root/.cargo/bin:$PATH" && \
-	pip install --no-cache-dir -r requirements.txt \
+	pip install --no-cache-dir -r requirements.txt
 
 # Copy the content of the local app directory to the working directory
 COPY . .
