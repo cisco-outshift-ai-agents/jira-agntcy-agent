@@ -24,27 +24,22 @@ import json
 import logging
 import os
 import traceback
-import uuid
 from typing import Any, Dict, TypedDict, List, Annotated
-
-import requests
-from dotenv import load_dotenv, find_dotenv
-from langgraph.graph.message import add_messages
-from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
-from langgraph.graph import END, START, StateGraph
-from requests.exceptions import (ConnectionError, HTTPError, RequestException,
-                                 Timeout)
-from logging_config import configure_logging
 
 from agntcy_acp import ACPClient, ApiClientConfiguration
 from agntcy_acp.acp_v0.sync_client.api_client import ApiClient
-
 from agntcy_acp.models import (
     RunCreateStateless,
     RunResult,
     RunError,
     Config,
 )
+from dotenv import load_dotenv, find_dotenv
+from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
+from langgraph.graph import END, START, StateGraph
+from langgraph.graph.message import add_messages
+
+from logging_config import configure_logging
 
 logger = configure_logging()
 

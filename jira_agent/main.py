@@ -16,22 +16,21 @@
 
 from __future__ import annotations
 
-from jira_agent.common.logging_config import logging, configure_logging
-import os
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
-
 # Start the FastAPI application using Uvicorn
 import asyncio
+import os
+from contextlib import asynccontextmanager
 from datetime import datetime
-from uvicorn import Config, Server
+from typing import AsyncGenerator
 
-from jira_agent.common.config import get_settings_from_env
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
+from uvicorn import Config, Server
 
+from jira_agent.common.config import get_settings_from_env
+from jira_agent.common.logging_config import logging, configure_logging
 from jira_agent.protocol.ap.api.routes import stateless_runs
 
 

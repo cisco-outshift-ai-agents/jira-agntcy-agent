@@ -130,7 +130,8 @@ dependencies = [
     "cisco-outshift-agent-utils (==0.0.2)",
     "langchain-anthropic (>=0.3.12,<0.4.0)",
     "agntcy-acp (==1.1.2)",
-    "httpx-sse (>=0.4.0,<0.5.0)"
+    "httpx-sse (>=0.4.0,<0.5.0)",
+    "deptry (>=0.23.0,<0.24.0)"
 ]
 
 

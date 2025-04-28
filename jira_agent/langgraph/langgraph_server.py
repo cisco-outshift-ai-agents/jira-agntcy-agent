@@ -14,8 +14,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from jira_agent.agents.supervisor_agent.supervisor_agent import SupervisorAgent
 from langgraph.checkpoint.memory import InMemorySaver
+
+from jira_agent.agents.supervisor_agent.supervisor_agent import SupervisorAgent
+
 
 # To run the standalone LangGraph Server:
 # % pip install --upgrade "langgraph-cli[inmem]"

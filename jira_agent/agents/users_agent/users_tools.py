@@ -17,13 +17,11 @@
 import json
 import logging
 
-from users_models import JiraUserOutput
-from users_models import GetJiraAccountIdByUserEmailInput
-
-from jira_agent.utils.jira_client.rest import JiraRESTClient
-from jira_agent.utils.dryrun_utils import dryrun_response
-
 from jira_agent.common.config import INTERNAL_ERROR_MESSAGE
+from jira_agent.utils.dryrun_utils import dryrun_response
+from jira_agent.utils.jira_client.rest import JiraRESTClient
+from users_models import GetJiraAccountIdByUserEmailInput
+from users_models import JiraUserOutput
 
 
 # option 1-if using the users_agent to get_jira_accountID_by_user_email, add this to the supervisor prompt under projects section.

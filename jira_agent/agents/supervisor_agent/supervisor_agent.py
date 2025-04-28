@@ -16,12 +16,11 @@
 
 from langgraph_supervisor import create_supervisor
 
-from jira_agent.common.llm import get_llm
-
-from jira_agent.agents.projects_agent.agent import ProjectsAgent
 from jira_agent.agents.issues_agent.agent import IssuesAgent
-
+from jira_agent.agents.projects_agent.agent import ProjectsAgent
+from jira_agent.common.llm import get_llm
 from .prompt import prompt
+
 
 # from .state import AgentState
 

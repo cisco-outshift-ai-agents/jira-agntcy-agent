@@ -20,23 +20,20 @@
 # Prerequisites: create a .env similar to .env.sample based on the Agent deployment output (Refer deploy_acp/README.md).
 # Usage: python clients/acp_client/client_async.py
 
-import json
-import logging
-
-from dotenv import load_dotenv, find_dotenv
-from httpx_sse import ServerSentEvent
-
-import os
 import asyncio
+import json
+import os
+
 from agntcy_acp import AsyncACPClient, ApiClientConfiguration
 from agntcy_acp.acp_v0.async_client.api_client import ApiClient as AsyncApiClient
-
 from agntcy_acp.models import (
     RunCreateStateless,
     RunResult,
     RunError,
     Config,
 )
+from dotenv import load_dotenv, find_dotenv
+from httpx_sse import ServerSentEvent
 
 from clients.acp_client.logging_config import configure_logging
 

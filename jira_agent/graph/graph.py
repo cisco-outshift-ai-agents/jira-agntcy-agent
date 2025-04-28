@@ -19,9 +19,11 @@ import os
 import uuid
 from typing import Optional
 
-from jira_agent.agents.supervisor_agent.supervisor_agent import SupervisorAgent
 from langgraph.checkpoint.memory import InMemorySaver
+
+from jira_agent.agents.supervisor_agent.supervisor_agent import SupervisorAgent
 from jira_agent.utils.jira_client.config import JiraConfig
+
 
 # If DRYRUN is set, we don't want to initialize Jira settings
 def _init_jira_config() -> Optional[JiraConfig]:

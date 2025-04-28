@@ -23,10 +23,8 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 
 from jira_agent.common.config import INTERNAL_ERROR_MESSAGE, get_settings_from_env
-from jira_agent.models.models import Any, ErrorResponse, RunCreateStateless, Union
-
 from jira_agent.graph.graph import JiraGraph
-
+from jira_agent.models.models import Any, ErrorResponse, RunCreateStateless, Union
 
 router = APIRouter(tags=["Stateless Runs"])
 logger = logging.getLogger(__name__)  # This will be "app.api.routes.<name>"

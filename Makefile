@@ -34,7 +34,7 @@ venv/bin/activate:
 
 run: .env venv/bin/activate
 	@echo "Running the application with Uvicorn reload on port 8125..."
-	. venv/bin/activate && export PYTHONPATH=$PYTHONPATH:$(ROOT_DIR)/jira_agent && python jira_agent/main.py
+	. venv/bin/activate && poetry install && export PYTHONPATH=$PYTHONPATH:$(ROOT_DIR)/jira_agent && python jira_agent/main.py
 
 docker-build:
 	${docker} build --platform linux/amd64 -t ${AGENT_NAME}-agent:dev -f ./Dockerfile  .

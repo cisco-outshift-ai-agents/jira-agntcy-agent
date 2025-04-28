@@ -21,6 +21,7 @@ import os
 import traceback
 from pathlib import Path
 from typing import Dict
+
 import coloredlogs
 
 if os.getenv("HTTP_CLIENT_DEBUG", "0") == "1":
