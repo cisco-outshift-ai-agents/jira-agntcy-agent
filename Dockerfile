@@ -8,8 +8,6 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 COPY poetry.lock pyproject.toml ./
 
-RUN poetry --version
-
 # Install Rust (required for some Python packages)
 RUN apt-get update && apt-get install -y curl && curl https://sh.rustup.rs -sSf | sh -s -- -y && \
 	export PATH="/root/.cargo/bin:$PATH" && \
