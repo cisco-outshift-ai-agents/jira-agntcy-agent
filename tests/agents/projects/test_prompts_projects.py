@@ -14,12 +14,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-import unittest
 import logging
+import unittest
 
 from dotenv import load_dotenv
-from graph.graph import JiraGraph
 
+from jira_agent.graph.graph import JiraGraph
 from tests.helper import get_tools_executed
 from tests.helper import verify_llm_settings_for_test
 

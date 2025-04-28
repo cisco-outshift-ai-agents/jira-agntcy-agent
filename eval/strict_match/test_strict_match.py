@@ -31,7 +31,7 @@ import yaml
 import argparse
 import logging
 
-from graph.graph import JiraGraph
+from jira_agent.graph.graph import JiraGraph
 
 # Initialize logger
 logger = logging.getLogger()

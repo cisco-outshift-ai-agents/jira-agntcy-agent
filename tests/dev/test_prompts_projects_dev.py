@@ -19,12 +19,12 @@ import unittest
 import logging
 
 from dotenv import load_dotenv
-from graph.graph import JiraGraph
+from jira_agent.graph.graph import JiraGraph
 
 from tests.helper import get_tools_executed
 from tests.dev.projects_helper import get_project_by_key, project_update_description
 
-from agents.projects_agent.tools.utils import _get_jira_accountID_by_user_email
+from jira_agent.agents.projects_agent.tools.utils import _get_jira_accountID_by_user_email
 
 # Initialize logger
 logger = logging.getLogger()
