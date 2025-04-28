@@ -28,7 +28,8 @@ COPY requirements.txt ./
 COPY poetry.lock pyproject.toml ./
 
 # Configure Poetry to use a local virtual environment and install dependencies
-RUN poetry install --no-root --no-interaction --no-ansi
+RUN pip install --no-cache-dir -r requirements.txt && \
+    poetry install --no-root --no-interaction --no-ansi
 
 # Copy the content of the local app directory to the working directory
 COPY . .
