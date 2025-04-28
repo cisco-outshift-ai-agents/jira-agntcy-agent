@@ -16,4 +16,4 @@ RUN apt-get update && apt-get install -y curl && curl https://sh.rustup.rs -sSf 
 COPY . .
 
 # Command to run on container start
-CMD ["python", "./src/main.py"]
+CMD ["python", "./jira_agent/main.py"]
