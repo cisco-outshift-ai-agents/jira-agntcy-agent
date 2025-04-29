@@ -31,7 +31,7 @@ Before installation, ensure you have:
 ### **1️⃣ Clone the Repository**
 
 ```bash
-git clone https://github.com/cisco-outshift-alfred/jira-agntcy-agent.git
+git clone https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent.git
 cd jira-agntcy-agent
 ```
 ---
@@ -309,7 +309,7 @@ This will ensure the environment variables are loaded and the tests are executed
 ---
 ## Roadmap
 
-See the [open issues](https://github.com/cisco-outshift-alfred/jira-agntcy-agent/issues) for a list
+See the [open issues](https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/issues) for a list
 of proposed features (and known issues).
 
 ---
@@ -334,7 +334,7 @@ information.
 [cisco-outshift-ai-agents@cisco.com](mailto:cisco-outshift-ai-agents@cisco.com)
 
 Project Link: 
-[https://github.com/cisco-outshift-alfred/jira-agntcy-agent/](https://github.com/cisco-outshift-alfred/jira-agntcy-agent/)
+[https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/](https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/)
 
 ---
 ## Acknowledgements
