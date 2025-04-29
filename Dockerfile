@@ -29,10 +29,12 @@ COPY poetry.lock pyproject.toml ./
 
 # Configure Poetry to use a local virtual environment and install dependencies
 RUN pip install --no-cache-dir -r requirements.txt && \
+    poetry config virtualenvs.create false && \
     poetry install --no-root --no-interaction --no-ansi
 
 # Copy the content of the local app directory to the working directory
-COPY . .
+COPY . /usr/src/app
 
 # Command to run on container start
-CMD ["python", "./jira_agent/main.py"]
+CMD ["python", "-m", "jira_agent.main"]
+
