@@ -35,9 +35,6 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 # Copy the content of the local app directory to the working directory
 COPY . /usr/src/app
 
-## Set PYTHONPATH to include the working directory
-ENV PYTHONPATH="/usr/src/app:$PYTHONPATH"
-
 # Command to run on container start
 CMD ["python", "-m", "jira_agent.main"]
 
