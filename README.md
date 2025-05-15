@@ -187,6 +187,11 @@ curl -X 'POST' \
 
 #### PreRequisites
 The agent must be deployed using Workflow Server Manager following [these instructions](https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/blob/main/deploy_acp/README.md).
+* Ensure the version of Workflow Server Manager being used is as below
+```bash
+(venv) sushroff@SUSHROFF-M-7MJQ jira-agntcy-agent % wfsm --version
+wfsm version v0.1.1
+```
 
 Detailed instruction on running the clients with this agent are available [here](https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/blob/main/deploy_acp/README.md).
 
