@@ -1,4 +1,5 @@
 values:
+  JIRA_INSTANCE:
   JIRA_USERNAME:
   JIRA_API_TOKEN:
   LLM_PROVIDER: azure
