@@ -123,7 +123,7 @@ On a successful run, you should see logs in your terminal similar to the snippet
 python app/main.py
 {"timestamp": "2025-03-14 18:04:29,821", "level": "INFO", "message": "Logging is initialized. This should appear in the log file.", "module": "logging_config", "function": "configure_logging", "line": 158, "logger": "app", "pid": 53852}
 {"timestamp": "2025-03-14 18:04:29,821", "level": "INFO", "message": "Starting FastAPI application...", "module": "main", "function": "main", "line": 197, "logger": "app", "pid": 53852}
-{"timestamp": "2025-03-14 18:04:29,822", "level": "INFO", "message": ".env file loaded from /Users/sushroff/Documents/AI/jira-agent/.env", "module": "main", "function": "load_environment_variables", "line": 47, "logger": "root", "pid": 53852}
+{"timestamp": "2025-03-14 18:04:29,822", "level": "INFO", "message": ".env file loaded from /Users/Documents/AI/jira-agent/.env", "module": "main", "function": "load_environment_variables", "line": 47, "logger": "root", "pid": 53852}
 INFO:     Started server process [53852]
 INFO:     Waiting for application startup.
 {"timestamp": "2025-03-14 18:04:29,851", "level": "INFO", "message": "Starting Jira Agent...", "module": "main", "function": "lifespan", "line": 71, "logger": "root", "pid": 53852}
@@ -187,6 +187,11 @@ curl -X 'POST' \
 
 #### PreRequisites
 The agent must be deployed using Workflow Server Manager following [these instructions](https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/blob/main/deploy_acp/README.md).
+* Ensure the version of Workflow Server Manager being used is as below
+```bash
+(venv) user@user: jira-agntcy-agent % wfsm --version
+wfsm version v0.1.1
+```
 
 Detailed instruction on running the clients with this agent are available [here](https://github.com/cisco-outshift-ai-agents/jira-agntcy-agent/blob/main/deploy_acp/README.md).
 
