@@ -126,7 +126,7 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_create_jira_issue(self):
-    query = "create a jira sushroff-custom-issue issue in project Foo, summary will be TBD, and then assign it to samuyang@cisco.com"
+    query = "create a jira sushroff-custom-issue issue in project Foo, summary will be TBD, and then assign it to anusures@cisco.com"
     graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
