@@ -90,7 +90,7 @@ eval-strict-langsmith-tracking-disabled: venv/bin/activate
 	export PYTHONPATH=jira_agent && \
 	export DRYRUN=true && \
 	export LANGSMITH_TEST_TRACKING=false && \
-	python3 -m pytest eval/strict_match/test_strict_match.py
+	python3 -m pytest eval/strict_match/runStrictMatch.py
 
 eval-strict: venv/bin/activate
 	@echo "Running evaluation with LLM and mock Jira responses..."
