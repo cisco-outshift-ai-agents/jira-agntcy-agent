@@ -198,5 +198,5 @@ def main(config_file ,test_ids=None , **kwargs):
     asyncio.run(test_eval_strict(input_file_path , destination_file_path,test_ids=test_ids))
 
 if __name__ == "__main__":
-    #python3 test_strict_match.py --config_file ../configs/test_strict_match.yaml
+    #python3 runStrictMmatch.py --config_file ../configs/strict_match_config.yaml
     fire.Fire(main)
