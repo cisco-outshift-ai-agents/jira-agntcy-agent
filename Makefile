@@ -100,7 +100,7 @@ eval-strict: venv/bin/activate
 	export PYTHONPATH=jira_agent && \
 	export DRYRUN=true && \
 	export LANGSMITH_TRACING=true && \
-	python3 -m pytest eval/strict_match/test_strict_match.py
+	python3 -m pytest eval/strict_match/runStrictMatch.py
 
 langgraph-dev: .env venv/bin/activate
 	@echo "Running server langgraph dev..."
