@@ -28,16 +28,12 @@ def get_tools_executed(result):
 
   return tools_executed, tools_executed_dict
 
-def verify_llm_settings_for_test():
-  """
-  Verifies that either OpenAI or Azure settings are set.
+def verify_llm_settings_for_test() -> bool:
+  """Return ``True`` if dry-run mode is enabled and LLM settings are present."""
 
-  Returns:
-      bool: True if either OpenAI or Azure settings are set, False otherwise.
-      str: Error message if neither settings are set.
-  """
-  print("DRYRUN: ", os.getenv("DRYRUN"))
-  if not os.getenv("DRYRUN"):
+  # Only run tests when in dry-run mode.  Any other value means the required
+  # external services will not be available and tests should be skipped.
+  if os.getenv("DRYRUN", "").lower() != "true":
     return False
 
   openai_settings = [
@@ -48,15 +44,10 @@ def verify_llm_settings_for_test():
   azure_settings = [
     os.getenv("AZURE_OPENAI_ENDPOINT"),
     os.getenv("AZURE_OPENAI_API_KEY"),
-    os.getenv("AZURE_OPENAI_API_VERSION")
+    os.getenv("AZURE_OPENAI_API_VERSION"),
   ]
 
-  if all(openai_settings):
-    return True, ""
-  elif all(azure_settings):
-    return True, ""
-  else:
-    return False, "Either OpenAI or Azure settings must be set."
+  return all(openai_settings) or all(azure_settings)
 
 def contains_all_elements(list1, list2):
   return all(elem in list1 for elem in list2)
