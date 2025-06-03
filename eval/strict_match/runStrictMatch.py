@@ -169,7 +169,7 @@ async def test_eval_strict(input_file_path ,destination_file_path, test_ids=None
         })
 
     ########################################
-    #  Write the results to a README file  #
+    #  Write the results to a output file  #
     ########################################
 
     headers = ["Action Type", "Prompt", "Score", "Extracted Trajectory", "Reference Trajectories"]
@@ -188,8 +188,6 @@ async def test_eval_strict(input_file_path ,destination_file_path, test_ids=None
     print(tabulate(table, headers=headers, tablefmt="github"))
 
 def main(config_file ,test_ids=None , **kwargs):
-    import pdb
-    pdb.set_trace()
     is_ok, msg = verify_llm_settings_for_strict_eval()
     config = yaml.safe_load(open(config_file))
     input_file_path = config['FILEPATH']

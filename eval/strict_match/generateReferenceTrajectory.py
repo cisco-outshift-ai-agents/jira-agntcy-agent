@@ -1,45 +1,44 @@
+import fire
 from jira_agent.graph.graph import JiraGraph
-from dotenv import load_dotenv
-import json
 import yaml
 from collections import defaultdict
+from dotenv import load_dotenv
+import json
 
-if __name__ == '__main__':
-    """
-    python3 generateReferenceTrajectory.py --input_file ../Dataset/Trajectory_project.json --count 1
-    """
-    load_dotenv()
-    graph = JiraGraph()
-    filename = "../Dataset/project_prompts.json"
-    count = 1
-    project_tool_calls = ["get_jira_project_by_name", "update_jira_project_lead",
-                          "update_jira_project_description", "create_jira_project"]
-    issue_tool_calls = ['search_jira_issues_using_jql', 'perform_jira_transition',
-                        'get_jira_transitions', 'create_jira_issue', 'assign_jira',
-                        'update_issue_reporter', 'add_new_label_to_issue', 'get_jira_issue_details']
+def main(config_file, **kwargs):
+        load_dotenv()
+        graph = JiraGraph()
+        config = yaml.safe_load(open(config_file))
+        filename = config['FILEPATH']
+        count = config.get("COUNT", default = 1)
+        destination_path = config.get('DESTINATION_PATH')
+        project_tool_calls = ["update_jira_project_lead",
+                              "update_jira_project_description"]
+        issue_tool_calls = ['create_jira_issue',
+                            'perform_jira_transition']
 
-    final_output = []
-    new_data = defaultdict(list)
-    with open(filename, 'r') as file:
-        prompts = json.load(file)
+        final_output = []
+        new_data = defaultdict(list)
+        with open(filename, 'r') as file:
+            prompts = json.load(file)
 
-    for values in prompts:
-        counter = 0
-        trajectories = []
-        while counter < count:
-            prompt_type = values['action']
-            user_prompt = values['query']
-            result,trajectory_result = graph.serve(user_prompt)
-            trajectory = [trajectory.model_dump() for trajectory in trajectory_result['messages']]
-            trajectories.append(trajectory)
-        for trajectory_info in trajectories:
+        for values in prompts:
+            counter = 0
+            trajectories = []
+            while counter < count:
+                prompt_type = values['action']
+                user_prompt = values['query']
+                result,trajectory_result = graph.serve(user_prompt)
+                trajectory = [trajectory.model_dump() for trajectory in trajectory_result['messages']]
+                trajectories.append(trajectory)
+                counter += 1
+
             reference_trajectories = []
-            expected_results = []
-            for i,trajectory in enumerate(trajectory_info):
+            for i,trajectory_info in enumerate(trajectories):
                 response = []
                 is_first = False
                 response.append("__start__")
-                for traject in trajectory:
+                for traject in trajectory_info:
                     if traject['type'] == 'ai':
                         if traject['name'] == 'jira_supervisor':
 
@@ -54,7 +53,7 @@ if __name__ == '__main__':
                                         response.append(f"jira_projects_agent")
                                         response.append(f"jira_projects_agent:__start__")
                                         response.append(f"jira_projects_agent:agent")
-                                    elif tools['name'] == 'transfer_to_jira_issues_agents':
+                                    elif tools['name'] == 'transfer_to_jira_issues_agent':
                                         response.append(f"jira_issues_agent")
                                         response.append(f"jira_issues_agent:__start__")
                                         response.append(f"jira_issues_agent:agent")
@@ -77,28 +76,20 @@ if __name__ == '__main__':
                                     is_first = True
                                 response.append(f"{traject['name']}:agent")
                                 response.append(f"{traject['name']}:generate_structured_response")
-                    reference_trajectories.append({f"Solution{i+1}": ";".join(response)})
-                    expected_results.append(result)
-
+                reference_trajectories.append({f"Solution{i+1}": ";".join(response)})
 
             visited = set()
             trajectory_selected = []
-            if list(trajectory.values())[0] not in visited:
-                visited.add(list(trajectory.values())[0])
-                trajectory_selected.append(trajectory)
-            new_data[item['prompt_type']].append({
-                "input": item["input"],
+            for trajectory in reference_trajectories:
+                if list(trajectory.values())[0] not in visited:
+                    visited.add(list(trajectory.values())[0])
+                    trajectory_selected.append(trajectory)
+            new_data[values['action']].append({
+                "input": values["query"],
                 "reference_trajectory": trajectory_selected,
             })
-    #     final_output.append({
-    #         "prompt_type": prompt_type,
-    #         "input": prompt,
-    #         "reference_trajectory": reference_trajectories,
-    #         "response": expected_results
-    #     })
-    #
-    #
-    # with open("../Dataset/reference_trajectory.json", 'w') as file:
-    #     json.dump(final_output, file, indent=2)
-    with open('../Dataset/strict_match_dataset.yaml', 'w') as outfile:
-        yaml.dump({"tests": new_data}, outfile, default_flow_style=False)
+        with open(destination_path, 'w') as outfile:
+            yaml.dump({"tests": new_data}, outfile, default_flow_style=False)
+
+if __name__ == '__main__':
+    fire.Fire(main)
