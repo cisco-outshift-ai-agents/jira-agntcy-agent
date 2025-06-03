@@ -50,9 +50,9 @@ def verify_llm_settings_for_strict_eval():
       bool: True if either OpenAI or Azure settings are set, False otherwise.
       str: Error message if neither settings are set.
   """
-  # print("DRYRUN: ", os.getenv("DRYRUN"))
-  # if not os.getenv("DRYRUN"):
-  #   return False, "DRYRUN environment not set"
+  print("DRYRUN: ", os.getenv("DRYRUN"))
+  if not os.getenv("DRYRUN"):
+    return False, "DRYRUN environment not set"
 
   openai_settings = [
     os.getenv("TEST_OPENAI_ENDPOINT"),
@@ -198,4 +198,5 @@ def main(config_file ,test_ids=None , **kwargs):
     asyncio.run(test_eval_strict(input_file_path , destination_file_path,test_ids=test_ids))
 
 if __name__ == "__main__":
+    #python3 test_strict_match.py --config_file ../configs/test_strict_match.yaml
     fire.Fire(main)

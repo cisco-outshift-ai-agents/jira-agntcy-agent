@@ -92,4 +92,5 @@ def main(config_file, **kwargs):
             yaml.dump({"tests": new_data}, outfile, default_flow_style=False)
 
 if __name__ == '__main__':
+    # python3 generateReferenceTrajectory.py --config_file ../configs/generate_trajectory_config.yaml
     fire.Fire(main)
