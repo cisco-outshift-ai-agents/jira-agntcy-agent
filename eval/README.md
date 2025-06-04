@@ -1,14 +1,13 @@
-## Introduction
+## Introduction:
 
-This eval/ subdirectory contains tools designed to **evaluate the performance of the Jira Agent**. Jira Agent has two evaluation metrics
+This eval/ subdirectory contains tools designed to **evaluate the performance of the Jira Agent**. Jira Agent has two evaluation techniques:
+
 1. Trajectory Evaluation
-2. Correctness
+2. Correctness Evaluation
 
-### How It Works
-#TODO
+## Prerequisites for the eval tool:
 
-
-## Prerequisites for the eval tool
+To use the these evaluation scripts:
 
 1. Install [pyenv](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation) and install Python 3.12.9
    ```bash
@@ -26,7 +25,7 @@ This eval/ subdirectory contains tools designed to **evaluate the performance of
    cd eval
    ```
    ```sh
-   pip install -r requirements.txt
+   pip install -r eval_requirements.txt
    ```
 
 ## Steps to Run the Trajectory Evaluation
@@ -52,9 +51,9 @@ This eval/ subdirectory contains tools designed to **evaluate the performance of
      python runstrictMatch.py --config_file ../configs/strict_match_config.yaml
      ```
 
-## Steps to Run the Correctness #TODO: SreeGowri
-### 1. Data Generation/Collection
-### 2. Evaluation
+## Steps to Run the Correctness Evaluation:
+
+ Please refer to this documentation to learn more about [Correctness Evaluation](../readme_jira_correctness_evaluation.md)
 
 ## Additional Notes
 
