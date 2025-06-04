@@ -206,9 +206,6 @@ terraform_output.json
 # IntelliJ / PyCharm
 .idea
 
-
-*.txt
-
 .logs/
 *.log
 
