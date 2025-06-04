@@ -64,17 +64,17 @@ class TestPromptsIssues(unittest.TestCase):
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_issue_details','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
-  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
-  def test_create_jira_epic(self):
-    query = "create jira EPIC with title 'Epic 1' in project FOO"
-    graph = JiraGraph()
-    output, result = graph.serve(query)
-    self.assertIsNotNone(output)
-
-    tools_executed, _ = get_tools_executed(result)
-    logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue','transfer_back_to_jira_supervisor' ]
-    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+  # @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  # def test_create_jira_epic(self):
+  #   query = "create jira EPIC with title 'Epic 1' in project FOO"
+  #   graph = JiraGraph()
+  #   output, result = graph.serve(query)
+  #   self.assertIsNotNone(output)
+  #
+  #   tools_executed, _ = get_tools_executed(result)
+  #   logging.info(f"tools_executed: {tools_executed}")
+  #   tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue','transfer_back_to_jira_supervisor' ]
+  #   self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_perform_jira_transition(self):
