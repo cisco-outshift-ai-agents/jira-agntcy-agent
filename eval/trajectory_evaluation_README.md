@@ -26,7 +26,7 @@ Trajectory evaluation tries to evaluate the flow of agent calls in JiraAgent. It
 ### 3. Trajectory Evaluation
    - Configure the config file [strict_match_config](strict_match/configs/strict_match_config.yaml)
      ```sh
-     python runstrictMatch.py --config_file configs/strict_match_config.yaml
+     python traject_evaluation.py --config_file configs/strict_match_config.yaml
      ```
      
 
