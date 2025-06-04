@@ -5,7 +5,7 @@ Trajectory evaluation tries to evaluate the flow of agent calls in JiraAgent. It
 1. Please follow the prerequisites in the eval folder's [readme.md](EVAL_README.md).
 
 ## Steps to run Trajectory Evaluation:
-1. Generate list of project and issue prompts similar to the sample prompts described here [Dataset](strict_match/Dataset)
+1. Generate list of project and issue prompts similar to the sample prompts described here [Dataset](strict_match/Dataset/Input)
 2. Run Reference Trajectory script to generate possible reference trajectories for input , by default it will generate one trajectory, the output file will be similar to file [reference_trajectory.yaml](strict_match/Dataset/trajectory_input/generateReferenceTrajectoryResponse.yaml)
 3. The output file from previous script as input, run the  runStrictMatch.py to generate trajectory evaluation report which will be similar to the reports here [Sample Reports](strict_match/Dataset/output/)
 
