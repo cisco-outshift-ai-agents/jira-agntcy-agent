@@ -43,37 +43,39 @@ load_dotenv()
 
 
 def verify_llm_settings_for_strict_eval():
-  """
+    """
   Verifies that either OpenAI or Azure settings are set.
 
   Returns:
       bool: True if either OpenAI or Azure settings are set, False otherwise.
       str: Error message if neither settings are set.
   """
-  print("DRYRUN: ", os.getenv("DRYRUN"))
-  if not os.getenv("DRYRUN"):
-    return False, "DRYRUN environment not set"
+    print("DRYRUN: ", os.getenv("DRYRUN"))
+    if not os.getenv("DRYRUN"):
+        return False, "DRYRUN environment not set"
 
-  openai_settings = [
-    os.getenv("TEST_OPENAI_ENDPOINT"),
-    os.getenv("TEST_OPENAI_API_KEY"),
-  ]
+    openai_settings = [
+        os.getenv("TEST_OPENAI_ENDPOINT"),
+        os.getenv("TEST_OPENAI_API_KEY"),
+    ]
 
-  azure_settings = [
-    os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
-    os.getenv("TEST_AZURE_OPENAI_API_KEY"),
-    os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
-  ]
-  print(azure_settings)
+    azure_settings = [
+        os.getenv("TEST_AZURE_OPENAI_ENDPOINT"),
+        os.getenv("TEST_AZURE_OPENAI_API_KEY"),
+        os.getenv("TEST_AZURE_OPENAI_API_VERSION"),
+    ]
+    print(azure_settings)
 
-  if all(openai_settings):
-    return True, ""
-  elif all(azure_settings):
-    return True, ""
-  else:
-    return False, "Either OpenAI or Azure settings must be set."
+    if all(openai_settings):
+        return True, ""
+    elif all(azure_settings):
+        return True, ""
+    else:
+        return False, "Either OpenAI or Azure settings must be set."
+
 
 graph = JiraGraph()
+
 
 def format_results(results):
     output = "# Evaluation Results\n\n"
@@ -98,7 +100,8 @@ def read_yaml(file_path):
 
 
 @pytest.mark.langsmith
-async def test_eval_strict(input_file_path ,destination_file_path, test_ids=None):
+async def test_eval_strict(input_file_path='strict_match_dataset.yaml', destination_file_path='README.md',
+                           test_ids=None):
     data = read_yaml(input_file_path)
 
     # Filter tests by test_ids
@@ -112,7 +115,7 @@ async def test_eval_strict(input_file_path ,destination_file_path, test_ids=None
 
     reference_trajectories = []
     for test in data['tests'].values():
-        res  = []
+        res = []
         for sol in test[0]['reference_trajectory']:
             temp = list(sol.values())
 
@@ -122,9 +125,9 @@ async def test_eval_strict(input_file_path ,destination_file_path, test_ids=None
     results = []
     print(list(zip(action_type, prompts, reference_trajectories)))
     for action_type, each_prompt, each_reference_trajectories in zip(
-      action_type,
-      prompts,
-      reference_trajectories,
+            action_type,
+            prompts,
+            reference_trajectories,
     ):
         print("#" * 80)
         print(f"Action Type:", action_type)
@@ -133,8 +136,8 @@ async def test_eval_strict(input_file_path ,destination_file_path, test_ids=None
         print("#" * 80)
         # Generate a unique thread ID
         thread_id = uuid.uuid4().hex
-        config = {"configurable": {"thread_id": thread_id,"thread_ts": datetime.now(),}}
-        _ = graph.get_graph().invoke({"messages": [{"role": "user","content": each_prompt}],}, config)
+        config = {"configurable": {"thread_id": thread_id, "thread_ts": datetime.now(), }}
+        _ = graph.get_graph().invoke({"messages": [{"role": "user", "content": each_prompt}], }, config)
 
         extracted_trajectory = extract_langgraph_trajectory_from_thread(
             graph.get_graph(), {"configurable": {"thread_id": thread_id}}
@@ -187,15 +190,17 @@ async def test_eval_strict(input_file_path ,destination_file_path, test_ids=None
     print(format_results(results))
     print(tabulate(table, headers=headers, tablefmt="github"))
 
-def main(config_file ,test_ids=None , **kwargs):
+
+def main(config_file, test_ids=None, **kwargs):
     is_ok, msg = verify_llm_settings_for_strict_eval()
     config = yaml.safe_load(open(config_file))
-    input_file_path = config.get('FILEPATH','strict_match_dataset.yaml')
-    destination_file_path = config.get('DESTINATION_FILEPATH','README.md')
+    input_file_path = config.get('FILEPATH', 'strict_match_dataset.yaml')
+    destination_file_path = config.get('DESTINATION_FILEPATH', 'README.md')
     if not is_ok:
         print(f"Error: {msg}")
         exit(1)
-    asyncio.run(test_eval_strict(input_file_path , destination_file_path,test_ids=test_ids))
+    asyncio.run(test_eval_strict(input_file_path, destination_file_path, test_ids=test_ids))
+
 
 if __name__ == "__main__":
     #python3 runStrictMmatch.py --config_file ../configs/strict_match_config.yaml
