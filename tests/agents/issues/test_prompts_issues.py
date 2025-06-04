@@ -154,7 +154,7 @@ class TestPromptsIssues(unittest.TestCase):
     graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
-    logging.info("Result", output)
+    logging.info(f"Result : {output}")
     tools_executed, _ = get_tools_executed(result)
 
     logging.info(f"tools_executed: {tools_executed}")
