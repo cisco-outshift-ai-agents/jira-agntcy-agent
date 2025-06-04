@@ -1,45 +1,99 @@
 tests:
-  projects_agent_1:
-    input: |
-      Get details for project Agntcy-Jira-Eval-Test-Projects.
+  issue_query_1:
+  - input: Retrieve the latest 5 JIRA issues in the project MOT for the user with
+      email anusures@cisco.com
     reference_trajectory:
-      solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-    metadata:
-      comments: |
-        Get details for project.
-  projects_agent_2:
-    input: |
-      create a project for my venture Agntcy-Jira-Eval-Test-Projects with user agntcyevaltestuser@example.com.
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_query_2:
+  - input: process this JQL:project = 'MOT' AND status = 'In Progress' AND assignee
+      = 'nmallapr@cisco.com' ORDER BY created DESC
     reference_trajectory:
-      solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-      solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-    metadata:
-      comments: |
-        [Negative] Create project - Not enough information provided.
-  projects_agent_3:
-    input: |
-      create a new project for my venture Agntcy-Jira-Eval-Test-Projects with key AJETN and user agntcyevaltestuser@example.com.
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_query_3:
+  - input: 'Find me the latest jira tickets in project MOT. Requested by: sreeadde@cisco.com'
     reference_trajectory:
-      solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-      solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-    metadata:
-      comments: |
-        Create new project.
-  projects_agent_4:
-    input: |
-      update description for project Agntcy-Jira-Eval-Test-Projects to description - 'implement a test'.
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_query_4:
+  - input: Retrieve the total Jira completed issues in the project MOT for the user
+      with email anusures@cisco.com
     reference_trajectory:
-      solution 1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-      solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-    metadata:
-      comments: |
-        Update project description.
-  projects_agent_5:
-    input: |
-      update lead for project Agntcy-Jira-Eval-Test-Projects to user agntcyevaltestuser@example.com.
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_query_5:
+  - input: Retrieve the total number of bugs issues in the project MOT
     reference_trajectory:
-      solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-      solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
-    metadata:
-      comments: |
-        Update project lead.
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_creation_1:
+  - input: create a jira gowri-custom-issue issue in project MOT, summary will be
+      TBD, and then assign it to sreeadde@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_creation_2:
+  - input: create an EPIC with title 'Epic 1' in project MOT and write acceptance
+      criteria in Agile Acceptance format - Create common reusable templates that
+      use AP/ACP along with unit tests and evaluation tests that can be reused/shared
+      by other agents - Opensource Backstage Chat Plugin under CNOE - Opensource QnA
+      Agent - Opensource Jira Agent - Opensource Github Agent - Opensource ArgoCD
+      Agent
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_creation_3:
+  - input: create a jira gowri-custom-bug bug in project MOT, summary will be TBD,
+      and then assign it to sreeadde@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_creation_4:
+  - input: create a jira gowri-custom-task task in project MOT, summary will be TBD,
+      and then assign it to sreeadde@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_creation_5:
+  - input: create a jira gowri-custom-story story in project MOT, summary will be
+      TBD, and then assign it to sreeadde@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_update_1:
+  - input: update Assignee for issue MOT-546 to 'sreeadde@cisco.com'
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_update_2:
+  - input: update the Labels field for issue MOT-546 to 'ml-plugins-implementation-updated'
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_update_3:
+  - input: update the description for issue MOT-546 to 'TBD'
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_update_4:
+  - input: update the status for issue MOT-546 to 'PROPOSED'
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_assign_1:
+  - input: assign MOT-115 to sushroff@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_assign_2:
+  - input: assign MOT-239 to sushroff@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_assign_3:
+  - input: assign MOT-818 to sreeadde@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_assign_4:
+  - input: assign MOT-407 to sreeadde@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  issue_assign_5:
+  - input: assign MOT-249 to anusures@cisco.com
+    reference_trajectory:
+    - Solution1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_issues_agent;jira_issues_agent:__start__;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:tools;jira_issues_agent:agent;jira_issues_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
