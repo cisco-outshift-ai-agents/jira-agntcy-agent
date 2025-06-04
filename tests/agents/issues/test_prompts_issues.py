@@ -49,7 +49,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'add_new_label_to_issue']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'add_new_label_to_issue','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -61,7 +61,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_issue_details']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_issue_details','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -73,7 +73,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue','transfer_back_to_jira_supervisor' ]
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -85,7 +85,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'perform_jira_transition']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'perform_jira_transition','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -97,7 +97,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -109,7 +109,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -121,7 +121,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'search_jira_issues_using_jql','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -133,7 +133,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -145,7 +145,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'assign_jira']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'assign_jira','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -158,7 +158,7 @@ class TestPromptsIssues(unittest.TestCase):
     tools_executed, _ = get_tools_executed(result)
 
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'update_issue_reporter']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'update_issue_reporter','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -170,7 +170,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
-    tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_transitions']
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_transitions','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
 if __name__ == '__main__':
