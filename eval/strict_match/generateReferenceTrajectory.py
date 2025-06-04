@@ -10,7 +10,7 @@ def main(config_file, **kwargs):
         graph = JiraGraph()
         config = yaml.safe_load(open(config_file))
         filename = config['FILEPATH']
-        count = config.get("COUNT", default = 1)
+        count = config.get("COUNT",1)
         destination_path = config.get('DESTINATION_PATH')
         project_tool_calls = ["update_jira_project_lead",
                               "update_jira_project_description"]
