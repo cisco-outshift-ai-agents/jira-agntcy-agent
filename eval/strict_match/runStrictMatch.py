@@ -105,7 +105,7 @@ async def test_eval_strict(input_file_path=None, destination_file_path=None,
     if not input_file_path:
         input_file_path = './eval/strict_match/strict_match_dataset.yaml'
     if not destination_file_path:
-        destination_file_path = './eval/strict_match/README.md'
+        destination_file_path = './eval/strict_match/EVAL_README.md'
     data = read_yaml(input_file_path)
     # Filter tests by test_ids
     if test_ids:
@@ -206,5 +206,5 @@ def main(config_file, test_ids=None, **kwargs):
 
 
 if __name__ == "__main__":
-    #python3 runStrictMmatch.py --config_file ../configs/strict_match_config.yaml
+    #python3 runStrictMmatch.py --config_file configs/strict_match_config.yaml
     fire.Fire(main)
