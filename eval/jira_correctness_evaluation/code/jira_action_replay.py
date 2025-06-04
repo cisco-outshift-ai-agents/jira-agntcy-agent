@@ -5,11 +5,11 @@ from langchain_openai import AzureChatOpenAI
 from langchain_core.messages import HumanMessage
 import os
 import sys
-from ap_client.client import build_graph
 from typing_extensions import Annotated, TypedDict, Optional
 from langchain.prompts import PromptTemplate
 import time
 import fire
+import subprocess
 
 
 def get_jira_instance(jira_url, username, api_token):
@@ -91,14 +91,39 @@ def llm_initialize(AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT):
 
 def get_jira_agent_response(query, jira):
 
-    graph = build_graph()
-    print({"event": "invoking_graph", "input": input})
-    user_prompt = query
-    inputs = {"messages": [HumanMessage(content=user_prompt)]}
-    result = graph.invoke(inputs)
-    resultop= result["messages"][-1].content
-    print({"event": "final_result", "result": resultop})
-    return resultop
+    # Define your curl command as a list of arguments
+    print(query)
+    json_data = {
+                "agent_id": "remote_agent",
+                "input": {
+                    "query": query
+                },
+                "metadata": {"id": "c303282d-f2e6-46ca-a04a-35d3d873712d"}
+            }
+    json_string = json.dumps(json_data)
+
+    curl_command = [
+        "curl",
+        "-X", "POST",  # HTTP method
+        'http://0.0.0.0:8125/api/v1/runs',  # URL
+        "-H", "accept: application/json",  # Header
+        "-H", "Content-Type: application/json",  # Header
+        "-d", json_string
+    ]
+
+    # Execute the curl command
+    try:
+        result = subprocess.run(curl_command, text=True, capture_output=True, check=True)
+        subprocess_output = result.stdout
+        print("Response:")
+        print(subprocess_output)  # Print the response from the server
+        subprocess_json_object = json.loads(subprocess_output)
+        print(subprocess_json_object["output"])
+        return subprocess_json_object["output"]
+    except subprocess.CalledProcessError as e:
+        print("Error occurred:")
+        print(e.stderr)  # Print the error message
+        return e.stderr
 
 
 class Output(TypedDict):
