@@ -136,31 +136,31 @@ class TestPromptsIssues(unittest.TestCase):
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'create_jira_issue','transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
-  # @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
-  # def test_assign_jira(self):
-  #   query = "for project FOO, assign the jira issue TEST-123 to samuyang@cisco.com"
-  #   graph = JiraGraph()
-  #   output, result = graph.serve(query)
-  #   self.assertIsNotNone(output)
-  #
-  #   tools_executed, _ = get_tools_executed(result)
-  #   logging.info(f"tools_executed: {tools_executed}")
-  #   tools_executed_expected = ['transfer_to_jira_issues_agent', 'assign_jira','transfer_back_to_jira_supervisor']
-  #   self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  def test_assign_jira(self):
+    query = "for project FOO, assign the jira issue TEST-123 to samuyang@cisco.com"
+    graph = JiraGraph()
+    output, result = graph.serve(query)
+    self.assertIsNotNone(output)
 
-  # @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
-  # def test_update_issue_reporter(self):
-  #   query = "for project FOO, update the reporter of jira issue TEST-123 to samuyang@cisco.com"
-  #   graph = JiraGraph()
-  #   output, result = graph.serve(query)
-  #   self.assertIsNotNone(output)
-  #   logging.info(f"Result : {output}")
-  #   tools_executed, _ = get_tools_executed(result)
-  #
-  #   logging.info(f"tools_executed: {tools_executed}")
-  #   tools_executed_expected = ['transfer_to_jira_issues_agent', 'update_issue_reporter','transfer_back_to_jira_supervisor']
-  #   logging.info(f"The result is : {contains_all_elements(tools_executed, tools_executed_expected)}")
-  #   self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+    tools_executed, _ = get_tools_executed(result)
+    logging.info(f"tools_executed: {tools_executed}")
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'assign_jira','transfer_back_to_jira_supervisor']
+    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
+
+  @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
+  def test_update_issue_reporter(self):
+    query = "for project FOO, update the reporter of jira issue TEST-123 to samuyang@cisco.com"
+    graph = JiraGraph()
+    output, result = graph.serve(query)
+    self.assertIsNotNone(output)
+    logging.info(f"Result : {output}")
+    tools_executed, _ = get_tools_executed(result)
+
+    logging.info(f"tools_executed: {tools_executed}")
+    tools_executed_expected = ['transfer_to_jira_issues_agent', 'update_issue_reporter','transfer_back_to_jira_supervisor']
+    logging.info(f"The result is : {contains_all_elements(tools_executed, tools_executed_expected)}")
+    self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_get_jira_transitions(self):
