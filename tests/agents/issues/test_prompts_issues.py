@@ -154,12 +154,9 @@ class TestPromptsIssues(unittest.TestCase):
     graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
-    logging.info(f"Result : {output}")
     tools_executed, _ = get_tools_executed(result)
-
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'update_issue_reporter']
-    logging.info(f"The result is : {contains_all_elements(tools_executed, tools_executed_expected)}")
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
