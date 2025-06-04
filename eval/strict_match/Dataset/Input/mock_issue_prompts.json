@@ -1,0 +1,18 @@
+[
+  {
+    "action":"issue_query_1",
+   "query":"Retrieve the latest 5 JIRA issues in the project ABC for the user with email xyz@abc.com"
+  },
+  {
+    "action": "issue_creation_1",
+    "query": "create a jira custom_issue issue in project ABC, summary will be TBD, and then assign it to xyz@abc.com"
+  },
+  {
+    "action": "issue_update_1",
+    "query": "update Assignee for issue ABC-222 to 'foo@abc.com'"
+  },
+  {
+    "action": "issue_assign_1",
+    "query": "assign FOO-111 to foo@abc.com"
+  }
+]

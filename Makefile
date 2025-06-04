@@ -86,7 +86,7 @@ eval-strict-langsmith-tracking-disabled: venv/bin/activate
 	@echo "Running evaluation with LLM and mock Jira responses..."
 	. venv/bin/activate && \
 	pip install --upgrade pip setuptools && \
-	pip install -r eval/requirements.txt && \
+	pip install -r eval/eval_requirements.txt && \
 	export PYTHONPATH=jira_agent && \
 	export DRYRUN=true && \
 	export LANGSMITH_TEST_TRACKING=false && \
@@ -96,7 +96,7 @@ eval-strict: venv/bin/activate
 	@echo "Running evaluation with LLM and mock Jira responses..."
 	. venv/bin/activate && \
 	pip install --upgrade pip setuptools && \
-	pip install -r eval/requirements.txt && \
+	pip install -r eval/eval_requirements.txt && \
 	export PYTHONPATH=jira_agent && \
 	export DRYRUN=true && \
 	export LANGSMITH_TRACING=true && \

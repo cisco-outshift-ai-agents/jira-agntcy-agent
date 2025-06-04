@@ -272,6 +272,8 @@ Upon successful execution, you should see:
 
 ![Langgraph Studio](./docs/imgs/search-issues-readme.png "Studio")
 ---
+## Evaluation
+To run evaluation on the JiraAgent, refer to [Eval_README.md](eval/EVAL_README.md) for steps
 ## Running Unit and Evaluation Tests
 
 To run the tests or eval tests, you need to set up the environment variables and then execute the respective test command.
