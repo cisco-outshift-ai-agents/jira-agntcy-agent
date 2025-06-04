@@ -190,8 +190,8 @@ async def test_eval_strict(input_file_path ,destination_file_path, test_ids=None
 def main(config_file ,test_ids=None , **kwargs):
     is_ok, msg = verify_llm_settings_for_strict_eval()
     config = yaml.safe_load(open(config_file))
-    input_file_path = config['FILEPATH']
-    destination_file_path = config['DESTINATION_FILEPATH']
+    input_file_path = config.get('FILEPATH','strict_match_dataset.yaml')
+    destination_file_path = config.get('DESTINATION_FILEPATH','README.md')
     if not is_ok:
         print(f"Error: {msg}")
         exit(1)
