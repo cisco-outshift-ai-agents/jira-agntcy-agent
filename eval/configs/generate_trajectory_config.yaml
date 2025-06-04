@@ -1,0 +1,3 @@
+FILEPATH: #File path to the input prompts
+COUNT: # Number of times to run the trajectory generation Default is 1
+DESTINATION_PATH: # File path to store the generated trajectories
