@@ -19,7 +19,7 @@ To use the these evaluation scripts:
    ~/.pyenv/versions/3.12.9/bin/python3 -m venv .evalvenv &&
    source .evalvenv/bin/activate
    ```
-3. Install dependencies of eval using eval_requirements.txt:(TODO)
+3. Install dependencies of eval using eval_requirements.txt
    
    ```sh
    cd eval
