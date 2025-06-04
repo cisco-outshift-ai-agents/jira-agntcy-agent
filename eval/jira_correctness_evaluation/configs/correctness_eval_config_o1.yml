@@ -1,0 +1,6 @@
+GPT_DEPLOYMENT_NAME: # LLM GPT DEPLOYEMT NAME like o1
+AZURE_OPENAI_API_KEY: # LLM AZURE OPENAI KEY
+AZURE_OPENAI_ENDPOINT: # LLM AZURE OPENAI ENDPOINT
+JIRA_ACTION_REPLAY_OUTPUT:  # The path to the output of jira action replay file.
+RATING_FILE_NAME: # this should be a file without json extension
+REPORT_FILE_NAME:  # this should be a filename without md extension

@@ -16,3 +16,6 @@ langgraph-prebuilt==0.1.2
 langgraph-supervisor==0.0.9
 jira~=3.8.0
 requests~=2.32.3
+PyYAML==6.0.2
+fire==0.7.0
+jira==3.8.0
