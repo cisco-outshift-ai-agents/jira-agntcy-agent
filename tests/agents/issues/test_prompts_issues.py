@@ -66,7 +66,7 @@ class TestPromptsIssues(unittest.TestCase):
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
   def test_create_jira_epic(self):
-    query = "create an EPIC with title 'Epic 1' in project FOO"
+    query = "create jira EPIC with title 'Epic 1' in project FOO"
     graph = JiraGraph()
     output, result = graph.serve(query)
     self.assertIsNotNone(output)
