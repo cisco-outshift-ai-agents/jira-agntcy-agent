@@ -159,6 +159,7 @@ class TestPromptsIssues(unittest.TestCase):
 
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'update_issue_reporter','transfer_back_to_jira_supervisor']
+    logging.info(f"The result is : {contains_all_elements(tools_executed, tools_executed_expected)}")
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
   @retry(stop=stop_after_attempt(TEST_PROMPT_ISSUES_RETRY_COUNT))
@@ -171,6 +172,7 @@ class TestPromptsIssues(unittest.TestCase):
     tools_executed, _ = get_tools_executed(result)
     logging.info(f"tools_executed: {tools_executed}")
     tools_executed_expected = ['transfer_to_jira_issues_agent', 'get_jira_transitions','transfer_back_to_jira_supervisor']
+    ['transfer_to_jira_issues_agent', 'update_issue_reporter', 'transfer_back_to_jira_supervisor']
     self.assertTrue(contains_all_elements(tools_executed, tools_executed_expected))
 
 if __name__ == '__main__':
