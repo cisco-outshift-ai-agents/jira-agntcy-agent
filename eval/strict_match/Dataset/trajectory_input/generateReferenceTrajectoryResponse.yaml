@@ -1,0 +1,10 @@
+tests:
+  projects_query_1:
+  - input: Get details for project ABC.
+    reference_trajectory:
+    - Solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+  projects_creation_1:
+  - input: create a project for my venture FOO-Projects with user xyz@example.com.
+    reference_trajectory:
+    - Solution_1: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent;jira_supervisor:tools;jira_projects_agent;jira_projects_agent:__start__;jira_projects_agent:agent;jira_projects_agent:tools;jira_projects_agent:agent;jira_projects_agent:generate_structured_response;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent
+    - Solution_2: __start__;jira_supervisor;jira_supervisor:__start__;jira_supervisor:agent

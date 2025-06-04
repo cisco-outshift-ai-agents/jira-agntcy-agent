@@ -1,0 +1,77 @@
+[
+  {
+    "action":"issue_query_1",
+   "query":"Retrieve the latest 5 JIRA issues in the project MOT for the user with email anusures@cisco.com"
+  },
+  {"action":"issue_query_2",
+  "query": "process this JQL:project = 'MOT' AND status = 'In Progress' AND assignee = 'nmallapr@cisco.com' ORDER BY created DESC"
+  },
+  {
+    "action": "issue_query_3",
+    "query": "Find me the latest jira tickets in project MOT. Requested by: sreeadde@cisco.com"
+  },
+  {
+    "action": "issue_query_4",
+    "query": "Retrieve the total Jira completed issues in the project MOT for the user with email anusures@cisco.com"
+  },
+  {
+    "action": "issue_query_5",
+    "query": "Retrieve the total number of bugs issues in the project MOT"
+  },
+  {
+    "action": "issue_creation_1",
+    "query": "create a jira gowri-custom-issue issue in project MOT, summary will be TBD, and then assign it to sreeadde@cisco.com"
+  },
+  {
+    "action": "issue_creation_2",
+    "query": "create an EPIC with title 'Epic 1' in project MOT and write acceptance criteria in Agile Acceptance format - Create common reusable templates that use AP/ACP along with unit tests and evaluation tests that can be reused/shared by other agents - Opensource Backstage Chat Plugin under CNOE - Opensource QnA Agent - Opensource Jira Agent - Opensource Github Agent - Opensource ArgoCD Agent"
+  },
+  {
+    "action": "issue_creation_3",
+    "query": "create a jira gowri-custom-bug bug in project MOT, summary will be TBD, and then assign it to sreeadde@cisco.com"
+  },
+  {
+    "action": "issue_creation_4",
+    "query": "create a jira gowri-custom-task task in project MOT, summary will be TBD, and then assign it to sreeadde@cisco.com"
+  },
+  {
+    "action": "issue_creation_5",
+    "query":"create a jira gowri-custom-story story in project MOT, summary will be TBD, and then assign it to sreeadde@cisco.com"
+  },
+  {
+    "action": "issue_update_1",
+    "query": "update Assignee for issue MOT-546 to 'sreeadde@cisco.com'"
+  },
+  {
+    "action": "issue_update_2",
+    "query": "update the Labels field for issue MOT-546 to 'ml-plugins-implementation-updated'"
+  },
+  {
+    "action": "issue_update_3",
+    "query": "update the description for issue MOT-546 to 'TBD'"
+  },
+  {
+    "action": "issue_update_4",
+    "query": "update the status for issue MOT-546 to 'PROPOSED'"
+  },
+  {
+    "action": "issue_assign_1",
+    "query": "assign MOT-115 to sushroff@cisco.com"
+  },
+  {
+    "action": "issue_assign_2",
+    "query": "assign MOT-239 to sushroff@cisco.com"
+  },
+  {
+    "action": "issue_assign_3",
+    "query": "assign MOT-818 to sreeadde@cisco.com"
+  },
+  {
+    "action": "issue_assign_4",
+    "query": "assign MOT-407 to sreeadde@cisco.com"
+  },
+  {
+    "action": "issue_assign_5",
+    "query": "assign MOT-249 to anusures@cisco.com"
+  }
+]

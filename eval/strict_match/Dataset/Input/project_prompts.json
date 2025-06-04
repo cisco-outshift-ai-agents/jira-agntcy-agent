@@ -1,0 +1,72 @@
+[
+  {"action":"project_query_1",
+  "query":"give me the key details about the Motific_Trajectory project, such as the project lead, start date, and current sprint"
+  },
+  {"action":"project_query_2",
+  "query": "Get an update on the Alfred Plus Test project"
+  },
+  {
+    "action": "project_query_3",
+    "query": "get details for my project sushroff-test-1"
+  },
+  {
+    "action": "project_query_4",
+    "query": "Generate report on project with key MOT"
+  },
+  {
+    "action": "project_query_5",
+    "query": "give me the project key of the project Alfred Plus Test"
+  },
+  {
+    "action": "project_creation_1",
+    "query" : "create a project for my venture ProjectAnusha12 with key PA12 with user sreeadde@cisco.com"
+  },
+  {
+    "action": "project_creation_2",
+    "query" : "Generate a project for my venture ProjectGowri12, and associate it with the key PG12 and user anusures@cisco.com"
+  },
+  {
+    "action": "project_update_1",
+    "query": "update description for project Motific_Trajectory to '0/20 - This is a project for tracking all motific related issues and tasks'"
+  },
+  {
+    "action": "project_update_2",
+    "query": "Update the description for project sushroff-venture-1 to '3/15 - This project is a testbed for visionary tools and features"
+  },
+  {
+    "action": "project_update_3",
+    "query": "Update the description for project project sushroff-test-1 to '3/15 - This project is a testbed for visionary tools and features,'"
+  },
+  {
+    "action": "project_update_4",
+    "query": "Change the description for project AlfredPlus to '0/15 - A project for testing the roadmap planning tools for 2025."
+  },
+  {
+    "action": "project_assign_1",
+    "query": "Change the project lead for ProjectAnusha from anusures@cisco.com to sreeadde@cisco.com."
+  },
+  {
+    "action": "project_assign_2",
+    "query": "Change the project lead for AlfredPlus from anusures@cisco.com to sreeadde@cisco.com."
+  },
+  {
+    "action": "project_transition_1",
+    "query": "get transition data for MOT-2200"
+  },
+  {
+    "action": "project_transition_2",
+    "query": "get transition data for MOT-738"
+  },
+  {
+    "action": "project_transition_3",
+    "query": "get transition data for MOT-1631"
+  },
+  {
+    "action": "project_transition_4",
+    "query": "get transition data for MOT-1182"
+  },
+  {
+    "action": "project_transition_5",
+    "query": "get transition data for MOT-386"
+  }
+]
