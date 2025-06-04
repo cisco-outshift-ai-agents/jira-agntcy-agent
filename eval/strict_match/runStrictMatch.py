@@ -100,10 +100,13 @@ def read_yaml(file_path):
 
 
 @pytest.mark.langsmith
-async def test_eval_strict(input_file_path='strict_match_dataset.yaml', destination_file_path='README.md',
+async def test_eval_strict(input_file_path=None, destination_file_path=None,
                            test_ids=None):
+    if not input_file_path:
+        input_file_path = './eval/strict_match/strict_match_dataset.yaml'
+    if not destination_file_path:
+        destination_file_path = './eval/strict_match/README.md'
     data = read_yaml(input_file_path)
-
     # Filter tests by test_ids
     if test_ids:
         test_ids = set(test_ids.split(','))
@@ -194,8 +197,8 @@ async def test_eval_strict(input_file_path='strict_match_dataset.yaml', destinat
 def main(config_file, test_ids=None, **kwargs):
     is_ok, msg = verify_llm_settings_for_strict_eval()
     config = yaml.safe_load(open(config_file))
-    input_file_path = config.get('FILEPATH', 'strict_match_dataset.yaml')
-    destination_file_path = config.get('DESTINATION_FILEPATH', 'README.md')
+    input_file_path = config.get('FILEPATH', None)
+    destination_file_path = config.get('DESTINATION_FILEPATH', None)
     if not is_ok:
         print(f"Error: {msg}")
         exit(1)
