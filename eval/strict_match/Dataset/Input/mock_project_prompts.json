@@ -1,0 +1,22 @@
+[
+  {
+    "action":"project_query_1",
+  "query":"give me the key details about the FOO project, such as the project lead, start date, and current sprint"
+  },
+  {
+    "action": "project_creation_1",
+    "query" : "create a project for my venture ProjectLee with key PL with user xyz@abc.com"
+  },
+  {
+    "action": "project_update_1",
+    "query": "update description for project FOO to '0/20 - This is a mock project to track all the issues and tasks'"
+  },
+  {
+    "action": "project_assign_1",
+    "query": "Change the project lead for ProjectLee from xyz@abc.com to foo@abc.com."
+  },
+  {
+    "action": "project_transition_1",
+    "query": "get transition data for FOO-1111"
+  }
+]

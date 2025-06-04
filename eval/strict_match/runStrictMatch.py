@@ -206,5 +206,5 @@ def main(config_file, test_ids=None, **kwargs):
 
 
 if __name__ == "__main__":
-    #python3 runStrictMmatch.py --config_file ../configs/strict_match_config.yaml
+    #python3 runStrictMmatch.py --config_file configs/strict_match_config.yaml
     fire.Fire(main)
