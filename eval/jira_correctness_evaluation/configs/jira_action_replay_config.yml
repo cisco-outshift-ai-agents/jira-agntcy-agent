@@ -1,0 +1,8 @@
+GPT_DEPLOYMENT_NAME: # eg: gpt-4o - LLM GPT DEPLOYEMT NAME like gpt-4o
+AZURE_OPENAI_API_KEY:  # LLM AZURE OPENAI API KEY
+AZURE_OPENAI_ENDPOINT: # LLM AZURE OPENAI ENDPOINT
+JIRA_SERVER:  # eg: https://your-jira-domain.atlassian.net - JIRA SERVER
+JIRA_USER: # eg: ty@gmail.com - JIRA USER
+JIRA_API_TOKEN:  # JIRA API TOKEN
+KEY_GENERATION_FILE_PATH:  # eg: key_generation.json - The path to key generation file.
+JIRA_ACTION_REPLAY_OUTPUT: # eg: jira_action_replay_output.json - The path to the output of jira action replay file.

@@ -1,0 +1,39 @@
+[
+    {
+       "action":"project_query",
+       "query":"give me the details about the 'ABC' project."
+    },
+    {
+        "action":"project_creation",
+        "query":"create a project for my venture 'XYZ' with key 'XY12' and user 'ty@gmail.com'"
+    },
+    {
+        "action":"project_update",
+        "query":"update description for project 'ABC' to 'Update ABC'"
+    },
+    {
+        "action":"project_assign",
+        "query":"Assign 'ty@gmail.com' as the lead for 'ABC'"
+    },
+    {
+        "action":"project_transition",
+        "query":"get transition data for issue 'ABC-48'"
+    },
+    {
+        "action":"issue_query",
+        "query":"process this JQL:project = 'ABC' AND status = 'In Progress' AND assignee = 'ty@gmail.com' ORDER BY created DESC" 
+    },
+    {
+        "action":"issue_update",
+        "query":"update Assignee for issue 'ABC-48' to 'ty@gmail.com'"
+    },
+    {
+        "action":"issue_assign",
+        "query":"assign issue 'ABC-116' to 'ty@gmail.com'"
+    },
+    {
+        "action":"issue_creation",
+        "query":"create a jira 'ABC888' issue in project 'ABC', summary will be 'TBD', and then assign it to 'abc@gmail.com'"
+    }
+]
+  
