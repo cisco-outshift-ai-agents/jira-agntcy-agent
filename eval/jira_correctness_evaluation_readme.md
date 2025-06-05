@@ -24,8 +24,10 @@ The below steps showcases our end to end pipeline to evaluate jira agent queries
 The below steps showcase the commands to be used to run the following:
 
 ```sh
-   cd eval/jira_correctness_evaluation
+   cd jira_correctness_evaluation
    ```
+We are assuming the above because we are already present in the eval folder.
+
 
 #### Dataset Generation:
 
@@ -38,6 +40,8 @@ The below steps showcase the commands to be used to run the following:
 ```sh
    python code/jira_action_replay.py --config_file configs/jira_action_replay_config.yml
 ```
+
+While running the Jira Action Replay, please ensure to keep the jira agent server running in one terminal to send the query to the jira agent and get response.
 
 #### LLM as Judge Evaluation:
 
