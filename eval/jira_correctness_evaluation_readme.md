@@ -61,7 +61,7 @@ For running with o1 model:
 
 Since, we are using LLMs to process most of the queries in key_generation.py, jira_action_replay.py and correctness_eval.py, we can't gaurantee the accuracy and consistency among runs for the same set of queries.
 
-Also, if there are queries that are not supported or are infeasible, the jira_action_replay.py may fail and the queries need to be corrected to run it end to end successfully to give an output.
+Also, if there are queries that are not supported or are infeasible, the jira_action_replay.py may fail and the queries need to be corrected to run it end to end successfully to give an output. If there are any network issues with the Jira server, Jira Agent, LLM service or any other infrastructure issue, it may fail to run end to end successfully. Please try to rerun to get a complete successful run.
 
 ## Results:
 
