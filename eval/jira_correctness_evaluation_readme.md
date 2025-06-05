@@ -6,7 +6,7 @@ The below steps showcases our end to end pipeline to evaluate jira agent queries
 
 ## Prerequisites:
 
-1. Please follow the prerequisites in the eval folder's [readme.md](EVAL_README.md).
+1. Please follow the prerequisites in the eval folder's [readme.md](README.md).
 2. We have currently not added our original evaluation dataset built, due to internal privacy data.
 3. We have added a sample mock input of queries in the input folder. Please create similar supported queries to create your own dataset.
 

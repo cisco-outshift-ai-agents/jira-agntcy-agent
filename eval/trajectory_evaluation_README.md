@@ -2,7 +2,7 @@
 Trajectory evaluation tries to evaluate the flow of agent calls in JiraAgent. It involves generating possible trajectories and check the similarity with trajectories extracted from Langraph using AgentEval tools
 
 ## Prerequisites:
-1. Please follow the prerequisites in the eval folder's [readme.md](EVAL_README.md).
+1. Please follow the prerequisites in the eval folder's [readme.md](README.md).
 
 ## Steps to run Trajectory Evaluation:
 1. Generate list of project and issue prompts similar to the sample prompts described here [Dataset](strict_match/Dataset/Input)
