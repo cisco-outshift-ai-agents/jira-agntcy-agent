@@ -118,8 +118,11 @@ def get_jira_agent_response(query, jira):
         print("Response:")
         print(subprocess_output)  # Print the response from the server
         subprocess_json_object = json.loads(subprocess_output)
-        print(subprocess_json_object["output"])
-        return subprocess_json_object["output"]
+        if "output" in subprocess_json_object:
+            print(subprocess_json_object["output"])
+            return subprocess_json_object["output"]
+        else:
+            return subprocess_json_object
     except subprocess.CalledProcessError as e:
         print("Error occurred:")
         print(e.stderr)  # Print the error message
