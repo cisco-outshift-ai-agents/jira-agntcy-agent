@@ -207,7 +207,6 @@ terraform_output.json
 .idea
 
 
-*.txt
 
 .logs/
 *.log

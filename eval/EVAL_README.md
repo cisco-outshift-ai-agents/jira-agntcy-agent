@@ -33,7 +33,7 @@ Please refer to this documentation to learn more about [Trajectory Evaluation](t
 
 ## Steps to Run the Correctness Evaluation:
 
- Please refer to this documentation to learn more about [Correctness Evaluation](../readme_jira_correctness_evaluation.md)
+ Please refer to this documentation to learn more about [Correctness Evaluation](jira_correctness_evaluation_readme.md)
 
 ## Additional Notes
 
